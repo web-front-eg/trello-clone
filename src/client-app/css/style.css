@@ -1,0 +1,107 @@
+:root {
+  /*  colors */
+  --color-white: #fff;
+
+  --color-trello-blue-50: #e4f0f6;
+  --color-trello-blue-100: #bcd9ea;
+  --color-trello-blue-200: #8bbdd9;
+  --color-trello-blue-300: #5ba4cf;
+  --color-trello-blue-400: #298fca;
+  --color-trello-blue-500: #0079bf;
+  --color-trello-blue-600: #026aa7;
+  --color-trello-blue-700: #055a8c;
+  --color-trello-blue-800: #094c72;
+  --color-trello-blue-900: #0c3953;
+
+  --color-text-title: #aaa;
+  --color-text-primary: #000;
+  --color-nav-icon: #fff;
+}
+
+.root {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+/* 
+* 1. nav 
+*/
+.nav {
+  background-color: var(--color-trello-blue-800);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 5px;
+}
+
+/* 
+* nav icon (font awesome)
+*/
+.nav i {
+  font-size: 2rem;
+  text-align: center;
+  color: var(--color-nav-icon);
+}
+
+/*
+* 1-1. left 3 btns
+*/
+.nav__left {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 
+* 1-2. main title
+*/
+.nav__title {
+  font-family: "Pacifico", cursive;
+  font-size: 2.2rem;
+  color: var(--color-text-title);
+}
+
+/* 메인 타이틀 옆의 아이콘 (중앙) */
+.nav__title i {
+  font-size: 2.2rem;
+  color: var(--color-text-title);
+}
+
+/* 
+* 1-3. right 3 btns
+*/
+.nav__right {
+  display: flex;
+  flex-direction: row;
+}
+
+nav .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  width: 50px;
+  height: 50px;
+  margin: 0 6px;
+  border-radius: 5px;
+
+  background-color: var(--color-trello-blue-300);
+}
+
+/* 
+* user button (마지막, 오른쪽) 
+*/
+.btn.btn--user {
+  padding: 0;
+  margin: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+/* 
+    
+*/

@@ -14,12 +14,23 @@
   --color-trello-blue-900: #0c3953;
 
   --color-text-title: #aaa;
-  --color-text-primary: #000;
+  --color-text-default: #fff;
   --color-nav-icon: #fff;
+  --color-separator: #aaa;
+
+  --sign-y-offset: 30%;
 }
 
-.root {
+body {
   font-family: "Noto Sans KR", sans-serif;
+}
+
+.separator {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-separator);
+  box-sizing: border-box;
+  margin: 0 15px;
 }
 
 /* 
@@ -92,9 +103,9 @@ nav .btn {
 }
 
 /* 
-* user button (마지막, 오른쪽) 
+* user (마지막, 오른쪽) 
 */
-.btn.btn--user {
+.nav__user {
   padding: 0;
   margin: 0;
   width: 50px;
@@ -103,5 +114,86 @@ nav .btn {
 }
 
 /* 
-    
+  2. canvas    
 */
+.canvas {
+  background-color: var(--color-trello-blue-400);
+}
+
+/* 
+* 2-1. menu
+*/
+.canvas__menu {
+  color: var(--color-text-default);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* 
+* 2-2. left
+*/
+.canvas__menu__left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.canvas__menu__title {
+  font-size: 1.5rem;
+  padding: 10px 20px;
+}
+
+.canvas__menu .fa-lock {
+  margin-right: 10px;
+}
+
+.canvas__menu__user {
+  position: relative;
+}
+
+.canvas__menu__user__image {
+  padding: 0;
+  margin: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+
+  margin-right: 10px;
+
+  display: flex;
+  align-self: center;
+}
+
+.canvas__menu__user i {
+  display: inline;
+  position: absolute;
+  left: 50%;
+  top: var(--sign-y-offset);
+
+  font-size: 0.8rem;
+  transform: scale(1.3, 0.8);
+}
+
+.canvas__menu__user i:nth-child(2) {
+  top: calc(var(--sign-y-offset) + 15%);
+}
+
+.canvas__menu__user i:nth-child(3) {
+  top: calc(var(--sign-y-offset) + 15% * 2);
+}
+
+/* 
+* 2-3. right
+*/
+.canvas__menu__right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.canvas__menu__right a {
+  color: var(--color-text-default);
+  margin-left: 15px;
+}

@@ -108,34 +108,42 @@
 
     <!-- 3. card lists -->
     <section class="card-lists">
-      <!-- 3-1. list -->
       <div class="card-list">
-        <!-- 3-2. add list -->
+        <!-- 3-1. add list -->
         <div class="card-list__add-list">Add a list...</div>
 
-        <!-- 3-3. adding list -->
+        <!-- 3-2. adding list -->
         <div class="card-list__adding-list">
           <input type="text" placeholder="Add a list..." />
           <div class="card-list__adding-list__under">
-            <button>Save</button> <i class="fas fa-times"></i>
+            <button class="btn">Save</button> <i class="fas fa-times"></i>
           </div>
         </div>
 
-        <!-- 3-4. list title -->
+        <!-- added list title -->
         <div class="card-list__title">
           <strong>리스트 1</strong>
           <i class="fas fa-ellipsis-h"></i>
         </div>
 
-        <!-- 3-5. list add list -->
+        <!-- 3-3. add card -->
         <p class="card-list__add-card">Add a card...</p>
-        <div class="card-list__add-card">
-          <textarea name="" id="" cols="30" rows="5"></textarea>
-          <button></button>
-          <i class="fas fa-times"></i>
-          <i class="fas fa-ellipsis-h"></i>
+
+        <!-- 3-4. adding card -->
+        <div class="card-list__adding-card">
+          <textarea name="" id="" cols="30" rows="4"></textarea>
+
+          <div class="card-list__adding-card__under">
+            <div class="card-list__adding-card__under__left">
+              <button class="btn">Add</button> <i class="fas fa-times"></i>
+            </div>
+            <div class="card-list__adding-card__under__right">
+              <i class="fas fa-ellipsis-h"></i>
+            </div>
+          </div>
         </div>
-        <div class="card-list__card"></div>
+        <!-- 3-5. added card -->
+        <div class="card-list__added-card"></div>
       </div>
     </section>
   </body>

@@ -331,20 +331,21 @@ nav .btn {
   margin-top: 5px;
 }
 
-.card-list__adding-list button {
+.btn {
   background-color: var(--color-btn-save);
   color: var(--color-text);
 
   box-sizing: border-box;
 
   padding: 8px 15px;
+  width: 55px;
   border-radius: var(--border-radius-small);
 }
 
 .card-list__adding-list i {
-  color: var(--color-text-dark2);
-  font-size: 1.5rem;
   margin-left: 10px;
+  font-size: 1.3rem;
+  color: var(--color-text-dark2);
 }
 
 .card-list__title {
@@ -358,7 +359,7 @@ nav .btn {
 
 .card-list__title i {
   font-size: 0.9rem;
-  color: var(--color-text-dark1);
+  color: var(--color-text-dark2);
 }
 
 .card-list__add-card {
@@ -371,4 +372,41 @@ nav .btn {
   background-color: var(--color-bg-card-list-highlight);
   cursor: pointer;
   text-decoration: underline;
+}
+
+.card-list__adding-card {
+  padding: 4px;
+  color: var(--color-text-dark2);
+}
+
+.card-list__adding-card textarea {
+  display: block;
+  width: 99%;
+  margin: 0 auto;
+}
+
+.card-list__adding-card__under {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-top: 5px;
+  margin-left: 1.5px;
+}
+
+.card-list__adding-card__under__left {
+  display: flex;
+  align-items: center;
+}
+
+.card-list__adding-card__under__left i {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  color: var(--color-text-dark2);
+}
+
+.card-list__adding-card__under__right i {
+  margin-right: 8px;
+  font-size: 0.9rem;
+  color: var(--color-text-dark2);
 }

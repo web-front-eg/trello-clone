@@ -23,8 +23,6 @@
       crossorigin="anonymous"
     />
 
-    <!-- same as "reset.css" -->
-    <link rel="stylesheet" type="text/css" href="/css/pre.css" />
     <!-- main stylesheet -->
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <!-- <script type="text/javascript" src="./index.js" defer></script> -->
@@ -70,44 +68,47 @@
       </div>
     </nav>
 
-    <!-- 2. card canvas -->
-    <section class="canvas">
-      <!-- 2-1. menu -->
-      <section class="canvas__menu">
-        <!-- 2-2. left -->
-        <div class="canvas__menu__left">
-          <p class="canvas__menu__title">웹 프론트엔드 과제</p>
-          <i class="far fa-star"></i>
-          <div class="separator"></div>
+    <!-- 2. menu -->
+    <section class="menu">
+      <!-- 2-1. left -->
+      <div class="menu__left">
+        <p class="menu__title">웹 프론트엔드 과제</p>
+        <i class="far fa-star"></i>
+        <div class="separator"></div>
 
-          <p class="canvas__menu__personal">Personal</p>
-          <div class="separator"></div>
+        <p class="menu__personal">Personal</p>
+        <div class="separator"></div>
 
-          <i class="fas fa-lock"></i>
-          <p class="canvas__menu__private">Private</p>
-          <div class="separator"></div>
+        <i class="fas fa-lock"></i>
+        <p class="menu__private">Private</p>
+        <div class="separator"></div>
 
-          <div class="canvas__menu__user">
-            <i class="fas fa-chevron-up"></i>
-            <i class="fas fa-chevron-up"></i>
-            <i class="fas fa-chevron-up"></i>
-            <img
-              class="canvas__menu__user__image"
-              src="./img/user.jpg"
-              alt="alt-user-profile-picture"
-            />
-          </div>
+        <!-- user + custom sign -->
+        <div class="menu__user">
+          <i class="fas fa-chevron-up"></i>
+          <i class="fas fa-chevron-up"></i>
+          <i class="fas fa-chevron-up"></i>
+          <img
+            class="menu__user__image"
+            src="./img/user.jpg"
+            alt="alt-user-profile-picture"
+          />
+        </div>
+        <div class="menu__add-user">
           <i class="fas fa-user-plus"></i>
         </div>
+      </div>
 
-        <!-- 2-3. right -->
-        <div class="canvas__menu__right">
-          <i class="fas fa-ellipsis-h"></i>
-          <a href="/" target="_blank" rel="noopener noreferrer">Show Menu</a>
-        </div>
-      </section>
+      <!-- 2-2. right -->
+      <div class="menu__right">
+        <i class="fas fa-ellipsis-h"></i>
+        <a href="/" target="_blank" rel="noopener noreferrer">Show Menu</a>
+      </div>
+    </section>
 
-      <!-- 3. list -->
+    <!-- 3. card canvas -->
+    <section class="canvas">
+      <!-- 3-1. lists -->
       <section class="canvas__lists"></section>
     </section>
   </body>

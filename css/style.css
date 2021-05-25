@@ -18,11 +18,37 @@
   --color-nav-icon: #fff;
   --color-separator: #aaa;
 
-  --sign-y-offset: 30%;
+  --user-sign-y-offset: 30%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+ol ul {
+  list-style: none;
 }
 
 body {
   font-family: "Noto Sans KR", sans-serif;
+  background-color: var(--color-trello-blue-500);
 }
 
 .separator {
@@ -37,7 +63,7 @@ body {
 * 1. nav 
 */
 .nav {
-  background-color: var(--color-trello-blue-800);
+  background-color: var(--color-trello-blue-700);
 
   display: flex;
   flex-direction: row;
@@ -114,46 +140,44 @@ nav .btn {
 }
 
 /* 
-  2. canvas    
+* 2. menu
 */
-.canvas {
-  background-color: var(--color-trello-blue-400);
-}
+.menu {
+  position: relative;
 
-/* 
-* 2-1. menu
-*/
-.canvas__menu {
-  color: var(--color-text-default);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  position: relative;
+
+  color: var(--color-text-default);
 }
 
 /* 
-* 2-2. left
+* 2-1. left
 */
-.canvas__menu__left {
+.menu__left {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.canvas__menu__title {
+.menu__title {
   font-size: 1.5rem;
   padding: 10px 20px;
 }
 
-.canvas__menu .fa-lock {
+.menu .fa-lock {
   margin-right: 10px;
 }
 
-.canvas__menu__user {
+.menu__user {
   position: relative;
 }
 
-.canvas__menu__user__image {
+/* 
+* user image + ^^^
+*/
+.menu__user__image {
   padding: 0;
   margin: 0;
   width: 25px;
@@ -166,34 +190,58 @@ nav .btn {
   align-self: center;
 }
 
-.canvas__menu__user i {
-  display: inline;
+.menu__user i {
+  display: inline;a
   position: absolute;
   left: 50%;
-  top: var(--sign-y-offset);
+  top: var(--user-sign-y-offset);
 
   font-size: 0.8rem;
   transform: scale(1.3, 0.8);
 }
 
-.canvas__menu__user i:nth-child(2) {
-  top: calc(var(--sign-y-offset) + 15%);
+.menu__user i:nth-child(2) {
+  top: calc(var(--user-sign-y-offset) + 15%);
 }
 
-.canvas__menu__user i:nth-child(3) {
-  top: calc(var(--sign-y-offset) + 15% * 2);
+.menu__user i:nth-child(3) {
+  top: calc(var(--user-sign-y-offset) + 15% * 2);
+}
+
+.menu__left .menu__add-user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 25px;
+  height: 25px;
+
+  box-sizing: border-box;
+  padding: 5px 5px;
+
+  border-radius: 50%;
+  background-color: var(--color-trello-blue-200);
+  z-index: -1;
+}
+
+.menu__left .menu__add-user i {
+  font-size: 0.8rem;
 }
 
 /* 
 * 2-3. right
 */
-.canvas__menu__right {
+.menu__right {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.canvas__menu__right a {
+.menu__right a {
+  margin: 0 15px;
   color: var(--color-text-default);
-  margin-left: 15px;
+}
+
+/* 3. canvas lists */
+.canvas__lists {
 }

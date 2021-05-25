@@ -276,6 +276,8 @@ nav .btn {
 */
 .card-list {
   width: 320px;
+  height: 100%;
+  box-sizing: border-box;
   border-radius: var(--border-radius-small);
   background-color: var(--color-bg-card-list);
 }
@@ -318,10 +320,6 @@ nav .btn {
 
   text-indent: 8px;
 }
-
-/* ::placeholder {
-  padding-left: 8px;
-} */
 
 .card-list__adding-list__under {
   display: flex;
@@ -409,4 +407,38 @@ nav .btn {
   margin-right: 8px;
   font-size: 0.9rem;
   color: var(--color-text-dark2);
+}
+
+.card-list__added-card {
+  box-sizing: border-box;
+  padding: 4px;
+
+  color: var(--color-text-dark2);
+}
+
+.card-list__added-card:hover {
+}
+
+.card-list__added-inside {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  /* margin: 14px 8px; */
+  width: 99%;
+  box-sizing: border-box;
+
+  padding: 4px;
+
+  border-radius: var(--border-radius-small);
+
+  margin: 0 auto;
+  background-color: #fff;
+}
+
+.card-list__added-card p {
+}
+
+.card-list__added-card i {
 }

@@ -1,7 +1,6 @@
 :root {
-  /*  colors */
-  --color-white: #fff;
-
+  /* 1. colors */
+  /* blue themes */
   --color-trello-blue-50: #e4f0f6;
   --color-trello-blue-100: #bcd9ea;
   --color-trello-blue-200: #8bbdd9;
@@ -13,11 +12,35 @@
   --color-trello-blue-800: #094c72;
   --color-trello-blue-900: #0c3953;
 
-  --color-text-title: #aaa;
-  --color-text-default: #fff;
+  /* basic colors */
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* text */
+  --color-text-dark0: rgba(200, 200, 200, 0.4);
+  --color-text-dark1: #888;
+  --color-text-dark2: #a8a8a8;
+  --color-text-dark3: #ccc;
+  --color-text: #fff;
+
+  /* nav */
   --color-nav-icon: #fff;
+
+  /* separator */
   --color-separator: #aaa;
 
+  /* card list */
+  --color-bg-card-list: #d9d9d9;
+  --color-bg-card-list-highlight: #999;
+
+  /* btn */
+  --color-btn-save: rgb(64, 158, 1);
+
+  /* 2. value */
+  /* border-radius */
+  --border-radius-small: 3px;
+
+  /* offsets */
   --user-sign-y-offset: 30%;
 }
 
@@ -62,24 +85,39 @@ body {
 /* 
 * 1. nav 
 */
-.nav {
-  background-color: var(--color-trello-blue-700);
-
+nav {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 
-  padding: 5px;
+  background-color: var(--color-trello-blue-700);
+
+  padding: 7px 10px;
 }
 
 /* 
 * nav icon (font awesome)
 */
-.nav i {
-  font-size: 2rem;
+nav i {
+  font-size: 1.7rem;
   text-align: center;
   color: var(--color-nav-icon);
+}
+
+nav .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  width: 50px;
+  height: 50px;
+  margin: 0 6px;
+  border-radius: var(--border-radius-small);
+
+  background-color: var(--color-trello-blue-300);
 }
 
 /*
@@ -95,14 +133,14 @@ body {
 */
 .nav__title {
   font-family: "Pacifico", cursive;
-  font-size: 2.2rem;
-  color: var(--color-text-title);
+  font-size: 1.6rem;
+  color: var(--color-text-dark0);
 }
 
 /* 메인 타이틀 옆의 아이콘 (중앙) */
 .nav__title i {
-  font-size: 2.2rem;
-  color: var(--color-text-title);
+  font-size: 1.6rem;
+  color: var(--color-text-dark0);
 }
 
 /* 
@@ -111,21 +149,6 @@ body {
 .nav__right {
   display: flex;
   flex-direction: row;
-}
-
-nav .btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  box-sizing: border-box;
-
-  width: 50px;
-  height: 50px;
-  margin: 0 6px;
-  border-radius: 5px;
-
-  background-color: var(--color-trello-blue-300);
 }
 
 /* 
@@ -149,7 +172,7 @@ nav .btn {
   flex-direction: row;
   justify-content: space-between;
 
-  color: var(--color-text-default);
+  color: var(--color-text);
 }
 
 /* 
@@ -191,7 +214,8 @@ nav .btn {
 }
 
 .menu__user i {
-  display: inline;a
+  display: inline;
+
   position: absolute;
   left: 50%;
   top: var(--user-sign-y-offset);
@@ -239,9 +263,112 @@ nav .btn {
 
 .menu__right a {
   margin: 0 15px;
-  color: var(--color-text-default);
+  color: var(--color-text);
 }
 
-/* 3. canvas lists */
-.canvas__lists {
+/* 3. card lists */
+.card-lists {
+  margin: 0 10px;
+}
+
+/* 
+* 3-1. list
+*/
+.card-list {
+  width: 320px;
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-bg-card-list);
+}
+
+/* 
+* 3-2. add list 
+*/
+.card-list__add-list {
+  background-color: var(--color-trello-blue-700);
+  color: var(--color-text-dark3);
+  padding: 8px 13px;
+  border-radius: var(--border-radius-small);
+  transition: background-color 0.2s linear;
+}
+
+.card-list__add-list:hover {
+  cursor: pointer;
+  background-color: var(--color-trello-blue-800);
+}
+
+.card-list__add-list:active {
+}
+
+.card-list__adding-list {
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.card-list__adding-list input {
+  display: block;
+  width: 99%;
+  height: 30px;
+
+  margin: 0 auto;
+
+  background-color: var(--color-text-dark3);
+
+  border: 1px solid var(--color-text-dark1);
+  box-shadow: inset 1px 1px 1.5px 0.01px var(--color-text-dark1);
+
+  text-indent: 8px;
+}
+
+/* ::placeholder {
+  padding-left: 8px;
+} */
+
+.card-list__adding-list__under {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-top: 5px;
+}
+
+.card-list__adding-list button {
+  background-color: var(--color-btn-save);
+  color: var(--color-text);
+
+  box-sizing: border-box;
+
+  padding: 8px 15px;
+  border-radius: var(--border-radius-small);
+}
+
+.card-list__adding-list i {
+  color: var(--color-text-dark2);
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+
+.card-list__title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 8px 13px;
+}
+
+.card-list__title i {
+  font-size: 0.9rem;
+  color: var(--color-text-dark1);
+}
+
+.card-list__add-card {
+  padding: 8px 13px;
+  color: var(--color-text-dark2);
+}
+
+.card-list__add-card:hover {
+  color: var(--color-black);
+  background-color: var(--color-bg-card-list-highlight);
+  cursor: pointer;
+  text-decoration: underline;
 }

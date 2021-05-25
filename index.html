@@ -31,7 +31,7 @@
 
   <body>
     <!-- 1. nav (main title, logo, buttons) -->
-    <nav class="nav">
+    <nav>
       <!-- 1-1. left 3 btns -->
       <div class="nav__left">
         <div class="nav__go-prv btn">
@@ -106,10 +106,37 @@
       </div>
     </section>
 
-    <!-- 3. card canvas -->
-    <section class="canvas">
-      <!-- 3-1. lists -->
-      <section class="canvas__lists"></section>
+    <!-- 3. card lists -->
+    <section class="card-lists">
+      <!-- 3-1. list -->
+      <div class="card-list">
+        <!-- 3-2. add list -->
+        <div class="card-list__add-list">Add a list...</div>
+
+        <!-- 3-3. adding list -->
+        <div class="card-list__adding-list">
+          <input type="text" placeholder="Add a list..." />
+          <div class="card-list__adding-list__under">
+            <button>Save</button> <i class="fas fa-times"></i>
+          </div>
+        </div>
+
+        <!-- 3-4. list title -->
+        <div class="card-list__title">
+          <strong>리스트 1</strong>
+          <i class="fas fa-ellipsis-h"></i>
+        </div>
+
+        <!-- 3-5. list add list -->
+        <p class="card-list__add-card">Add a card...</p>
+        <div class="card-list__add-card">
+          <textarea name="" id="" cols="30" rows="5"></textarea>
+          <button></button>
+          <i class="fas fa-times"></i>
+          <i class="fas fa-ellipsis-h"></i>
+        </div>
+        <div class="card-list__card"></div>
+      </div>
     </section>
   </body>
 </html>

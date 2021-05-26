@@ -14,7 +14,5 @@ export class Lists {
     if (!this.listsAnchorEl) {
       throw new Error("Invalid Lists anchor element!");
     }
-
-    
   }
 }

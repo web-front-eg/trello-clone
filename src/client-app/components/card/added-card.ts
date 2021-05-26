@@ -1,5 +1,5 @@
-import { IDraggable } from "models/IDraggable";
-import { TemplateInjector } from "template/template-injector";
+import { IDraggable } from "../../models/IDraggable";
+import { TemplateInjector } from "../../template/template-injector";
 
 export class AddedCard implements IDraggable {
   private templateInjector: TemplateInjector<HTMLDivElement>;

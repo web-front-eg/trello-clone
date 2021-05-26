@@ -1,14 +1,8 @@
-export function autobind(
-  _: any,
-  __: string,
-  descriptor: PropertyDescriptor
-): PropertyDescriptor {
-  const originalMethod = descriptor.value;
-  return <PropertyDescriptor>{
+export const autobind = (_: any, __: string, descriptor: PropertyDescriptor) =>
+  ({
     configurable: true,
     enumerable: false,
     get() {
-      return originalMethod.bind(this);
+      return descriptor.value.bind(this);
     },
-  };
-}
+  } as PropertyDescriptor);

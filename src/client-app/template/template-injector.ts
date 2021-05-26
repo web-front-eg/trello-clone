@@ -1,10 +1,10 @@
 export class TemplateInjector<TCreateEl extends HTMLElement> {
   private templateEl: HTMLTemplateElement;
-  private anchorEl: HTMLDivElement;
+  private rootEl: HTMLDivElement;
   private createdEl: TCreateEl;
 
   constructor(
-    anchorId: string,
+    rootId: string,
     templateId: string,
     insertWhere: InsertPosition,
     newTemplateClassName?: string
@@ -18,10 +18,10 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       throw new Error(`template ID ${templateId} is invalid!`);
     }
 
-    this.anchorEl = document.getElementById(anchorId)! as HTMLDivElement;
+    this.rootEl = document.getElementById(rootId)! as HTMLDivElement;
 
-    if (!this.anchorEl) {
-      throw new Error(`anchor ID ${anchorId} is invalid!`);
+    if (!this.rootEl) {
+      throw new Error(`anchor ID ${rootId} is invalid!`);
     }
 
     // 2. import a node from the template
@@ -43,6 +43,6 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
   }
 
   private insertAt(where: InsertPosition): void {
-    this.anchorEl.insertAdjacentElement(where, this.createdEl);
+    this.rootEl.insertAdjacentElement(where, this.createdEl);
   }
 }

@@ -25,7 +25,10 @@
 
     <!-- main stylesheet -->
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
-    <!-- <script type="text/javascript" src="./index.js" defer></script> -->
+
+    <!-- script -->
+    <script type="module" src="/dist/client-app/index.js" defer></script>
+
     <title>웹 프론트엔드 과제 | Trello</title>
   </head>
 
@@ -69,7 +72,7 @@
     </nav>
 
     <!-- 2. menu -->
-    <section class="menu">
+    <section id="menu">
       <!-- 2-1. left -->
       <div class="menu__left">
         <p class="menu__title">웹 프론트엔드 과제</p>
@@ -107,7 +110,7 @@
     </section>
 
     <!-- 3. card lists -->
-    <section id="card-lists">
+    <section id="root">
       <div class="card-list"></div>
     </section>
 

@@ -165,7 +165,7 @@ nav .btn {
 /* 
 * 2. menu
 */
-.menu {
+#menu {
   position: relative;
 
   display: flex;
@@ -267,7 +267,7 @@ nav .btn {
 }
 
 /* 3. card lists */
-.card-lists {
+#root {
   display: flex;
   flex-direction: row;
 

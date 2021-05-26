@@ -1,0 +1,444 @@
+:root {
+  /* 1. colors */
+  /* blue themes */
+  --color-trello-blue-50: #e4f0f6;
+  --color-trello-blue-100: #bcd9ea;
+  --color-trello-blue-200: #8bbdd9;
+  --color-trello-blue-300: #5ba4cf;
+  --color-trello-blue-400: #298fca;
+  --color-trello-blue-500: #0079bf;
+  --color-trello-blue-600: #026aa7;
+  --color-trello-blue-700: #055a8c;
+  --color-trello-blue-800: #094c72;
+  --color-trello-blue-900: #0c3953;
+
+  /* basic colors */
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* text */
+  --color-text-dark0: rgba(200, 200, 200, 0.4);
+  --color-text-dark1: #888;
+  --color-text-dark2: #a8a8a8;
+  --color-text-dark3: #ccc;
+  --color-text: #fff;
+
+  /* nav */
+  --color-nav-icon: #fff;
+
+  /* separator */
+  --color-separator: #aaa;
+
+  /* card list */
+  --color-bg-card-list: #d9d9d9;
+  --color-bg-card-list-highlight: #999;
+
+  /* btn */
+  --color-btn-save: rgb(64, 158, 1);
+
+  /* 2. value */
+  /* border-radius */
+  --border-radius-small: 3px;
+
+  /* offsets */
+  --user-sign-y-offset: 30%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+ol ul {
+  list-style: none;
+}
+
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  background-color: var(--color-trello-blue-500);
+}
+
+.separator {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-separator);
+  box-sizing: border-box;
+  margin: 0 15px;
+}
+
+/* 
+* 1. nav 
+*/
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: var(--color-trello-blue-700);
+
+  padding: 7px 10px;
+}
+
+/* 
+* nav icon (font awesome)
+*/
+nav i {
+  font-size: 1.7rem;
+  text-align: center;
+  color: var(--color-nav-icon);
+}
+
+nav .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  width: 50px;
+  height: 50px;
+  margin: 0 6px;
+  border-radius: var(--border-radius-small);
+
+  background-color: var(--color-trello-blue-300);
+}
+
+/*
+* 1-1. left 3 btns
+*/
+.nav__left {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 
+* 1-2. main title
+*/
+.nav__title {
+  font-family: "Pacifico", cursive;
+  font-size: 1.6rem;
+  color: var(--color-text-dark0);
+}
+
+/* 메인 타이틀 옆의 아이콘 (중앙) */
+.nav__title i {
+  font-size: 1.6rem;
+  color: var(--color-text-dark0);
+}
+
+/* 
+* 1-3. right 3 btns
+*/
+.nav__right {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 
+* user (마지막, 오른쪽) 
+*/
+.nav__user {
+  padding: 0;
+  margin: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+/* 
+* 2. menu
+*/
+.menu {
+  position: relative;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  color: var(--color-text);
+}
+
+/* 
+* 2-1. left
+*/
+.menu__left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.menu__title {
+  font-size: 1.5rem;
+  padding: 10px 20px;
+}
+
+.menu .fa-lock {
+  margin-right: 10px;
+}
+
+.menu__user {
+  position: relative;
+}
+
+/* 
+* user image + ^^^
+*/
+.menu__user__image {
+  padding: 0;
+  margin: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+
+  margin-right: 10px;
+
+  display: flex;
+  align-self: center;
+}
+
+.menu__user i {
+  display: inline;
+
+  position: absolute;
+  left: 50%;
+  top: var(--user-sign-y-offset);
+
+  font-size: 0.8rem;
+  transform: scale(1.3, 0.8);
+}
+
+.menu__user i:nth-child(2) {
+  top: calc(var(--user-sign-y-offset) + 15%);
+}
+
+.menu__user i:nth-child(3) {
+  top: calc(var(--user-sign-y-offset) + 15% * 2);
+}
+
+.menu__left .menu__add-user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 25px;
+  height: 25px;
+
+  box-sizing: border-box;
+  padding: 5px 5px;
+
+  border-radius: 50%;
+  background-color: var(--color-trello-blue-200);
+  z-index: -1;
+}
+
+.menu__left .menu__add-user i {
+  font-size: 0.8rem;
+}
+
+/* 
+* 2-3. right
+*/
+.menu__right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.menu__right a {
+  margin: 0 15px;
+  color: var(--color-text);
+}
+
+/* 3. card lists */
+.card-lists {
+  margin: 0 10px;
+}
+
+/* 
+* 3-1. list
+*/
+.card-list {
+  width: 320px;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-bg-card-list);
+}
+
+/* 
+* 3-2. add list 
+*/
+.card-list__add-list {
+  background-color: var(--color-trello-blue-700);
+  color: var(--color-text-dark3);
+  padding: 8px 13px;
+  border-radius: var(--border-radius-small);
+  transition: background-color 0.2s linear;
+}
+
+.card-list__add-list:hover {
+  cursor: pointer;
+  background-color: var(--color-trello-blue-800);
+}
+
+.card-list__add-list:active {
+}
+
+.card-list__adding-list {
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.card-list__adding-list input {
+  display: block;
+  width: 99%;
+  height: 30px;
+
+  margin: 0 auto;
+
+  background-color: var(--color-text-dark3);
+
+  border: 1px solid var(--color-text-dark1);
+  box-shadow: inset 1px 1px 1.5px 0.01px var(--color-text-dark1);
+
+  text-indent: 8px;
+}
+
+.card-list__adding-list__under {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-top: 5px;
+}
+
+.btn {
+  background-color: var(--color-btn-save);
+  color: var(--color-text);
+
+  box-sizing: border-box;
+
+  padding: 8px 15px;
+  width: 55px;
+  border-radius: var(--border-radius-small);
+}
+
+.card-list__adding-list i {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  color: var(--color-text-dark2);
+}
+
+.card-list__title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 8px 13px;
+}
+
+.card-list__title i {
+  font-size: 0.9rem;
+  color: var(--color-text-dark2);
+}
+
+.card-list__add-card {
+  padding: 8px 13px;
+  color: var(--color-text-dark2);
+}
+
+.card-list__add-card:hover {
+  color: var(--color-black);
+  background-color: var(--color-bg-card-list-highlight);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.card-list__adding-card {
+  padding: 4px;
+  color: var(--color-text-dark2);
+}
+
+.card-list__adding-card textarea {
+  display: block;
+  width: 99%;
+  margin: 0 auto;
+}
+
+.card-list__adding-card__under {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-top: 5px;
+  margin-left: 1.5px;
+}
+
+.card-list__adding-card__under__left {
+  display: flex;
+  align-items: center;
+}
+
+.card-list__adding-card__under__left i {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  color: var(--color-text-dark2);
+}
+
+.card-list__adding-card__under__right i {
+  margin-right: 8px;
+  font-size: 0.9rem;
+  color: var(--color-text-dark2);
+}
+
+.card-list__added-card {
+  box-sizing: border-box;
+  padding: 4px;
+
+  color: var(--color-text-dark2);
+}
+
+.card-list__added-card:hover {
+}
+
+.card-list__added-inside {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  /* margin: 14px 8px; */
+  width: 99%;
+  box-sizing: border-box;
+
+  padding: 4px;
+
+  border-radius: var(--border-radius-small);
+
+  margin: 0 auto;
+  background-color: #fff;
+}
+
+.card-list__added-card p {
+}
+
+.card-list__added-card i {
+}

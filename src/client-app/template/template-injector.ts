@@ -1,142 +1,48 @@
-import { TyHTMLCode, TyEventListnerType, TyEventListner } from "typings";
-import { v4 as uuid } from "uuid";
+export class TemplateInjector<TCreateEl extends HTMLElement> {
+  private templateEl: HTMLTemplateElement;
+  private anchorEl: HTMLDivElement;
+  private createdEl: TCreateEl;
 
-class TemplateMaker {
-  public static makeAddList(): TyHTMLCode {
-    return `
-        <div class="card-list__add-list">Add a list...</div>
-        `;
+  constructor(
+    anchorId: string,
+    templateId: string,
+    insertWhere: InsertPosition,
+    newTemplateClassName?: string
+  ) {
+    // 1. set up the anchor tag and the template tag
+    this.templateEl = document.getElementById(
+      templateId
+    )! as HTMLTemplateElement;
+
+    if (!this.templateEl) {
+      throw new Error(`template ID ${templateId} is invalid!`);
+    }
+
+    this.anchorEl = document.getElementById(anchorId)! as HTMLDivElement;
+
+    if (!this.anchorEl) {
+      throw new Error(`anchor ID ${anchorId} is invalid!`);
+    }
+
+    // 2. import a node from the template
+    const imported = document.importNode(this.templateEl.content, true);
+
+    // 3. get the first element child of the imported node
+    this.createdEl = <TCreateEl>imported.firstElementChild;
+
+    if (!this.createdEl) {
+      throw new Error(`Element creation failed!`);
+    }
+
+    if (newTemplateClassName) {
+      this.createdEl.classList.add(newTemplateClassName);
+    }
+
+    // 4. forward the position to insert the createdEl
+    this.insertAt(insertWhere);
   }
 
-  /**
-   *
-   * @param onClickSaveBtn
-   * @returns [0]: HTML 템플릿 코드
-   *          [1]: save button click 을 등록하는 함수
-   *
-   */
-  public static makeAddingList(
-    onClickSaveBtn: (e: Event) => void
-  ): [TyHTMLCode, Function] {
-    const relOnClickSaveBtn = `adding-list-save-btn-${uuid()}`;
-    return [
-      `
-      <div class="card-list__adding-list">
-          <input type="text" placeholder="Add a list..." />
-          <div class="card-list__adding-list__under">
-            <button class="btn" rel=${relOnClickSaveBtn}>Save</button> <i class="fas fa-times"></i>
-          </div>
-        </div>
-      `,
-      () => {
-        const saveBtnEl = document.querySelector(
-          `[rel=${relOnClickSaveBtn}]`
-        ) as HTMLButtonElement;
-
-        if (!saveBtnEl) {
-          throw new Error("querySelector failed!: card-list__adding-list");
-        }
-
-        saveBtnEl.addEventListener("click", (e: Event): any =>
-          onClickSaveBtn(e)
-        );
-      },
-    ];
-  }
-
-  public static makeAddedList(title: string): [TyHTMLCode, Function] {
-    return [
-      `
-        <div class="card-list__title">
-          <strong>${title}</strong>
-          <i class="fas fa-ellipsis-h"></i>
-        </div>
-      `,
-      () => {},
-    ];
-  }
-
-  public static makeAddCard(
-    onClickAddCard: (e: Event) => any
-  ): [TyHTMLCode, Function] {
-    const relOnClickAddCard = `add-card-btn-${uuid()}`;
-    return [
-      `<p class="card-list__add-card" rel=${relOnClickAddCard}>Add a card...</p>`,
-      () => {
-        const addCardBtnEl = document.querySelector(
-          `[rel=${relOnClickAddCard}]`
-        ) as HTMLParagraphElement;
-
-        if (!addCardBtnEl) {
-          throw new Error("querySelector failed: card-list__add-card");
-        }
-
-        addCardBtnEl.addEventListener("click", (e: Event): any =>
-          onClickAddCard(e)
-        );
-      },
-    ];
-  }
-
-  public static makeAddingCard(
-    onClickAddingCard: (e: Event, content: string) => any
-  ): [TyHTMLCode, Function] {
-    const relAddingCardTextArea = `adding-card-text-area`;
-    const relOnClickAddingCard = `adding-card-btn-${uuid()}`;
-    return [
-      ` <div class="card-list__adding-card">
-          <textarea name="" id="" cols="30" rows="4" rel=${relAddingCardTextArea}></textarea>
-
-          <div class="card-list__adding-card__under">
-            <div class="card-list__adding-card__under__left">
-              <button class="btn" rel=${relOnClickAddingCard}>Add</button> <i class="fas fa-times"></i>
-            </div>
-            <div class="card-list__adding-card__under__right">
-              <i class="fas fa-ellipsis-h"></i>
-            </div>
-          </div>
-        </div>`,
-      () => {
-        const addingCardTextAreaEl = document.querySelector(
-          `[rel=${relAddingCardTextArea}]`
-        ) as HTMLTextAreaElement;
-
-        if (!addingCardTextAreaEl) {
-          throw new Error(
-            "querySelector failed: card--list__adding-card textarea"
-          );
-        }
-
-        const addingCardBtnEl = document.querySelector(
-          `[rel=${relOnClickAddingCard}]`
-        ) as HTMLButtonElement;
-
-        if (!addingCardBtnEl) {
-          throw new Error(
-            "querySelector failed: card--list__adding-card button"
-          );
-        }
-
-        addingCardBtnEl.addEventListener("click", (e: MouseEvent): any =>
-          onClickAddingCard(e, addingCardTextAreaEl.value)
-        );
-      },
-    ];
-  }
-
-  public static makeAddedCard(
-    onStartDrag: Function,
-    title: string
-  ): [TyHTMLCode, Function] {
-    return [
-      `
-      <div class="card-list__added-card">
-          <div class="card-list__added-inside">
-            <p class="card-list__added-card__title">${title}</p>
-            <i class="fas fa-pencil-alt"></i>
-          </div>
-        </div>`,
-      () => {},
-    ];
+  private insertAt(where: InsertPosition): void {
+    this.anchorEl.insertAdjacentElement(where, this.createdEl);
   }
 }

@@ -4,7 +4,7 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
   private createdEl: TCreateEl;
 
   constructor(
-    rootId: string,
+    root: string,
     templateId: string,
     insertWhere: InsertPosition,
     newTemplateClassName?: string
@@ -18,10 +18,10 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       throw new Error(`template ID ${templateId} is invalid!`);
     }
 
-    this.rootEl = document.getElementById(rootId)! as HTMLDivElement;
+    this.rootEl = document.querySelector(root)! as HTMLDivElement;
 
     if (!this.rootEl) {
-      throw new Error(`anchor ID ${rootId} is invalid!`);
+      throw new Error(`anchor ID ${root} is invalid!`);
     }
 
     // 2. import a node from the template

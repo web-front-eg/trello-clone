@@ -1,8 +1,8 @@
-import { IList } from "../models/IList";
-import { ICard } from "../models/ICard";
-import { Stack } from "../typings";
-import { TemplateInjector } from "../template/template-injector";
-import { addList } from "../template/template-names";
+import { IList } from "../models/IList.js";
+import { ICard } from "../models/ICard.js";
+import { Stack } from "../typings.js";
+import { TemplateInjector } from "../template/template-injector.js";
+import * as Templates from "../template/template-names.js";
 
 export class Lists {
   private rootEl: HTMLElement;
@@ -21,9 +21,9 @@ export class Lists {
 
     // 2. init template injector
     this.initialAddListTemplateInjector = new TemplateInjector<HTMLDivElement>(
-      "root",
-      addList,
-      "beforeend"
+      ".card-list",
+      Templates.addList,
+      "afterbegin"
     );
 
     this.init();

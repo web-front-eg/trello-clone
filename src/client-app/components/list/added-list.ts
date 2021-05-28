@@ -26,7 +26,8 @@ export class AddedList
       new TemplateInjector<HTMLParagraphElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addCard,
-        "afterend"
+        "afterend",
+        BaseEntity.currentListPosition - 1
       )
     );
   }

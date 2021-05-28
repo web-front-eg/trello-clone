@@ -40,7 +40,8 @@ export class AddingCard
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
-        "afterbegin"
+        "afterbegin",
+        BaseEntity.currentListPosition - 1
       ),
       this.content
     );
@@ -59,7 +60,8 @@ export class AddingCard
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
-        "afterbegin"
+        "afterbegin",
+        BaseEntity.currentListPosition - 1
       ),
       this.content
     );

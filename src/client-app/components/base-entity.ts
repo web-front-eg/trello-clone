@@ -10,10 +10,17 @@ export abstract class BaseEntity<
   protected currentEl: TyHTMLEl;
   protected nextEntity: TyNextEntity;
 
+  protected templateInjector: TemplateInjector<TyHTMLEl>;
+  public get getTemplateInjector(): TemplateInjector<TyHTMLEl> {
+    return this.templateInjector;
+  }
+
   constructor(
-    protected templateInjector: TemplateInjector<TyHTMLEl>,
+    templateInjector: TemplateInjector<TyHTMLEl>,
     currentEntityName: string
   ) {
+    this.templateInjector = templateInjector;
+
     if (!this.templateInjector) {
       throw new Error(`No template injector valid!: ${currentEntityName}`);
     }
@@ -22,6 +29,7 @@ export abstract class BaseEntity<
   }
 
   protected abstract init(): void;
+  protected abstract reset(): void;
 
   protected removeMyself(): void {
     this.templateInjector.removeMyself();

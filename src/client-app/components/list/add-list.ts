@@ -17,20 +17,49 @@ export class AddList
 
   protected init(): void {
     this.currentEl.addEventListener("click", this.onClickAddList);
+    this.currentEl.addEventListener("focusout", this.onFocusOut);
+  }
+
+  protected reset(): void {
+    this.currentEl.style.display = "none";
   }
 
   @autobind
   private onClickAddList(_: Event): void {
-    this.nextEntity = new AddingList(
-      new TemplateInjector<HTMLDivElement>(
-        this.templateInjector.getCurElIdOrClassName,
-        Templates.addingList,
-        "afterend"
-      )
+    if (!this.nextEntity) {
+      this.nextEntity = new AddingList(
+        new TemplateInjector<HTMLDivElement>(
+          this.templateInjector.getCurElIdOrClassName,
+          Templates.addingList,
+          "afterend"
+        )
+      );
+      this.nextEntity.setParentAddList = this;
+    }
+    this.nextEntity.onAddListClickedAgain();
+    this.reset();
+  }
+
+  @autobind
+  private onFocusOut(_: Event): void {
+    this.currentEl.style.display = "none";
+  }
+
+  public onAddingListClosed(): void {
+    // show add-list on closing adding-card
+    this.currentEl.style.display = "block";
+  }
+
+  public attachTo(newParentEl: HTMLElement): void {
+    newParentEl.insertAdjacentElement(
+      "afterbegin",
+      this.getTemplateInjector.getCreatedEl
+    );
+    this.getTemplateInjector.getCreatedEl.insertAdjacentElement(
+      "afterend",
+      this.nextEntity.getTemplateInjector.getCreatedEl
     );
 
-    // TODO: change remote to hide div itself due to there must be
-    // a return point of return
-    this.currentEl.remove();
+    this.currentEl.click();
   }
 }

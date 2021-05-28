@@ -10,11 +10,12 @@ export class AddCard
   implements ICard
 {
   public content: string;
-  private currentCardPosition: number;
+  private readonly fixedCurrentListPosition: number;
 
   constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
     super(templateInjector, "AddCard");
-    this.currentCardPosition = BaseEntity.currentListPosition - 1;
+    this.fixedCurrentListPosition = BaseEntity.currentListPosition - 1;
+
     this.init();
   }
 
@@ -22,15 +23,42 @@ export class AddCard
     this.currentEl.addEventListener("click", this.onClickAddCard);
   }
 
+  protected reset(): void {
+    this.currentEl.style.display = "none";
+  }
+
   @autobind
   private onClickAddCard(_: Event): void {
-    this.nextEntity = new AddingCard(
-      new TemplateInjector<HTMLDivElement>(
-        this.templateInjector.getCurElIdOrClassName,
-        Templates.addingCard,
-        "afterend",
-        this.currentCardPosition
-      )
+    // check .adding-card already created due to prevent
+    // unnecessary re-creation of itself
+    // (only 1 .adding-card in need)
+    if (!this.nextEntity) {
+      this.nextEntity = new AddingCard(
+        new TemplateInjector<HTMLDivElement>(
+          this.templateInjector.getCurElIdOrClassName,
+          Templates.addingCard,
+          "afterend",
+          this.fixedCurrentListPosition
+        ),
+        this.fixedCurrentListPosition,
+        this
+      );
+    } else {
+      this.nextEntity.onAddCardClickedAgain();
+    }
+    this.reset();
+  }
+
+  public onAddingCardClosed(): void {
+    // show add-card on closing adding-card
+    this.currentEl.style.display = "block";
+  }
+
+  public onAddingCardAttached(addingCard: AddingCard): void {
+    // attach add-card under the attached adding-card
+    addingCard.getTemplateInjector.getCreatedEl.insertAdjacentElement(
+      "afterend",
+      this.currentEl
     );
   }
 }

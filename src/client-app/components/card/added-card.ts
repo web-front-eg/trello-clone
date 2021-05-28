@@ -19,6 +19,10 @@ export class AddedCard
 
   protected init(): void {}
 
+  protected reset(): void {
+    //
+  }
+
   public dragStartHandler(e: DragEvent): void {}
 
   public dragEndHandler(e: DragEvent): void {}

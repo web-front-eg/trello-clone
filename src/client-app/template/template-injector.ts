@@ -48,9 +48,8 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
         throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);
       }
     } else {
-      this.rootEl = document.querySelectorAll(rootIdorClassName)[
-        nthOfResult
-      ]! as HTMLDivElement;
+      const allRoots = document.querySelectorAll(rootIdorClassName);
+      this.rootEl = allRoots[nthOfResult]! as HTMLDivElement;
 
       if (!this.rootEl) {
         throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);

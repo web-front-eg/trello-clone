@@ -1,12 +1,9 @@
-import { IList } from "../models/IList.js";
-import { Stack } from "../typings.js";
 import { TemplateInjector } from "../template/template-injector.js";
 import * as Templates from "../template/template-names.js";
-import { autobind } from "../decorators/autobind.js";
 import { AddList } from "./list/add-list.js";
 import { BaseEntity } from "./base-entity.js";
 export class Lists extends BaseEntity<HTMLDivElement, AddList> {
-  public static onListAdded_addNewListColumn: Function;
+  public static onListAdded_addNewList: Function;
 
   constructor() {
     // 1. init template injector
@@ -15,7 +12,7 @@ export class Lists extends BaseEntity<HTMLDivElement, AddList> {
     super(
       new TemplateInjector<HTMLDivElement>(
         "#root",
-        Templates.listColumn,
+        Templates.list,
         "afterbegin"
       ),
       "Lists"
@@ -36,22 +33,18 @@ export class Lists extends BaseEntity<HTMLDivElement, AddList> {
   protected init(): void {
     // performs attching a new .add-list onto the next column
     // 새로운 .add-list 를 다음 열에 추가
-    Lists.onListAdded_addNewListColumn = () => {
+    Lists.onListAdded_addNewList = () => {
       this.templateInjector = new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
-        Templates.listColumn,
+        Templates.list,
         "afterend",
         BaseEntity.currentListPosition++
       );
-
-      this.nextEntity = new AddList(
-        new TemplateInjector<HTMLDivElement>(
-          this.templateInjector.getCurElIdOrClassName,
-          Templates.addList,
-          "afterbegin",
-          BaseEntity.currentListPosition
-        )
-      );
+      this.nextEntity.attachTo(this.templateInjector.getCreatedEl);
     };
+  }
+
+  protected reset(): void {
+    //
   }
 }

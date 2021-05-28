@@ -20,14 +20,10 @@ export class AddingList
   private readonly titleInputEl: HTMLInputElement;
   private readonly saveBtnEl: HTMLButtonElement;
 
-  private parentAddList: AddList;
-  public set setParentAddList(newParentAddList: AddList) {
-    // console.log(newParentAddList);
-
-    this.parentAddList = newParentAddList;
-  }
-
-  constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
+  constructor(
+    templateInjector: TemplateInjector<HTMLDivElement>,
+    private parentAddList: AddList
+  ) {
     super(templateInjector, "AddingList");
 
     this.titleInputEl = this.currentEl.firstElementChild! as HTMLInputElement;
@@ -54,20 +50,14 @@ export class AddingList
   private onClickSaveBtn(_: Event): void {
     // set the content of adding-list, which is the title of added-list,
     // as the value of input.
-    this.attachAddedList();
+    this.addChild();
   }
 
   @autobind
   private onPressEnterKey(e: Event): void {
-    // only KeyboardEvent can read the line below
-    const eventAsKeyboardEvent = e as KeyboardEvent;
-    if (!eventAsKeyboardEvent) return;
+    if ((e as KeyboardEvent)!.key !== "Enter") return;
 
-    // set the content of adding-list, which is the title of added-list,
-    // as the value of input.
-    if (eventAsKeyboardEvent.key !== "Enter") return;
-
-    this.attachAddedList();
+    this.addChild();
   }
 
   @autobind
@@ -76,7 +66,11 @@ export class AddingList
     this.parentAddList.onAddingListClosed();
   }
 
-  private attachAddedList(): void {
+  /**
+   * set the content of adding-list, which is the title of added-list
+   * with the value of input.
+   */
+  private addChild(): void {
     this.setContent(this.titleInputEl.value);
 
     Lists.onListAdded_addNewList();
@@ -94,6 +88,9 @@ export class AddingList
     this.reset();
   }
 
+  /**
+   * show adding-list and auto-focus at the input
+   */
   public onAddListClickedAgain(): void {
     this.currentEl.style.display = "block";
     this.titleInputEl.focus();

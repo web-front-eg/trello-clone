@@ -26,22 +26,25 @@ export class AddList
 
   @autobind
   private onClickAddList(_: Event): void {
+    // re-using adding-list
     if (!this.nextEntity) {
       this.nextEntity = new AddingList(
         new TemplateInjector<HTMLDivElement>(
           this.templateInjector.getCurElIdOrClassName,
           Templates.addingList,
           "afterend"
-        )
+        ),
+        this
       );
-      this.nextEntity.setParentAddList = this;
     }
+
     this.nextEntity.onAddListClickedAgain();
     this.reset();
   }
 
   @autobind
   private onFocusOut(_: Event): void {
+    // hide add-list automatically on focusing out
     this.currentEl.style.display = "none";
   }
 
@@ -50,16 +53,17 @@ export class AddList
     this.currentEl.style.display = "block";
   }
 
-  public attachTo(newParentEl: HTMLElement): void {
-    newParentEl.insertAdjacentElement(
-      "afterbegin",
-      this.getTemplateInjector.getCreatedEl
-    );
-    this.getTemplateInjector.getCreatedEl.insertAdjacentElement(
+  public attachTo_afterFirstAddList(newParentEl: HTMLElement): void {
+    // attach add-list to new parent element
+    newParentEl.insertAdjacentElement("afterbegin", this.currentEl);
+
+    // attach adding-list to add-list
+    this.currentEl.insertAdjacentElement(
       "afterend",
       this.nextEntity.getTemplateInjector.getCreatedEl
     );
 
+    // click add-list since it's already created once
     this.currentEl.click();
   }
 }

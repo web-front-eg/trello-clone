@@ -1,6 +1,4 @@
 export class TemplateInjector<TCreateEl extends HTMLElement> {
-  private uuid: string;
-
   private templateEl: HTMLTemplateElement;
 
   /**
@@ -28,7 +26,7 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
     rootIdorClassName: string,
     templateIdOrClassName: string,
     insertWhere: InsertPosition,
-    newTemplateClassName?: string
+    nthOfResult?: number
   ) {
     // 1. set up the anchor tag and the template tag
     this.templateEl = document.getElementById(
@@ -41,10 +39,22 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       );
     }
 
-    this.rootEl = document.querySelector(rootIdorClassName)! as HTMLDivElement;
+    if (!nthOfResult) {
+      this.rootEl = document.querySelector(
+        rootIdorClassName
+      )! as HTMLDivElement;
 
-    if (!this.rootEl) {
-      throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);
+      if (!this.rootEl) {
+        throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);
+      }
+    } else {
+      this.rootEl = document.querySelectorAll(rootIdorClassName)[
+        nthOfResult
+      ]! as HTMLDivElement;
+
+      if (!this.rootEl) {
+        throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);
+      }
     }
 
     // 2. import a node from the template
@@ -57,9 +67,9 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       throw new Error(`Element creation failed!`);
     }
 
-    if (newTemplateClassName) {
-      this.createdEl.classList.add(newTemplateClassName);
-    }
+    // if (newTemplateClassName) {
+    //   this.createdEl.classList.add(newTemplateClassName);
+    // }
 
     // 4. save id or class name of the created element.
     this.curElIdOrClassName = this.createdEl.id ? `#${this.createdEl.id}` : "";
@@ -67,11 +77,7 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       ? `.${this.createdEl.className}`
       : "";
 
-    // 5. set up a key to identify as a data attribute
-    this.uuid = (Math.random() * 1234124).toString().slice(0, 5).trim();
-    this.createdEl.dataset["key"] = this.uuid;
-
-    // 6. forward the position to insert the createdEl
+    // 5. forward the position to insert the createdEl
     this.insertAt(insertWhere);
   }
 

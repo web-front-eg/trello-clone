@@ -2,8 +2,7 @@ import { TemplateInjector } from "../template/template-injector.js";
 import * as Templates from "../template/template-names.js";
 import { AddList } from "./list/add-list.js";
 import { BaseEntity } from "./base-entity.js";
-import { AddingList } from "./list/adding-list.js";
-export class Lists extends BaseEntity<HTMLDivElement, AddList | AddingList> {
+export class Lists extends BaseEntity<HTMLDivElement, AddList> {
   public static onListAdded_addNewList: Function;
 
   constructor() {
@@ -41,15 +40,11 @@ export class Lists extends BaseEntity<HTMLDivElement, AddList | AddingList> {
         "afterend",
         BaseEntity.currentListPosition++
       );
-
-      this.nextEntity = new AddingList(
-        new TemplateInjector<HTMLDivElement>(
-          this.templateInjector.getCurElIdOrClassName,
-          Templates.addingList,
-          "afterbegin",
-          BaseEntity.currentListPosition
-        )
-      );
+      this.nextEntity.attachTo(this.templateInjector.getCreatedEl);
     };
+  }
+
+  protected reset(): void {
+    //
   }
 }

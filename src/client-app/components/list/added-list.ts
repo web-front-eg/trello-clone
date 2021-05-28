@@ -20,6 +20,10 @@ export class AddedList
     this.init();
   }
 
+  protected reset(): void {
+    //
+  }
+
   protected init(): void {
     // attach add card initially
     this.nextEntity = new AddCard(

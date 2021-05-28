@@ -5,6 +5,7 @@ import { autobind } from "../../decorators/autobind.js";
 import { Lists } from "../lists.js";
 import { AddedList } from "./added-list.js";
 import * as Templates from "../../template/template-names.js";
+import { AddList } from "./add-list.js";
 
 export class AddingList
   extends BaseEntity<HTMLDivElement, AddedList>
@@ -16,8 +17,15 @@ export class AddingList
     console.log("content of AddingList has been set as:", this.content);
   }
 
-  private titleInputEl: HTMLInputElement;
-  private saveBtnEl: HTMLButtonElement;
+  private readonly titleInputEl: HTMLInputElement;
+  private readonly saveBtnEl: HTMLButtonElement;
+
+  private parentAddList: AddList;
+  public set setParentAddList(newParentAddList: AddList) {
+    // console.log(newParentAddList);
+
+    this.parentAddList = newParentAddList;
+  }
 
   constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
     super(templateInjector, "AddingList");
@@ -26,6 +34,7 @@ export class AddingList
     this.titleInputEl.focus();
 
     this.saveBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
+
     this.init();
   }
 
@@ -33,9 +42,10 @@ export class AddingList
     // bind clicking the Save button or press enter
     this.saveBtnEl.addEventListener("click", this.onClickSaveBtn);
     this.titleInputEl.addEventListener("keypress", this.onPressEnterKey);
+    this.currentEl.addEventListener("focusout", this.onFocusOut);
   }
 
-  private reset(): void {
+  protected reset(): void {
     this.titleInputEl.value = "";
     this.setContent("");
   }
@@ -44,24 +54,7 @@ export class AddingList
   private onClickSaveBtn(_: Event): void {
     // set the content of adding-list, which is the title of added-list,
     // as the value of input.
-    this.setContent(this.titleInputEl.value);
-    Lists.onListAdded_addNewList();
-
-    if (this.nextEntity) return;
-
-    this.nextEntity = new AddedList(
-      new TemplateInjector<HTMLDivElement>(
-        ".list",
-        Templates.addedList,
-        "beforeend",
-        BaseEntity.currentListPosition - 1
-      ),
-      this.content
-    );
-
-    this.reset();
-    // this.currentEl?.remove();
-    this.currentEl.style.display = "none";
+    this.attachAddedList();
   }
 
   @autobind
@@ -74,10 +67,19 @@ export class AddingList
     // as the value of input.
     if (eventAsKeyboardEvent.key !== "Enter") return;
 
-    this.setContent(this.titleInputEl.value);
-    Lists.onListAdded_addNewList();
+    this.attachAddedList();
+  }
 
-    if (this.nextEntity) return;
+  @autobind
+  private onFocusOut(_: Event): void {
+    this.currentEl.style.display = "none";
+    this.parentAddList.onAddingListClosed();
+  }
+
+  private attachAddedList(): void {
+    this.setContent(this.titleInputEl.value);
+
+    Lists.onListAdded_addNewList();
 
     this.nextEntity = new AddedList(
       new TemplateInjector<HTMLDivElement>(
@@ -90,7 +92,10 @@ export class AddingList
     );
 
     this.reset();
-    // this.currentEl?.remove();
-    this.currentEl.style.display = "none";
+  }
+
+  public onAddListClickedAgain(): void {
+    this.currentEl.style.display = "block";
+    this.titleInputEl.focus();
   }
 }

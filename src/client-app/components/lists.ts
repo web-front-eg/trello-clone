@@ -7,7 +7,7 @@ import { AddList } from "./list/add-list.js";
 export class Lists {
   private listColumnTemplateInjector: TemplateInjector<HTMLDivElement>;
 
-  public static onListAdded: Function;
+  public static onListAdded_addNewListColumn: Function;
 
   private listArr: Array<IList> = new Array<IList>();
 
@@ -21,6 +21,7 @@ export class Lists {
       "afterbegin"
     );
 
+    // 2. inject the initial .add-list template under #root
     this.listArr.push(
       new AddList(
         new TemplateInjector<HTMLDivElement>(
@@ -30,7 +31,6 @@ export class Lists {
         )
       )
     );
-    console.log(this.listArr);
 
     this.initDelegate();
   }
@@ -38,7 +38,7 @@ export class Lists {
   private initDelegate(): void {
     // performs attching a new .add-list onto the next column
     // 새로운 .add-list 를 다음 열에 추가
-    Lists.onListAdded = () => {
+    Lists.onListAdded_addNewListColumn = () => {
       // 1. remove the current .adding-list from the last .list-column
       //    현재 .adding-list 을 기존의 list-column 에서 삭제
       // this.listColumnTemplateInjector.removeMyself();
@@ -58,16 +58,16 @@ export class Lists {
       //   Templates.addList,
       //   "afterbegin"
       // );
-      this.listArr.push(
-        new AddList(
-          new TemplateInjector<HTMLDivElement>(
-            this.listColumnTemplateInjector.getCurElIdOrClassName,
-            Templates.addList,
-            "afterbegin"
-          )
-        )
-      );
-      console.log(this.listArr);
+      // this.listArr.push(
+      //   new AddList(
+      //     new TemplateInjector<HTMLDivElement>(
+      //       this.listColumnTemplateInjector.getCurElIdOrClassName,
+      //       Templates.addList,
+      //       "afterbegin"
+      //     )
+      //   )
+      // );
+      // console.log(this.listArr);
 
       // 4. 기존의 list
       // (this.listStack.pop() as AddingList<HTMLFormElement>).removeMyself();

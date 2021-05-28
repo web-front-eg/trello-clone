@@ -1,42 +1,38 @@
+import { BaseEntity } from "../base-entity.js";
 import { TemplateInjector } from "../../template/template-injector.js";
 import { IList } from "../../models/IList.js";
 import { autobind } from "../../decorators/autobind.js";
 import * as Templates from "../../template/template-names.js";
 import { AddingList } from "./adding-list.js";
-import { Lists } from "../lists.js";
 
-export class AddList implements IList {
+export class AddList
+  extends BaseEntity<HTMLDivElement, AddingList>
+  implements IList
+{
   public content: string = "";
-  private addListDivEl: HTMLDivElement;
-  private listArr: Array<IList> = new Array<IList>();
-
-  constructor(private templateInjector: TemplateInjector<HTMLDivElement>) {
-    if (!this.templateInjector) {
-      throw new Error("No template injector valid!");
-    }
-
-    this.addListDivEl = this.templateInjector.getCreatedEl!;
-
+  constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
+    super(templateInjector, "AddList");
     this.init();
   }
 
-  private init(): void {
-    this.addListDivEl.addEventListener("click", this.onClickAddList);
+  protected init(): void {
+    this.currentEl.addEventListener("click", this.onClickAddList);
   }
 
   @autobind
   private onClickAddList(_: Event): void {
-    this.listArr.push(
-      new AddingList(
+    if (!this.nextEntity) {
+      this.nextEntity = new AddingList(
         new TemplateInjector<HTMLDivElement>(
           this.templateInjector.getCurElIdOrClassName,
           Templates.addingList,
-          "afterbegin"
+          "afterend"
         )
-      )
-    );
+      );
+    }
 
-    // this.addListDivEl.remove();
-    // Lists.onListAdded();
+    // TODO: change remote to hide div itself due to there must be
+    // a return point of return
+    this.currentEl.remove();
   }
 }

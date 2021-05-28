@@ -1,4 +1,6 @@
-export class TemplateInjector<TCreateEl extends HTMLElement> {  
+export class TemplateInjector<TCreateEl extends HTMLElement> {
+  private uuid: string;
+
   private templateEl: HTMLTemplateElement;
 
   /**
@@ -14,39 +16,35 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
     return this.createdEl;
   }
 
-  private curElId: string;
+  private curElIdOrClassName: string;
   /**
    * if not exists, it's falsy ""
    */
-  public get getCurElId(): string {
-    return this.curElId;
-  }
-
-  private curElClass: string;
-  /**
-   * if not exists, it's falsy ""
-   */
-  public get getCurElClass(): string {
-    return this.curElClass;
+  public get getCurElIdOrClassName(): string {
+    return this.curElIdOrClassName;
   }
 
   constructor(
-    root: string,
-    template: string,
+    rootIdorClassName: string,
+    templateIdOrClassName: string,
     insertWhere: InsertPosition,
     newTemplateClassName?: string
   ) {
     // 1. set up the anchor tag and the template tag
-    this.templateEl = document.getElementById(template)! as HTMLTemplateElement;
+    this.templateEl = document.getElementById(
+      templateIdOrClassName
+    )! as HTMLTemplateElement;
 
     if (!this.templateEl) {
-      throw new Error(`template ID or Class ${template} is invalid!`);
+      throw new Error(
+        `template ID or Class ${templateIdOrClassName} is invalid!`
+      );
     }
 
-    this.rootEl = document.querySelector(root)! as HTMLDivElement;
+    this.rootEl = document.querySelector(rootIdorClassName)! as HTMLDivElement;
 
     if (!this.rootEl) {
-      throw new Error(`anchor ID or Class ${root} is invalid!`);
+      throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);
     }
 
     // 2. import a node from the template
@@ -64,10 +62,16 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
     }
 
     // 4. save id or class name of the created element.
-    this.curElId = this.createdEl.id ?? "";
-    this.curElClass = this.createdEl.className ?? "";
+    this.curElIdOrClassName = this.createdEl.id ? `#${this.createdEl.id}` : "";
+    this.curElIdOrClassName = this.createdEl.className
+      ? `.${this.createdEl.className}`
+      : "";
 
-    // 5. forward the position to insert the createdEl
+    // 5. set up a key to identify as a data attribute
+    this.uuid = (Math.random() * 1234124).toString().slice(0, 5).trim();
+    this.createdEl.dataset["key"] = this.uuid;
+
+    // 6. forward the position to insert the createdEl
     this.insertAt(insertWhere);
   }
 

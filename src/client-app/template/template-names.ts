@@ -1,3 +1,5 @@
+export const listColumn = "template__list-column";
+
 export const addList = "template__add-list";
 export const addingList = "template__adding-list";
 export const addedList = "template__added-list";

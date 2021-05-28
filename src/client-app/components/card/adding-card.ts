@@ -15,21 +15,36 @@ export class AddingCard
     console.log("content of AddingCard has been set as:", this.content);
   }
 
+  private fixedCurrentListPosition: number;
+
   private titleTextareaEl: HTMLTextAreaElement;
   private addBtnEl: HTMLButtonElement;
 
-  constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
+  constructor(
+    templateInjector: TemplateInjector<HTMLDivElement>,
+    addListPos: number
+  ) {
     super(templateInjector, "AddingCard");
 
+    this.fixedCurrentListPosition = addListPos;
+    
     this.titleTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
+    this.titleTextareaEl.focus();
+
     this.addBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
+
     this.init();
   }
 
   protected init(): void {
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
     this.titleTextareaEl.addEventListener("keypress", this.onPressEnterKey);
+  }
+
+  private reset(): void {
+    this.titleTextareaEl.value = "";
+    this.setContent("");
   }
 
   @autobind
@@ -41,19 +56,22 @@ export class AddingCard
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
         "afterbegin",
-        BaseEntity.currentListPosition - 1
+        this.fixedCurrentListPosition
       ),
       this.content
     );
 
-    this.setContent("");
+    this.reset();
   }
 
   @autobind
   private onPressEnterKey(e: Event): void {
     const eventAsKeyboardEvent = e as KeyboardEvent;
+
     if (!eventAsKeyboardEvent) return;
+
     if (eventAsKeyboardEvent.key !== "Enter") return;
+
     this.setContent(this.titleTextareaEl.value);
 
     this.nextEntity = new AddedCard(
@@ -61,11 +79,11 @@ export class AddingCard
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
         "afterbegin",
-        BaseEntity.currentListPosition - 1
+        this.fixedCurrentListPosition
       ),
       this.content
     );
 
-    this.setContent("");
+    this.reset();
   }
 }

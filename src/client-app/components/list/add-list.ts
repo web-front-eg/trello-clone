@@ -31,6 +31,7 @@ export class AddList
 
     // TODO: change remote to hide div itself due to there must be
     // a return point of return
-    this.currentEl.remove();
+    this.currentEl.style.display = "none";
+    // this.currentEl.remove();
   }
 }

@@ -23,6 +23,8 @@ export class AddingList
     super(templateInjector, "AddingList");
 
     this.titleInputEl = this.currentEl.firstElementChild! as HTMLInputElement;
+    this.titleInputEl.focus();
+
     this.saveBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
     this.init();
   }
@@ -33,18 +35,23 @@ export class AddingList
     this.titleInputEl.addEventListener("keypress", this.onPressEnterKey);
   }
 
+  private reset(): void {
+    this.titleInputEl.value = "";
+    this.setContent("");
+  }
+
   @autobind
   private onClickSaveBtn(_: Event): void {
     // set the content of adding-list, which is the title of added-list,
     // as the value of input.
     this.setContent(this.titleInputEl.value);
-    Lists.onListAdded_addNewListColumn();
+    Lists.onListAdded_addNewList();
 
     if (this.nextEntity) return;
 
     this.nextEntity = new AddedList(
       new TemplateInjector<HTMLDivElement>(
-        this.templateInjector.getCurElIdOrClassName,
+        ".list",
         Templates.addedList,
         "beforeend",
         BaseEntity.currentListPosition - 1
@@ -52,7 +59,9 @@ export class AddingList
       this.content
     );
 
-    this.setContent("");
+    this.reset();
+    // this.currentEl?.remove();
+    this.currentEl.style.display = "none";
   }
 
   @autobind
@@ -66,13 +75,13 @@ export class AddingList
     if (eventAsKeyboardEvent.key !== "Enter") return;
 
     this.setContent(this.titleInputEl.value);
-    Lists.onListAdded_addNewListColumn();
+    Lists.onListAdded_addNewList();
 
     if (this.nextEntity) return;
 
     this.nextEntity = new AddedList(
       new TemplateInjector<HTMLDivElement>(
-        this.templateInjector.getCurElIdOrClassName,
+        ".list",
         Templates.addedList,
         "beforeend",
         BaseEntity.currentListPosition - 1
@@ -80,6 +89,8 @@ export class AddingList
       this.content
     );
 
-    this.setContent("");
+    this.reset();
+    // this.currentEl?.remove();
+    this.currentEl.style.display = "none";
   }
 }

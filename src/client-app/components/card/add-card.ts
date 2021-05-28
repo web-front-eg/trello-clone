@@ -10,9 +10,11 @@ export class AddCard
   implements ICard
 {
   public content: string;
+  private currentCardPosition: number;
 
   constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
     super(templateInjector, "AddCard");
+    this.currentCardPosition = BaseEntity.currentListPosition - 1;
     this.init();
   }
 
@@ -26,7 +28,8 @@ export class AddCard
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addingCard,
-        "afterend"
+        "afterend",
+        this.currentCardPosition
       )
     );
   }

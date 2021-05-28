@@ -46,7 +46,8 @@ export class AddingList
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedList,
-        "beforeend"
+        "beforeend",
+        BaseEntity.currentListPosition - 1
       ),
       this.content
     );
@@ -73,7 +74,8 @@ export class AddingList
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedList,
-        "beforeend"
+        "beforeend",
+        BaseEntity.currentListPosition - 1
       ),
       this.content
     );

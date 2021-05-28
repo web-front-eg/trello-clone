@@ -40,7 +40,7 @@ export class Lists extends BaseEntity<HTMLDivElement, AddList> {
         "afterend",
         BaseEntity.currentListPosition++
       );
-      this.nextEntity.attachTo(this.templateInjector.getCreatedEl);
+      this.nextEntity.attachTo_afterFirstAddList(this.templateInjector.getCreatedEl);
     };
   }
 

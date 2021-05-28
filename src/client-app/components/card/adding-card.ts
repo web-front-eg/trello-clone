@@ -53,18 +53,14 @@ export class AddingCard
 
   @autobind
   private onClickAddCard(_: Event): void {
-    this.attachAddedCard();
+    this.addChild();
   }
 
   @autobind
   private onPressEnterKey(e: Event): void {
-    const eventAsKeyboardEvent = e as KeyboardEvent;
+    if ((e as KeyboardEvent).key !== "Enter") return;
 
-    if (!eventAsKeyboardEvent) return;
-
-    if (eventAsKeyboardEvent.key !== "Enter") return;
-
-    this.attachAddedCard();
+    this.addChild();
   }
 
   @autobind
@@ -73,7 +69,11 @@ export class AddingCard
     this.parentAddCard.onAddingCardClosed();
   }
 
-  private attachAddedCard(): void {
+  /**
+   * set the content of adding-card, which is the title of added-card
+   * with the value of input.
+   */
+  private addChild(): void {
     this.setContent(this.titleTextareaEl.value);
 
     this.nextEntity = new AddedCard(
@@ -81,9 +81,15 @@ export class AddingCard
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
         "beforebegin",
-        this.fixedCurrentListPosition
+        this.fixedCurrentListPosition,
+        true
       ),
       this.content
+    );
+
+    this.nextEntity.getTemplateInjector.insertAtManually(
+      "beforebegin",
+      this.currentEl
     );
 
     this.parentAddCard.onAddingCardAttached(this);

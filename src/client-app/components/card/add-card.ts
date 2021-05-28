@@ -29,9 +29,7 @@ export class AddCard
 
   @autobind
   private onClickAddCard(_: Event): void {
-    // check .adding-card already created due to prevent
-    // unnecessary re-creation of itself
-    // (only 1 .adding-card in need)
+    // re-using adding-card
     if (!this.nextEntity) {
       this.nextEntity = new AddingCard(
         new TemplateInjector<HTMLDivElement>(

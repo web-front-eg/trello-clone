@@ -22,11 +22,20 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
     return this.curElIdOrClassName;
   }
 
+  /**
+   *
+   * @param rootIdorClassName key to find root Element
+   * @param templateIdOrClassName key to find template
+   * @param insertWhere insert position
+   * @param listPos list position at head (index)
+   * @param isManualInserted deroute to insert manually the created element from template
+   */
   constructor(
     rootIdorClassName: string,
     templateIdOrClassName: string,
     insertWhere: InsertPosition,
-    nthOfResult?: number
+    listPos?: number,
+    private isManualInserted: boolean = false
   ) {
     // 1. set up the anchor tag and the template tag
     this.templateEl = document.getElementById(
@@ -39,20 +48,26 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       );
     }
 
-    if (!nthOfResult) {
-      this.rootEl = document.querySelector(
-        rootIdorClassName
-      )! as HTMLDivElement;
+    if (!this.isManualInserted) {
+      if (!listPos) {
+        this.rootEl = document.querySelector(
+          rootIdorClassName
+        )! as HTMLDivElement;
 
-      if (!this.rootEl) {
-        throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);
-      }
-    } else {
-      const allRoots = document.querySelectorAll(rootIdorClassName);
-      this.rootEl = allRoots[nthOfResult]! as HTMLDivElement;
+        if (!this.rootEl) {
+          throw new Error(
+            `anchor ID or Class ${rootIdorClassName} is invalid!`
+          );
+        }
+      } else {
+        const allRoots = document.querySelectorAll(rootIdorClassName);
+        this.rootEl = allRoots[listPos]! as HTMLDivElement;
 
-      if (!this.rootEl) {
-        throw new Error(`anchor ID or Class ${rootIdorClassName} is invalid!`);
+        if (!this.rootEl) {
+          throw new Error(
+            `anchor ID or Class ${rootIdorClassName} is invalid!`
+          );
+        }
       }
     }
 
@@ -77,13 +92,26 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       : "";
 
     // 5. forward the position to insert the createdEl
-    this.insertAt(insertWhere);
+    if (!this.isManualInserted) {
+      this.insertAt(insertWhere);
+    }
+  }
+
+  public insertAtManually(where: InsertPosition, atEl: HTMLDivElement): void {
+    if (!this.isManualInserted) {
+      throw new Error(
+        "This template injector did not set 'isManualInserted' to 'true'"
+      );
+    }
+
+    this.rootEl = atEl;
+    this.insertAt(where);
   }
 
   private insertAt(where: InsertPosition): void {
     this.rootEl.insertAdjacentElement(where, this.createdEl);
   }
-
+  
   public removeMyself(): void {
     this.createdEl.remove();
   }

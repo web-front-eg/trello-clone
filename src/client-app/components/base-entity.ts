@@ -6,6 +6,7 @@ export abstract class BaseEntity<
   TyHTMLEl extends HTMLElement,
   TyNextEntity extends IList | ICard = any
 > {
+  protected static currentListPosition: number = 0;
   protected currentEl: TyHTMLEl;
   protected nextEntity: TyNextEntity;
 

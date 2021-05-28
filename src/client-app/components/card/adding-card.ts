@@ -20,6 +20,7 @@ export class AddingCard
 
   constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
     super(templateInjector, "AddingCard");
+
     this.titleTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
     this.addBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
@@ -32,16 +33,15 @@ export class AddingCard
   }
 
   @autobind
-  private onClickAddCard(e: Event): void {
+  private onClickAddCard(_: Event): void {
     this.setContent(this.titleTextareaEl.value);
-
-    // if (this.nextEntity) return;
 
     this.nextEntity = new AddedCard(
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
-        "afterbegin"
+        "afterbegin",
+        BaseEntity.currentListPosition - 1
       ),
       this.content
     );
@@ -56,13 +56,12 @@ export class AddingCard
     if (eventAsKeyboardEvent.key !== "Enter") return;
     this.setContent(this.titleTextareaEl.value);
 
-    // if (this.nextEntity) return;
-
     this.nextEntity = new AddedCard(
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
-        "afterbegin"
+        "afterbegin",
+        BaseEntity.currentListPosition - 1
       ),
       this.content
     );

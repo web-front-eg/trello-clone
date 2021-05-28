@@ -21,15 +21,13 @@ export class AddList
 
   @autobind
   private onClickAddList(_: Event): void {
-    if (!this.nextEntity) {
-      this.nextEntity = new AddingList(
-        new TemplateInjector<HTMLDivElement>(
-          this.templateInjector.getCurElIdOrClassName,
-          Templates.addingList,
-          "afterend"
-        )
-      );
-    }
+    this.nextEntity = new AddingList(
+      new TemplateInjector<HTMLDivElement>(
+        this.templateInjector.getCurElIdOrClassName,
+        Templates.addingList,
+        "afterend"
+      )
+    );
 
     // TODO: change remote to hide div itself due to there must be
     // a return point of return

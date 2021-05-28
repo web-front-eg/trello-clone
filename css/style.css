@@ -30,8 +30,8 @@
   --color-separator: #aaa;
 
   /* card list */
-  --color-bg-card-list: #d9d9d9;
-  --color-bg-card-list-highlight: #999;
+  --color-bg-list: #d9d9d9;
+  --color-bg-list-hover: #999;
 
   /* btn */
   --color-btn-save: rgb(64, 158, 1);
@@ -363,6 +363,8 @@ nav .btn {
   align-items: center;
 
   padding: 8px 13px;
+
+  background-color: var(--color-bg-list);
 }
 
 .list__title i {
@@ -373,11 +375,12 @@ nav .btn {
 .list__add-card {
   padding: 8px 13px;
   color: var(--color-text-dark2);
+  background-color: var(--color-bg-list);
 }
 
 .list__add-card:hover {
   color: var(--color-black);
-  background-color: var(--color-bg-list-highlight);
+  background-color: var(--color-bg-list-hover);
   cursor: pointer;
   text-decoration: underline;
 }
@@ -424,9 +427,6 @@ nav .btn {
   padding: 4px;
 
   color: var(--color-text-dark2);
-}
-
-.list__added-card:hover {
 }
 
 .list__added-inside {

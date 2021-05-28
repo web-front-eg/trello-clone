@@ -49,13 +49,6 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
       }
     } else {
       const allRoots = document.querySelectorAll(rootIdorClassName);
-      const allRoot2 = new Array(nthOfResult)
-        .fill("")
-        .map((_, i) => {
-          if (i === nthOfResult) {
-            return 0;
-          }
-        });
       this.rootEl = allRoots[nthOfResult]! as HTMLDivElement;
 
       if (!this.rootEl) {

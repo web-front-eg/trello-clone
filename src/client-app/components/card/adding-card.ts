@@ -4,6 +4,7 @@ import { ICard } from "../../models/ICard.js";
 import { AddedCard } from "./added-card.js";
 import { autobind } from "../../decorators/autobind.js";
 import * as Templates from "../../template/template-names.js";
+import { AddCard } from "./add-card.js";
 
 export class AddingCard
   extends BaseEntity<HTMLDivElement, AddedCard>
@@ -15,19 +16,20 @@ export class AddingCard
     console.log("content of AddingCard has been set as:", this.content);
   }
 
-  private fixedCurrentListPosition: number;
+  private readonly fixedCurrentListPosition: number;
 
-  private titleTextareaEl: HTMLTextAreaElement;
-  private addBtnEl: HTMLButtonElement;
+  private readonly titleTextareaEl: HTMLTextAreaElement;
+  private readonly addBtnEl: HTMLButtonElement;
 
   constructor(
     templateInjector: TemplateInjector<HTMLDivElement>,
-    addListPos: number
+    parentPos: number,
+    private parentAddCard: AddCard
   ) {
     super(templateInjector, "AddingCard");
 
-    this.fixedCurrentListPosition = addListPos;
-    
+    this.fixedCurrentListPosition = parentPos;
+
     this.titleTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
     this.titleTextareaEl.focus();
@@ -40,28 +42,18 @@ export class AddingCard
   protected init(): void {
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
     this.titleTextareaEl.addEventListener("keypress", this.onPressEnterKey);
+    this.currentEl.addEventListener("focusout", this.onFocusOut);
+    // this.currentEl.addEventListener("focusin", this.onFocusIn);
   }
 
-  private reset(): void {
+  protected reset(): void {
     this.titleTextareaEl.value = "";
     this.setContent("");
   }
 
   @autobind
   private onClickAddCard(_: Event): void {
-    this.setContent(this.titleTextareaEl.value);
-
-    this.nextEntity = new AddedCard(
-      new TemplateInjector<HTMLDivElement>(
-        this.templateInjector.getCurElIdOrClassName,
-        Templates.addedCard,
-        "afterbegin",
-        this.fixedCurrentListPosition
-      ),
-      this.content
-    );
-
-    this.reset();
+    this.attachAddedCard();
   }
 
   @autobind
@@ -72,18 +64,35 @@ export class AddingCard
 
     if (eventAsKeyboardEvent.key !== "Enter") return;
 
+    this.attachAddedCard();
+  }
+
+  @autobind
+  private onFocusOut(_: Event): void {
+    this.currentEl.style.display = "none";
+    this.parentAddCard.onAddingCardClosed();
+  }
+
+  private attachAddedCard(): void {
     this.setContent(this.titleTextareaEl.value);
 
     this.nextEntity = new AddedCard(
       new TemplateInjector<HTMLDivElement>(
         this.templateInjector.getCurElIdOrClassName,
         Templates.addedCard,
-        "afterbegin",
+        "beforebegin",
         this.fixedCurrentListPosition
       ),
       this.content
     );
 
+    this.parentAddCard.onAddingCardAttached(this);
     this.reset();
+  }
+
+  public onAddCardClickedAgain(): void {
+    // show and focus adding-card on clicking add-card again
+    this.currentEl.style.display = "block";
+    this.titleTextareaEl.focus();
   }
 }

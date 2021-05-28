@@ -24,10 +24,10 @@
     />
 
     <!-- main stylesheet -->
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
 
     <!-- script -->
-    <script type="module" src="/dist/client-app/index.js" defer></script>
+    <script type="module" src="./js/index.js" defer></script>
 
     <title>웹 프론트엔드 과제 | Trello</title>
   </head>
@@ -110,59 +110,65 @@
     </section>
 
     <!-- 3. card lists -->
-    <section id="root">
-      <div class="card-list"></div>
-    </section>
+    <section id="root"></section>
 
-    <!-- add list template -->
-    <template id="template__add-list">
-      <div class="card-list__add-list">Add a list...</div>
+    <!-- templates -->
+    <!-- 1. list column template -->
+    <template id="template__list-column">
+      <div class="list"></div>
     </template>
 
-    <!-- adding list template -->
+    <!-- 2. add list template -->
+    <template id="template__add-list">
+      <div class="list__add-list">Add a list...</div>
+    </template>
+
+    <!-- 3. adding list template -->
     <template id="template__adding-list">
-      <div class="card-list__adding-list">
+      <div class="list__adding-list">
         <input type="text" placeholder="Add a list..." />
-        <div class="card-list__adding-list__under">
-          <button class="btn">Save</button> <i class="fas fa-times"></i>
+        <div class="list__adding-list__under">
+          <button class="btn">Save</button>
+          <i class="fas fa-times"></i>
         </div>
       </div>
     </template>
 
-    <!-- added list (title) template -->
+    <!-- 4. added list (title) template -->
     <template id="template__added-list">
-      <div class="card-list__title">
+      <div class="list__title">
         <strong>리스트 1</strong>
         <i class="fas fa-ellipsis-h"></i>
       </div>
     </template>
 
-    <!-- add card template -->
+    <!-- 5. add card template -->
     <template id="template__add-card">
-      <p class="card-list__add-card">Add a card...</p>
+      <p class="list__add-card">Add a card...</p>
     </template>
 
-    <!-- adding card template -->
+    <!-- 6. adding card template -->
     <template class="template__adding-card">
-      <div class="card-list__adding-card">
+      <div class="list__adding-card">
         <textarea name="" id="" cols="30" rows="4"></textarea>
 
-        <div class="card-list__adding-card__under">
-          <div class="card-list__adding-card__under__left">
-            <button class="btn">Add</button> <i class="fas fa-times"></i>
+        <div class="list__adding-card__under">
+          <div class="list__adding-card__under__left">
+            <button type="submit" class="btn">Add</button>
+            <i class="fas fa-times"></i>
           </div>
-          <div class="card-list__adding-card__under__right">
+          <div class="list__adding-card__under__right">
             <i class="fas fa-ellipsis-h"></i>
           </div>
         </div>
       </div>
     </template>
 
-    <!-- added card template -->
+    <!-- 7. added card template -->
     <template class="template__added-card">
-      <div class="card-list__added-card">
-        <div class="card-list__added-inside">
-          <p class="card-list__added-card__title">카드 1</p>
+      <div class="list__added-card">
+        <div class="list__added-inside">
+          <p class="list__added-card__title">카드 1</p>
           <i class="fas fa-pencil-alt"></i>
         </div>
       </div>

@@ -19,7 +19,7 @@
   /* text */
   --color-text-dark0: rgba(200, 200, 200, 0.4);
   --color-text-dark1: #888;
-  --color-text-dark2: #a8a8a8;
+  --color-text-dark2: #bbb;
   --color-text-dark3: #ccc;
   --color-text: #fff;
 
@@ -277,51 +277,53 @@ nav .btn {
 /* 
 * 3-1. list
 */
-.card-list {
+.list {
   width: 320px;
   height: 100%;
   /* box-sizing: border-box; */
   margin-right: 10px;
   border-radius: var(--border-radius-small);
-  background-color: var(--color-bg-card-list);
+  background-color: var(--color-bg-list);
 }
 
-.card-list:last-child {
+.list:last-child {
   margin-right: 0;
 }
 
 /* 
 * 3-2. add list 
 */
-.card-list__add-list {
+.list__add-list {
   background-color: var(--color-trello-blue-700);
   color: var(--color-text-dark3);
+
   padding: 8px 13px;
   border-radius: var(--border-radius-small);
   transition: background-color 0.2s linear;
 }
 
-.card-list__add-list:hover {
+.list__add-list:hover {
   cursor: pointer;
   background-color: var(--color-trello-blue-800);
 }
 
-.card-list__add-list:active {
+.list__add-list:active {
 }
 
-.card-list__adding-list {
+.list__adding-list {
   padding: 4px;
   box-sizing: border-box;
+  background-color: var(--color-text-dark3);
 }
 
-.card-list__adding-list input {
+.list__adding-list input {
   display: block;
   width: 99%;
   height: 30px;
 
   margin: 0 auto;
 
-  background-color: var(--color-text-dark3);
+  background-color: var(--color-text-dark2);
 
   border: 1px solid var(--color-text-dark1);
   box-shadow: inset 1px 1px 1.5px 0.01px var(--color-text-dark1);
@@ -329,7 +331,7 @@ nav .btn {
   text-indent: 8px;
 }
 
-.card-list__adding-list__under {
+.list__adding-list__under {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -348,13 +350,13 @@ nav .btn {
   border-radius: var(--border-radius-small);
 }
 
-.card-list__adding-list i {
+.list__adding-list i {
   margin-left: 10px;
   font-size: 1.3rem;
   color: var(--color-text-dark2);
 }
 
-.card-list__title {
+.list__title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -363,35 +365,35 @@ nav .btn {
   padding: 8px 13px;
 }
 
-.card-list__title i {
+.list__title i {
   font-size: 0.9rem;
   color: var(--color-text-dark2);
 }
 
-.card-list__add-card {
+.list__add-card {
   padding: 8px 13px;
   color: var(--color-text-dark2);
 }
 
-.card-list__add-card:hover {
+.list__add-card:hover {
   color: var(--color-black);
-  background-color: var(--color-bg-card-list-highlight);
+  background-color: var(--color-bg-list-highlight);
   cursor: pointer;
   text-decoration: underline;
 }
 
-.card-list__adding-card {
+.list__adding-card {
   padding: 4px;
   color: var(--color-text-dark2);
 }
 
-.card-list__adding-card textarea {
+.list__adding-card textarea {
   display: block;
   width: 99%;
   margin: 0 auto;
 }
 
-.card-list__adding-card__under {
+.list__adding-card__under {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -400,34 +402,34 @@ nav .btn {
   margin-left: 1.5px;
 }
 
-.card-list__adding-card__under__left {
+.list__adding-card__under__left {
   display: flex;
   align-items: center;
 }
 
-.card-list__adding-card__under__left i {
+.list__adding-card__under__left i {
   margin-left: 10px;
   font-size: 1.3rem;
   color: var(--color-text-dark2);
 }
 
-.card-list__adding-card__under__right i {
+.list__adding-card__under__right i {
   margin-right: 8px;
   font-size: 0.9rem;
   color: var(--color-text-dark2);
 }
 
-.card-list__added-card {
+.list__added-card {
   box-sizing: border-box;
   padding: 4px;
 
   color: var(--color-text-dark2);
 }
 
-.card-list__added-card:hover {
+.list__added-card:hover {
 }
 
-.card-list__added-inside {
+.list__added-inside {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -445,8 +447,8 @@ nav .btn {
   background-color: #fff;
 }
 
-.card-list__added-card p {
+.list__added-card p {
 }
 
-.card-list__added-card i {
+.list__added-card i {
 }

@@ -1,5 +1,5 @@
 console.log("script loaded!");
 
-import { Lists } from "./components/lists.js";
+import { ColumnsView } from "./view/ColumnsView.js";
 
-new Lists();
+new ColumnsView();

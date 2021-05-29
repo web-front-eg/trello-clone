@@ -1,3 +1,3 @@
 export interface ICard {
-  content: string;  
+  content: string;
 }

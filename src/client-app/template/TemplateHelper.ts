@@ -24,6 +24,11 @@ export class TemplateHelper<TCreateEl extends HTMLElement> {
 
   /**
    *
+   */
+  private isManualInserted: boolean = false;
+
+  /**
+   *
    * @param rootIdorClassName key to find root Element
    * @param templateIdOrClassName key to find template
    * @param insertWhere insert position
@@ -34,8 +39,8 @@ export class TemplateHelper<TCreateEl extends HTMLElement> {
     rootIdorClassName: string,
     templateIdOrClassName: string,
     insertWhere: InsertPosition,
-    listPos?: number,
-    private isManualInserted: boolean = false
+    isManualInserted?: boolean,
+    listPos?: number
   ) {
     // 1. set up the anchor tag and the template tag
     this.templateEl = document.getElementById(
@@ -47,6 +52,8 @@ export class TemplateHelper<TCreateEl extends HTMLElement> {
         `template ID or Class ${templateIdOrClassName} is invalid!`
       );
     }
+
+    this.isManualInserted = isManualInserted ?? false;
 
     if (!this.isManualInserted) {
       if (!listPos) {

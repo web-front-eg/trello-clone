@@ -12,8 +12,12 @@ class Model {
   }
 
   constructor(saveInterval: number = 5, syncInterval: number = 5) {
-    this.saveAutomatically(saveInterval);
-    this.syncAutomatically(syncInterval);
+    this.state = {
+      columns: [],
+    };
+
+    // this.saveAutomatically(saveInterval);
+    // this.syncAutomatically(syncInterval);
   }
 
   public save(): boolean {
@@ -56,12 +60,16 @@ class Model {
     }
   }
 
-  public addList(listPos: number, title: string): void {
-    this.state.columns[listPos].title = title;
+  public addList(title: string): void {
+    this.state.columns.push(<IList>{ title, cards: [] });
+    // console.log(listPos, title);
+    // console.log(this.state);
   }
 
   public addCard(listPos: number, content: string): void {
     this.state.columns[listPos].cards.push({ content });
+    // console.log(listPos, content);
+    // console.log(this.state);
   }
 
   public moveCard(

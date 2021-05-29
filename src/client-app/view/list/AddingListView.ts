@@ -1,21 +1,22 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { autobind } from "../../decorator/autobind.js";
-import { ColumnsView } from "../ColumnsView.js";
 import { AddedListView } from "./AddedListView.js";
 import * as Templates from "../../template/TemplateNames.js";
-import { AddListView } from "./AddListView.js";
 import { ListController } from "../../controller/ListController.js";
-import { Cache } from "../../controller/Cache.js";
+import { ViewCache } from "../../controller/ViewCache.js";
 
 export class AddingListView extends View<HTMLDivElement> {
+  /**
+   *
+   */
   private readonly titleInputEl: HTMLInputElement;
+  /**
+   *
+   */
   private readonly saveBtnEl: HTMLButtonElement;
 
-  constructor(
-    templateHelper: TemplateHelper<HTMLDivElement>,
-    private parentAddList: AddListView
-  ) {
+  constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
     super(templateHelper, "AddingListView");
 
     this.titleInputEl = this.currentEl.firstElementChild! as HTMLInputElement;
@@ -27,7 +28,8 @@ export class AddingListView extends View<HTMLDivElement> {
   }
 
   protected init(): void {
-    Cache.addingListView = this;
+    ViewCache.addingListView = this;
+
     // bind clicking the Save button or press enter
     this.saveBtnEl.addEventListener("click", this.onClickSaveBtn);
     this.titleInputEl.addEventListener("keypress", this.onPressEnterKey);
@@ -40,8 +42,6 @@ export class AddingListView extends View<HTMLDivElement> {
 
   @autobind
   private onClickSaveBtn(_: Event): void {
-    // set the content of adding-list, which is the title of added-list,
-    // as the value of input.
     this.addChild();
   }
 
@@ -55,30 +55,29 @@ export class AddingListView extends View<HTMLDivElement> {
   @autobind
   private onFocusOut(_: Event): void {
     this.currentEl.style.display = "none";
-    // this.parentAddList.onCloseAddingList();
     ListController.onCloseAddingList();
   }
 
-  /**
-   * set the content of adding-list, which is the title of added-list
-   * with the value of input.
-   */
   private addChild(): void {
-    // ColumnsView.onListAdded();
+    // AddedList 추가 전에 새로운 column 추가
     ListController.addNewColumn();
-    ListController.attachAddListTo();
+    // AddList 를 새로운 column 의 child로 이동
+    ListController.attachAddListToNewColumn();
 
+    /**
+     * create a new AddListView
+     */
     this.nextView = new AddedListView(
       new TemplateHelper<HTMLDivElement>(
         ".column",
         Templates.addedList,
         "beforeend",
-        View.currentListPosition - 1
+        false,
+        View.currentListPosition
       ),
       this.titleInputEl.value
     );
 
-    // ListController.onCloseAddingList();
     this.reset();
   }
 

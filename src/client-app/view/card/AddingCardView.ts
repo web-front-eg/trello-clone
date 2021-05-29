@@ -3,26 +3,24 @@ import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { AddedCardView } from "./AddedCardView.js";
 import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
-import { AddCardView } from "./AddCardView.js";
+import { ViewCache } from "../../controller/ViewCache.js";
+import { CardController } from "../../controller/CardController.js";
+import { delay } from "../../util/timer.js";
 
 export class AddingCardView extends View<HTMLDivElement> {
-  private readonly fixedCurrentListPosition: number;
-
   private readonly titleTextareaEl: HTMLTextAreaElement;
   private readonly addBtnEl: HTMLButtonElement;
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
-    parentPos: number,
-    private parentAddCard: AddCardView
+    public parentListPos: number
   ) {
     super(templateHelper, "AddingCardView");
 
-    this.fixedCurrentListPosition = parentPos;
-
     this.titleTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
-    this.titleTextareaEl.focus();
+
+    delay(() => this.titleTextareaEl.focus(), 1);
 
     this.addBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
 
@@ -30,13 +28,18 @@ export class AddingCardView extends View<HTMLDivElement> {
   }
 
   protected init(): void {
+    ViewCache.setAddingCardView = this;
+
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
     this.titleTextareaEl.addEventListener("keypress", this.onPressEnterKey);
-    this.currentEl.addEventListener("focusout", this.onFocusOut);
-    // this.currentEl.addEventListener("focusin", this.onFocusIn);
+    this.titleTextareaEl.addEventListener("focusout", this.onFocusOut);
+
+    this.reset();
   }
 
   protected reset(): void {
+    console.log("title Text Area is wiped out!");
+
     this.titleTextareaEl.value = "";
   }
 
@@ -54,8 +57,10 @@ export class AddingCardView extends View<HTMLDivElement> {
 
   @autobind
   private onFocusOut(_: Event): void {
+    console.log("you're losing focus of ", this.titleTextareaEl);
+
     this.currentEl.style.display = "none";
-    this.parentAddCard.onAddingCardClosed();
+    CardController.onCloseAddingCard(this.parentListPos);
   }
 
   /**
@@ -68,7 +73,6 @@ export class AddingCardView extends View<HTMLDivElement> {
         this.templateHelper.getCurElIdOrClassName,
         Templates.addedCard,
         "beforebegin",
-        this.fixedCurrentListPosition,
         true
       ),
       this.titleTextareaEl.value
@@ -79,18 +83,18 @@ export class AddingCardView extends View<HTMLDivElement> {
       this.currentEl
     );
 
-    this.parentAddCard.onAddingCardAttached(this);
+    CardController.onAddingCardAdded(this.parentListPos);
     this.reset();
   }
 
-  public onAddCardClickedAgain(): void {
+  public onClickAddCardAgain(): void {
     // show and focus adding-card on clicking add-card again
     this.currentEl.style.display = "block";
-    this.titleTextareaEl.focus();
+    delay(() => this.titleTextareaEl.focus(), 1);
   }
 
-  public onAddingListClosed(): void {
-    // show add-list on closing adding-card
-    this.currentEl.style.display = "block";
+  public closeAddingCardForced(): void {
+    this.currentEl.style.display = "none";
+    this.titleTextareaEl.blur();
   }
 }

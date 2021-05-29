@@ -1,12 +1,29 @@
-// import { Controller } from "./Controller.js";
-// import { AddCardView, AddingCardView, AddedCardView } from "../view/index.js";
+import { ViewCache } from "./ViewCache.js";
+import Model from "../model/Model.js";
 
-// export class CardController extends Controller {
-//   public onCardAdd(): void {}
+export namespace CardController {
+  // export const closeAddingCardForced = (): void => {
+  //   ViewCache.addingCardView.closeAddingCardForced();
+  // };
 
-//   public onCardAdding(): void {}
+  export const onClickAddCardAgain = (idx: number): void => {
+    ViewCache.getAddingCardView(idx).onClickAddCardAgain();
+  };
 
-//   public onCardAdded(): void {
-//     // this.model.addCard(listPos, content);
-//   }
-// }
+  export const onCloseAddingCard = (idx: number): void => {
+    ViewCache.getAddCardView(idx).onCloseAddingCard();
+  };
+
+  export const onAddingCardAdded = (idx: number): void => {
+    ViewCache.getAddCardView(idx).onAddingCardAdded(
+      ViewCache.getAddingCardView(idx)
+    );
+  };
+
+  export const onSetContentInAddedCard = (
+    listPos: number,
+    content: string
+  ): void => {
+    Model.addCard(listPos, content);
+  };
+}

@@ -3,8 +3,12 @@ import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
 import { AddingListView } from "./AddingListView.js";
-import { Cache } from "../../controller/Cache.js";
+import { ViewCache } from "../../controller/ViewCache.js";
 
+/**
+ * Add List -> make a new AddingListView
+ *             새로운 AddingListView 를 만듬
+ */
 export class AddListView extends View<HTMLDivElement> {
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
     super(templateHelper, "AddListView");
@@ -12,7 +16,9 @@ export class AddListView extends View<HTMLDivElement> {
   }
 
   protected init(): void {
-    Cache.addListView = this;
+    // cache instance
+    ViewCache.addListView = this;
+
     this.currentEl.addEventListener("click", this.onClickAddList);
     this.currentEl.addEventListener("focusout", this.onFocusOut);
   }
@@ -30,13 +36,11 @@ export class AddListView extends View<HTMLDivElement> {
           this.templateHelper.getCurElIdOrClassName,
           Templates.addingList,
           "afterend"
-        ),
-        this
+        )
       );
     }
 
-    // (this.nextView as AddingListView).onAddListClickedAgain();
-    Cache.addingListView.onClickAddListAgain();
+    ViewCache.addingListView.onClickAddListAgain();
     this.reset();
   }
 
@@ -50,20 +54,4 @@ export class AddListView extends View<HTMLDivElement> {
     // show add-list on closing adding-card
     this.currentEl.style.display = "block";
   }
-
-  
-
-  // public attachTo_afterFirstAddList(newParentEl: HTMLElement): void {
-  //   // attach add-list to new parent element
-  //   newParentEl.insertAdjacentElement("afterbegin", this.currentEl);
-
-  //   // attach adding-list to add-list
-  //   this.currentEl.insertAdjacentElement(
-  //     "afterend",
-  //     this.nextView.templateHelper.getCreatedEl
-  //   );
-
-  //   // click add-list since it's already created once
-  //   this.currentEl.click();
-  // }
 }

@@ -189,7 +189,7 @@ nav .btn {
   padding: 10px 20px;
 }
 
-.menu .fa-lock {
+#menu .fa-lock {
   margin-right: 10px;
 }
 
@@ -275,9 +275,9 @@ nav .btn {
 }
 
 /* 
-* 3-1. list
+* 3-1. column
 */
-.list {
+.column {
   width: 320px;
   height: 100%;
   /* box-sizing: border-box; */
@@ -286,7 +286,7 @@ nav .btn {
   background-color: var(--color-bg-list);
 }
 
-.list:last-child {
+.column:last-child {
   margin-right: 0;
 }
 
@@ -394,6 +394,7 @@ nav .btn {
   display: block;
   width: 99%;
   margin: 0 auto;
+  resize: none;
 }
 
 .list__adding-card__under {

@@ -3,6 +3,7 @@ import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { IDragTarget } from "../../model/IDragTarget";
 import { AddCardView } from "../card/AddCardView.js";
 import * as Templates from "../../template/TemplateNames.js";
+import { ListController } from "../../controller/ListController.js";
 
 export class AddedListView extends View<HTMLDivElement> implements IDragTarget {
   private readonly titleEl: HTMLElement;
@@ -14,7 +15,9 @@ export class AddedListView extends View<HTMLDivElement> implements IDragTarget {
     super(templateHelper, "AddedListView");
 
     this.titleEl = this.currentEl.querySelector("strong")! as HTMLElement;
+
     this.titleEl.innerText = content;
+    ListController.onSetTitleInAddedList(content);
 
     this.init();
   }
@@ -25,17 +28,18 @@ export class AddedListView extends View<HTMLDivElement> implements IDragTarget {
 
   protected init(): void {
     // attach add card initially
-    this.nextView = new AddCardView(
-      new TemplateHelper<HTMLParagraphElement>(
-        this.templateHelper.getCurElIdOrClassName,
-        Templates.addCard,
-        "afterend",
-        View.currentListPosition - 1
-      )
-    );
-
-    
-  }  
+    if (!this.nextView) {
+      this.nextView = new AddCardView(
+        new TemplateHelper<HTMLParagraphElement>(
+          this.templateHelper.getCurElIdOrClassName,
+          Templates.addCard,
+          "afterend",
+          false,
+          View.currentListPosition
+        )
+      );
+    }
+  }
 
   public dragOverHandler(e: DragEvent): void {}
 

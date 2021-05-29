@@ -1,20 +1,11 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
-import { ICard } from "../../model/ICard.js";
 import { AddedCardView } from "./AddedCardView.js";
 import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
 import { AddCardView } from "./AddCardView.js";
 
-export class AddingCardView
-  extends View<HTMLDivElement, AddedCardView>
-  implements ICard
-{
-  public content: string = "";
-  private setContent(newContent: string): void {
-    this.content = newContent.trim();
-  }
-
+export class AddingCardView extends View<HTMLDivElement, AddedCardView> {
   private readonly fixedCurrentListPosition: number;
 
   private readonly titleTextareaEl: HTMLTextAreaElement;
@@ -47,7 +38,6 @@ export class AddingCardView
 
   protected reset(): void {
     this.titleTextareaEl.value = "";
-    this.setContent("");
   }
 
   @autobind
@@ -73,8 +63,6 @@ export class AddingCardView
    * with the value of input.
    */
   private addChild(): void {
-    this.setContent(this.titleTextareaEl.value);
-
     this.nextView = new AddedCardView(
       new TemplateHelper<HTMLDivElement>(
         this.templateHelper.getCurElIdOrClassName,
@@ -83,7 +71,7 @@ export class AddingCardView
         this.fixedCurrentListPosition,
         true
       ),
-      this.content
+      this.titleTextareaEl.value
     );
 
     this.nextView.getTemplateHelper.insertAtManually(

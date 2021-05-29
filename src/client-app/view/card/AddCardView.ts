@@ -1,15 +1,10 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
-import { ICard } from "../../model/ICard.js";
 import { AddingCardView } from "./AddingCardView.js";
 import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
 
-export class AddCardView
-  extends View<HTMLDivElement, AddingCardView>
-  implements ICard
-{
-  public content: string;
+export class AddCardView extends View<HTMLDivElement, AddingCardView> {
   private readonly fixedCurrentListPosition: number;
 
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {

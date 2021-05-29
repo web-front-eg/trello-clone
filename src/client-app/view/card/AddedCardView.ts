@@ -1,19 +1,18 @@
 import { View } from "../View.js";
-import { ICard } from "../../model/ICard.js";
 import { IDraggable } from "../../model/IDraggable";
 import { TemplateHelper } from "../../template/TemplateHelper";
 
-export class AddedCardView
-  extends View<HTMLDivElement>
-  implements IDraggable, ICard
-{
-  public content: string;
-  constructor(
-    templateHelper: TemplateHelper<HTMLDivElement>,
-    content: string
-  ) {
+export class AddedCardView extends View<HTMLDivElement> implements IDraggable {
+  private readonly title: HTMLParagraphElement;
+
+  constructor(templateHelper: TemplateHelper<HTMLDivElement>, content: string) {
     super(templateHelper, "AddedCardView");
-    this.content = content;
+
+    this.title = this.currentEl.querySelector(
+      ".list__added-card__title"
+    )! as HTMLParagraphElement;
+    this.title.textContent = content;
+
     this.init();
   }
 

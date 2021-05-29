@@ -1,15 +1,10 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
-import { IList } from "../../model/IList.js";
 import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
 import { AddingListView } from "./AddingListView.js";
 
-export class AddListView
-  extends View<HTMLDivElement, AddingListView>
-  implements IList
-{
-  public content: string = "";
+export class AddListView extends View<HTMLDivElement, AddingListView> {
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
     super(templateHelper, "AddListView");
     this.init();

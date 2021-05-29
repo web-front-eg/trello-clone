@@ -1,3 +1,6 @@
+import { ICard } from "./ICard.js";
+
 export interface IList {
-  content?: string;
+  title: string;
+  cards: Array<ICard>;
 }

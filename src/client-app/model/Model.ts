@@ -1,17 +1,5 @@
 import { delay } from "../util/timer.js";
-
-interface ICard {
-  content: string;
-}
-
-interface IList {
-  title: string;
-  cards: Array<ICard>;
-}
-
-// interface IColumns {
-//   columns: Array<IList>;
-// }
+import { IList } from "./IList.js";
 
 interface IState {
   columns: Array<IList>;
@@ -23,21 +11,15 @@ export class Model {
     return this.state;
   }
 
-  private readonly syncInterval: number;
-  private get getSyncIntervalAsMS(): number {
-    return this.syncInterval * 1000;
-  }
-
-  constructor(syncInterval: number = 5) {
-    this.syncInterval = syncInterval;
-    this.syncAutomatically();
+  constructor(saveInterval: number = 5, syncInterval: number = 5) {
+    this.saveAutomatically(saveInterval);
+    this.syncAutomatically(syncInterval);
   }
 
   public save(): boolean {
     try {
       // TOOD: POST data to server
 
-      this.sync();
       return true;
     } catch (e: unknown) {
       return false;
@@ -54,12 +36,22 @@ export class Model {
     }
   }
 
-  public async syncAutomatically(): Promise<void> {
+  public async syncAutomatically(syncInterval: number): Promise<void> {
     while (true) {
       try {
-        await delay(this.sync, this.getSyncIntervalAsMS);
+        await delay(this.sync, syncInterval * 1000);
       } catch (e: unknown) {
         console.error(`sync automatically failed! error status code: ${e}`);
+      }
+    }
+  }
+
+  public async saveAutomatically(saveInterval: number): Promise<void> {
+    while (true) {
+      try {
+        await delay(this.save, saveInterval * 1000);
+      } catch (e: unknown) {
+        console.error(`save automatically failed! error status code: ${e}`);
       }
     }
   }
@@ -78,12 +70,28 @@ export class Model {
     toListPos: number,
     toCardPos: number
   ): void {
-    const target: ICard = this.state.columns[fromListPos].cards[fromCardPos];
+    if (fromListPos < 0) {
+      throw new Error("fromListPos can't be 0 below");
+    }
 
-    if (!target) {
+    if (fromCardPos < 0) {
+      throw new Error("fromCardPos can't be 0 below");
+    }
+
+    if (toListPos < 0) {
+      throw new Error("toListPos can't be 0 below");
+    }
+
+    if (toCardPos < 0) {
+      throw new Error("toCardPos can't be 0 below");
+    }
+
+    const targetCard = this.state.columns[fromListPos].cards[fromCardPos];
+
+    if (!targetCard) {
       throw new Error(`No Card exists at ${fromListPos}:${fromCardPos}`);
     }
-    
-    this.state.columns[toListPos].cards[toCardPos] = target;
+
+    this.state.columns[toListPos].cards[toCardPos] = targetCard;
   }
 }

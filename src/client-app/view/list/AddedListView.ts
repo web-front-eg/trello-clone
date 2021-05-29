@@ -1,22 +1,27 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { IDragTarget } from "../../model/IDragTarget";
-import { IList } from "../../model/IList";
 import { AddCardView } from "../card/AddCardView.js";
 import * as Templates from "../../template/TemplateNames.js";
 
 export class AddedListView
   extends View<HTMLDivElement, AddCardView>
-  implements IDragTarget, IList
+  implements IDragTarget
 {
-  public content: string = "";
+  private readonly title: HTMLElement;
 
   constructor(
     templateHelper: TemplateHelper<HTMLParagraphElement>,
     content: string
   ) {
     super(templateHelper, "AddedListView");
-    this.content = content;
+
+    this.title = this.currentEl
+      .querySelector(".list____title")!
+      .querySelector("strong")! as HTMLElement;
+
+    this.title.textContent = content;
+
     this.init();
   }
 

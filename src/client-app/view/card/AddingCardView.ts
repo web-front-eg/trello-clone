@@ -5,7 +5,7 @@ import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
 import { AddCardView } from "./AddCardView.js";
 
-export class AddingCardView extends View<HTMLDivElement, AddedCardView> {
+export class AddingCardView extends View<HTMLDivElement> {
   private readonly fixedCurrentListPosition: number;
 
   private readonly titleTextareaEl: HTMLTextAreaElement;
@@ -74,7 +74,7 @@ export class AddingCardView extends View<HTMLDivElement, AddedCardView> {
       this.titleTextareaEl.value
     );
 
-    this.nextView.getTemplateHelper.insertAtManually(
+    this.nextView.templateHelper.insertAtManually(
       "beforebegin",
       this.currentEl
     );
@@ -87,5 +87,10 @@ export class AddingCardView extends View<HTMLDivElement, AddedCardView> {
     // show and focus adding-card on clicking add-card again
     this.currentEl.style.display = "block";
     this.titleTextareaEl.focus();
+  }
+
+  public onAddingListClosed(): void {
+    // show add-list on closing adding-card
+    this.currentEl.style.display = "block";
   }
 }

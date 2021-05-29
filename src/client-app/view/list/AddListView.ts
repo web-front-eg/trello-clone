@@ -3,14 +3,16 @@ import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
 import { AddingListView } from "./AddingListView.js";
+import { Cache } from "../../controller/Cache.js";
 
-export class AddListView extends View<HTMLDivElement, AddingListView> {
+export class AddListView extends View<HTMLDivElement> {
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
     super(templateHelper, "AddListView");
     this.init();
   }
 
   protected init(): void {
+    Cache.addListView = this;
     this.currentEl.addEventListener("click", this.onClickAddList);
     this.currentEl.addEventListener("focusout", this.onFocusOut);
   }
@@ -33,7 +35,8 @@ export class AddListView extends View<HTMLDivElement, AddingListView> {
       );
     }
 
-    this.nextView.onAddListClickedAgain();
+    // (this.nextView as AddingListView).onAddListClickedAgain();
+    Cache.addingListView.onClickAddListAgain();
     this.reset();
   }
 
@@ -43,22 +46,24 @@ export class AddListView extends View<HTMLDivElement, AddingListView> {
     this.currentEl.style.display = "none";
   }
 
-  public onAddingListClosed(): void {
+  public onClose(): void {
     // show add-list on closing adding-card
     this.currentEl.style.display = "block";
   }
 
-  public attachTo_afterFirstAddList(newParentEl: HTMLElement): void {
-    // attach add-list to new parent element
-    newParentEl.insertAdjacentElement("afterbegin", this.currentEl);
+  
 
-    // attach adding-list to add-list
-    this.currentEl.insertAdjacentElement(
-      "afterend",
-      this.nextView.getTemplateHelper.getCreatedEl
-    );
+  // public attachTo_afterFirstAddList(newParentEl: HTMLElement): void {
+  //   // attach add-list to new parent element
+  //   newParentEl.insertAdjacentElement("afterbegin", this.currentEl);
 
-    // click add-list since it's already created once
-    this.currentEl.click();
-  }
+  //   // attach adding-list to add-list
+  //   this.currentEl.insertAdjacentElement(
+  //     "afterend",
+  //     this.nextView.templateHelper.getCreatedEl
+  //   );
+
+  //   // click add-list since it's already created once
+  //   this.currentEl.click();
+  // }
 }

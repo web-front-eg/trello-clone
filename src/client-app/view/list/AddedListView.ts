@@ -4,11 +4,8 @@ import { IDragTarget } from "../../model/IDragTarget";
 import { AddCardView } from "../card/AddCardView.js";
 import * as Templates from "../../template/TemplateNames.js";
 
-export class AddedListView
-  extends View<HTMLDivElement, AddCardView>
-  implements IDragTarget
-{
-  private readonly title: HTMLElement;
+export class AddedListView extends View<HTMLDivElement> implements IDragTarget {
+  private readonly titleEl: HTMLElement;
 
   constructor(
     templateHelper: TemplateHelper<HTMLParagraphElement>,
@@ -16,11 +13,8 @@ export class AddedListView
   ) {
     super(templateHelper, "AddedListView");
 
-    this.title = this.currentEl
-      .querySelector(".list____title")!
-      .querySelector("strong")! as HTMLElement;
-
-    this.title.textContent = content;
+    this.titleEl = this.currentEl.querySelector("strong")! as HTMLElement;
+    this.titleEl.innerText = content;
 
     this.init();
   }
@@ -39,7 +33,9 @@ export class AddedListView
         View.currentListPosition - 1
       )
     );
-  }
+
+    
+  }  
 
   public dragOverHandler(e: DragEvent): void {}
 

@@ -1,10 +1,11 @@
+import { Cache } from "../controller/Cache.js";
 import { TemplateHelper } from "../template/TemplateHelper.js";
 import * as Templates from "../template/TemplateNames.js";
 import { AddListView } from "./list/AddListView.js";
 import { View } from "./View.js";
 
-export class ColumnsView extends View<HTMLDivElement, AddListView> {
-  public static onListAdded: Function;
+export class ColumnsView extends View<HTMLDivElement> {
+  // public static  : Function;
 
   constructor() {
     // 1. init template injector
@@ -32,22 +33,49 @@ export class ColumnsView extends View<HTMLDivElement, AddListView> {
   }
 
   protected init(): void {
+    Cache.columnsView = this;
     // performs attching a new .add-list onto the next column
     // 새로운 .add-list 를 다음 열에 추가
-    ColumnsView.onListAdded = () => {
-      this.templateHelper = new TemplateHelper<HTMLDivElement>(
-        this.templateHelper.getCurElIdOrClassName,
-        Templates.column,
-        "afterend",
-        View.currentListPosition++
-      );
-      this.nextView.attachTo_afterFirstAddList(
-        this.templateHelper.getCreatedEl
-      );
-    };
+    // ColumnsView.onListAdded = () => {
+    //   // this.templateHelper = new TemplateHelper<HTMLDivElement>(
+    //   //   this.templateHelper.getCurElIdOrClassName,
+    //   //   Templates.column,
+    //   //   "afterend",
+    //   //   View.currentListPosition++
+    //   // );
+
+    //   // (this.nextView as AddListView).attachTo_afterFirstAddList(
+    //   //   this.templateHelper.getCreatedEl
+    //   // );
+    // };
   }
 
   protected reset(): void {
     //
+  }
+
+  public addNewColumn(): void {
+    this.templateHelper = new TemplateHelper<HTMLDivElement>(
+      this.templateHelper.getCurElIdOrClassName,
+      Templates.column,
+      "afterend",
+      View.currentListPosition++
+    );
+  }
+
+  public attachToNewColumn(addListView: AddListView): void {
+    // attach add-list to new parent element
+    this.templateHelper.getCreatedEl.insertAdjacentElement(
+      "afterbegin",
+      addListView.currentEl
+    );
+
+    // attach adding-list to add-list
+    addListView.currentEl.insertAdjacentElement(
+      "afterend",
+      addListView.nextView.currentEl
+    );
+    // click add-list since it's already created once
+    addListView.currentEl.click();
   }
 }

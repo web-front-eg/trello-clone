@@ -5,7 +5,7 @@ interface IState {
   columns: Array<IList>;
 }
 
-export class Model {
+class Model {
   private readonly state: IState;
   public get getState(): IState {
     return this.state;
@@ -56,12 +56,12 @@ export class Model {
     }
   }
 
-  public addList(currentListPos: number, title: string): void {
-    this.state.columns[currentListPos].title = title;
+  public addList(listPos: number, title: string): void {
+    this.state.columns[listPos].title = title;
   }
 
-  public addCard(currentListPos: number, content: string): void {
-    this.state.columns[currentListPos].cards.push({ content });
+  public addCard(listPos: number, content: string): void {
+    this.state.columns[listPos].cards.push({ content });
   }
 
   public moveCard(
@@ -95,3 +95,5 @@ export class Model {
     this.state.columns[toListPos].cards[toCardPos] = targetCard;
   }
 }
+
+export default new Model(5, 10);

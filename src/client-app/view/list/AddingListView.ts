@@ -5,8 +5,10 @@ import { ColumnsView } from "../ColumnsView.js";
 import { AddedListView } from "./AddedListView.js";
 import * as Templates from "../../template/TemplateNames.js";
 import { AddListView } from "./AddListView.js";
+import { ListController } from "../../controller/ListController.js";
+import { Cache } from "../../controller/Cache.js";
 
-export class AddingListView extends View<HTMLDivElement, AddedListView> {
+export class AddingListView extends View<HTMLDivElement> {
   private readonly titleInputEl: HTMLInputElement;
   private readonly saveBtnEl: HTMLButtonElement;
 
@@ -25,6 +27,7 @@ export class AddingListView extends View<HTMLDivElement, AddedListView> {
   }
 
   protected init(): void {
+    Cache.addingListView = this;
     // bind clicking the Save button or press enter
     this.saveBtnEl.addEventListener("click", this.onClickSaveBtn);
     this.titleInputEl.addEventListener("keypress", this.onPressEnterKey);
@@ -52,7 +55,8 @@ export class AddingListView extends View<HTMLDivElement, AddedListView> {
   @autobind
   private onFocusOut(_: Event): void {
     this.currentEl.style.display = "none";
-    this.parentAddList.onAddingListClosed();
+    // this.parentAddList.onCloseAddingList();
+    ListController.onCloseAddingList();
   }
 
   /**
@@ -60,11 +64,13 @@ export class AddingListView extends View<HTMLDivElement, AddedListView> {
    * with the value of input.
    */
   private addChild(): void {
-    ColumnsView.onListAdded();
+    // ColumnsView.onListAdded();
+    ListController.addNewColumn();
+    ListController.attachAddListTo();
 
     this.nextView = new AddedListView(
       new TemplateHelper<HTMLDivElement>(
-        ".list",
+        ".column",
         Templates.addedList,
         "beforeend",
         View.currentListPosition - 1
@@ -72,13 +78,14 @@ export class AddingListView extends View<HTMLDivElement, AddedListView> {
       this.titleInputEl.value
     );
 
+    // ListController.onCloseAddingList();
     this.reset();
   }
 
   /**
    * show adding-list and auto-focus at the input
    */
-  public onAddListClickedAgain(): void {
+  public onClickAddListAgain(): void {
     this.currentEl.style.display = "block";
     this.titleInputEl.focus();
   }

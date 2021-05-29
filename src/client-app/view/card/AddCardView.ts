@@ -4,7 +4,7 @@ import { AddingCardView } from "./AddingCardView.js";
 import { autobind } from "../../decorator/autobind.js";
 import * as Templates from "../../template/TemplateNames.js";
 
-export class AddCardView extends View<HTMLDivElement, AddingCardView> {
+export class AddCardView extends View<HTMLDivElement> {
   private readonly fixedCurrentListPosition: number;
 
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
@@ -37,7 +37,7 @@ export class AddCardView extends View<HTMLDivElement, AddingCardView> {
         this
       );
     } else {
-      this.nextView.onAddCardClickedAgain();
+      (this.nextView as AddingCardView).onAddCardClickedAgain();
     }
     this.reset();
   }
@@ -49,7 +49,7 @@ export class AddCardView extends View<HTMLDivElement, AddingCardView> {
 
   public onAddingCardAttached(addingCard: AddingCardView): void {
     // attach add-card under the attached adding-card
-    addingCard.getTemplateHelper.getCreatedEl.insertAdjacentElement(
+    addingCard.templateHelper.getCreatedEl.insertAdjacentElement(
       "afterend",
       this.currentEl
     );

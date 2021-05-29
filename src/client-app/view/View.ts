@@ -1,31 +1,20 @@
-import { TemplateHelper } from "template/TemplateHelper.js";
-import { ICard } from "../model/ICard.js";
-import { IList } from "../model/IList.js";
+import { TemplateHelper } from "../template/TemplateHelper.js";
 
-export abstract class View<
-  TyHTMLEl extends HTMLElement,
-  TyNextView extends IList | ICard = any
-> {
-  protected static currentListPosition: number = 0;
-  protected currentEl: TyHTMLEl;
-  protected nextView: TyNextView;
+export abstract class View<T extends HTMLElement> {
+  public static currentListPosition: number = 0;
+  public currentEl: T;
+  public nextView: View<T>;
 
-  protected templateHelper: TemplateHelper<TyHTMLEl>;
-  public get getTemplateHelper(): TemplateHelper<TyHTMLEl> {
-    return this.templateHelper;
-  }
+  public templateHelper: TemplateHelper<T>;
 
-  constructor(
-    templateHelper: TemplateHelper<TyHTMLEl>,
-    currentViewName: string
-  ) {
+  constructor(templateHelper: TemplateHelper<T>, currentViewName: string) {
     this.templateHelper = templateHelper;
 
     if (!this.templateHelper) {
       throw new Error(`No template injector valid!: ${currentViewName}`);
     }
 
-    this.currentEl = this.templateHelper.getCreatedEl! as TyHTMLEl;
+    this.currentEl = this.templateHelper.getCreatedEl! as T;
   }
 
   protected abstract init(): void;

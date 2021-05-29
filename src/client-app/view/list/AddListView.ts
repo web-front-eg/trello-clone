@@ -1,17 +1,17 @@
-import { BaseEntity } from "../base-entity.js";
-import { TemplateInjector } from "../../template/template-injector.js";
-import { IList } from "../../models/IList.js";
-import { autobind } from "../../decorators/autobind.js";
-import * as Templates from "../../template/template-names.js";
-import { AddingList } from "./adding-list.js";
+import { View } from "../View.js";
+import { TemplateHelper } from "../../template/TemplateHelper.js";
+import { IList } from "../../model/IList.js";
+import { autobind } from "../../decorator/autobind.js";
+import * as Templates from "../../template/TemplateNames.js";
+import { AddingListView } from "./AddingListView.js";
 
-export class AddList
-  extends BaseEntity<HTMLDivElement, AddingList>
+export class AddListView
+  extends View<HTMLDivElement, AddingListView>
   implements IList
 {
   public content: string = "";
-  constructor(templateInjector: TemplateInjector<HTMLDivElement>) {
-    super(templateInjector, "AddList");
+  constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
+    super(templateHelper, "AddListView");
     this.init();
   }
 
@@ -27,10 +27,10 @@ export class AddList
   @autobind
   private onClickAddList(_: Event): void {
     // re-using adding-list
-    if (!this.nextEntity) {
-      this.nextEntity = new AddingList(
-        new TemplateInjector<HTMLDivElement>(
-          this.templateInjector.getCurElIdOrClassName,
+    if (!this.nextView) {
+      this.nextView = new AddingListView(
+        new TemplateHelper<HTMLDivElement>(
+          this.templateHelper.getCurElIdOrClassName,
           Templates.addingList,
           "afterend"
         ),
@@ -38,7 +38,7 @@ export class AddList
       );
     }
 
-    this.nextEntity.onAddListClickedAgain();
+    this.nextView.onAddListClickedAgain();
     this.reset();
   }
 
@@ -60,7 +60,7 @@ export class AddList
     // attach adding-list to add-list
     this.currentEl.insertAdjacentElement(
       "afterend",
-      this.nextEntity.getTemplateInjector.getCreatedEl
+      this.nextView.getTemplateHelper.getCreatedEl
     );
 
     // click add-list since it's already created once

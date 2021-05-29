@@ -1,4 +1,4 @@
-export const list = "template__list";
+export const column = "template__column";
 
 export const addList = "template__add-list";
 export const addingList = "template__adding-list";

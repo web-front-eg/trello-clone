@@ -1,4 +1,4 @@
-export class TemplateInjector<TCreateEl extends HTMLElement> {
+export class TemplateHelper<TCreateEl extends HTMLElement> {
   private templateEl: HTMLTemplateElement;
 
   /**
@@ -111,7 +111,7 @@ export class TemplateInjector<TCreateEl extends HTMLElement> {
   private insertAt(where: InsertPosition): void {
     this.rootEl.insertAdjacentElement(where, this.createdEl);
   }
-  
+
   public removeMyself(): void {
     this.createdEl.remove();
   }

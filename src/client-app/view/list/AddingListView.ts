@@ -1,30 +1,29 @@
-import { BaseEntity } from "../base-entity.js";
-import { TemplateInjector } from "../../template/template-injector.js";
-import { IList } from "../../models/IList.js";
-import { autobind } from "../../decorators/autobind.js";
-import { Lists } from "../lists.js";
-import { AddedList } from "./added-list.js";
-import * as Templates from "../../template/template-names.js";
-import { AddList } from "./add-list.js";
+import { View } from "../View.js";
+import { TemplateHelper } from "../../template/TemplateHelper.js";
+import { IList } from "../../model/IList.js";
+import { autobind } from "../../decorator/autobind.js";
+import { ColumnsView } from "../ColumnsView.js";
+import { AddedListView } from "./AddedListView.js";
+import * as Templates from "../../template/TemplateNames.js";
+import { AddListView } from "./AddListView.js";
 
-export class AddingList
-  extends BaseEntity<HTMLDivElement, AddedList>
+export class AddingListView
+  extends View<HTMLDivElement, AddedListView>
   implements IList
 {
   public content: string = "";
   private setContent(newContent: string): void {
     this.content = newContent.trim();
-    console.log("content of AddingList has been set as:", this.content);
   }
 
   private readonly titleInputEl: HTMLInputElement;
   private readonly saveBtnEl: HTMLButtonElement;
 
   constructor(
-    templateInjector: TemplateInjector<HTMLDivElement>,
-    private parentAddList: AddList
+    templateHelper: TemplateHelper<HTMLDivElement>,
+    private parentAddList: AddListView
   ) {
-    super(templateInjector, "AddingList");
+    super(templateHelper, "AddingListView");
 
     this.titleInputEl = this.currentEl.firstElementChild! as HTMLInputElement;
     this.titleInputEl.focus();
@@ -73,14 +72,14 @@ export class AddingList
   private addChild(): void {
     this.setContent(this.titleInputEl.value);
 
-    Lists.onListAdded_addNewList();
+    ColumnsView.onListAdded();
 
-    this.nextEntity = new AddedList(
-      new TemplateInjector<HTMLDivElement>(
+    this.nextView = new AddedListView(
+      new TemplateHelper<HTMLDivElement>(
         ".list",
         Templates.addedList,
         "beforeend",
-        BaseEntity.currentListPosition - 1
+        View.currentListPosition - 1
       ),
       this.content
     );

@@ -1,19 +1,18 @@
-import { BaseEntity } from "../base-entity.js";
-import { TemplateInjector } from "../../template/template-injector.js";
-import { ICard } from "../../models/ICard.js";
-import { AddedCard } from "./added-card.js";
-import { autobind } from "../../decorators/autobind.js";
-import * as Templates from "../../template/template-names.js";
-import { AddCard } from "./add-card.js";
+import { View } from "../View.js";
+import { TemplateHelper } from "../../template/TemplateHelper.js";
+import { ICard } from "../../model/ICard.js";
+import { AddedCardView } from "./AddedCardView.js";
+import { autobind } from "../../decorator/autobind.js";
+import * as Templates from "../../template/TemplateNames.js";
+import { AddCardView } from "./AddCardView.js";
 
-export class AddingCard
-  extends BaseEntity<HTMLDivElement, AddedCard>
+export class AddingCardView
+  extends View<HTMLDivElement, AddedCardView>
   implements ICard
 {
   public content: string = "";
   private setContent(newContent: string): void {
     this.content = newContent.trim();
-    console.log("content of AddingCard has been set as:", this.content);
   }
 
   private readonly fixedCurrentListPosition: number;
@@ -22,11 +21,11 @@ export class AddingCard
   private readonly addBtnEl: HTMLButtonElement;
 
   constructor(
-    templateInjector: TemplateInjector<HTMLDivElement>,
+    templateHelper: TemplateHelper<HTMLDivElement>,
     parentPos: number,
-    private parentAddCard: AddCard
+    private parentAddCard: AddCardView
   ) {
-    super(templateInjector, "AddingCard");
+    super(templateHelper, "AddingCardView");
 
     this.fixedCurrentListPosition = parentPos;
 
@@ -76,9 +75,9 @@ export class AddingCard
   private addChild(): void {
     this.setContent(this.titleTextareaEl.value);
 
-    this.nextEntity = new AddedCard(
-      new TemplateInjector<HTMLDivElement>(
-        this.templateInjector.getCurElIdOrClassName,
+    this.nextView = new AddedCardView(
+      new TemplateHelper<HTMLDivElement>(
+        this.templateHelper.getCurElIdOrClassName,
         Templates.addedCard,
         "beforebegin",
         this.fixedCurrentListPosition,
@@ -87,7 +86,7 @@ export class AddingCard
       this.content
     );
 
-    this.nextEntity.getTemplateInjector.insertAtManually(
+    this.nextView.getTemplateHelper.insertAtManually(
       "beforebegin",
       this.currentEl
     );

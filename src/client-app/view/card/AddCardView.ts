@@ -56,7 +56,7 @@ export class AddCardView extends View<HTMLDivElement> {
     this.currentEl.style.display = "block";
   }
 
-  public moveAddCardUnderAddingCard(addingCardView: AddingCardView): void {
+  public moveAddCardUnder(addingCardView: AddingCardView): void {
     // attach add-card under the attached adding-card
     addingCardView.currentEl.insertAdjacentElement("afterend", this.currentEl);
   }

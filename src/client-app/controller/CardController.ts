@@ -11,7 +11,7 @@ export namespace CardController {
   }
 
   export function onNewAddedCardAdded(idx: number): void {
-    ViewCache.getAddCardView(idx).moveAddCardUnderAddingCard(
+    ViewCache.getAddCardView(idx).moveAddCardUnder(
       ViewCache.getAddingCardView(idx)
     );
   }

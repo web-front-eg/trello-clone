@@ -1,15 +1,16 @@
 import { View } from "../View.js";
-import { IDraggable } from "../../model/IDraggable";
 import { TemplateHelper } from "../../template/TemplateHelper";
 import { CardController } from "../../controller/CardController.js";
-import { autobind } from "../../decorator/autobind.js";
+import { CardMover } from "./CardMover.js";
 
-export class AddedCardView extends View<HTMLDivElement> implements IDraggable {
+export class AddedCardView extends View<HTMLDivElement> {
   /**
    *
    */
   private readonly titleEl: HTMLParagraphElement;
-  public readonly id: number;
+  // private readonly parentListPos: number;
+  // private readonly currentCardPos: number;
+  private readonly cardMover: CardMover;
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
@@ -18,34 +19,25 @@ export class AddedCardView extends View<HTMLDivElement> implements IDraggable {
   ) {
     super(templateHelper, "AddedCardView");
 
+    // this.parentListPos = parentListPos;
+
     this.titleEl = this.currentEl.querySelector(
       ".list__added-card__title"
     )! as HTMLParagraphElement;
     this.titleEl.textContent = content;
 
-    CardController.onSetContentInAddedCard(parentListPos, content);
+    const currentCardPos = CardController.onSetContentInAddedCard(
+      parentListPos,
+      content
+    );
 
+    this.cardMover = new CardMover(this.currentEl, currentCardPos);
     this.init();
   }
 
-  protected init(): void {
-    this.currentEl.addEventListener("dragstart", this.onDragStart);
-  }
+  protected init(): void {}
 
   protected reset(): void {
-    //
-  }
-
-  @autobind
-  public onDragStart(e: DragEvent): void {
-    console.log("Drag start!", this.id);
-
-    e.dataTransfer!.setData("text/plain", this.id.toString());
-    e.dataTransfer!.effectAllowed = "move";
-  }
-
-  @autobind
-  public onDragEnd(e: DragEvent): void {
     //
   }
 }

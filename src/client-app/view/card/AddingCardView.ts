@@ -41,8 +41,6 @@ export class AddingCardView extends View<HTMLDivElement> {
   }
 
   protected reset(): void {
-    console.log("title Text Area is wiped out!");
-
     this.titleTextareaEl.value = "";
   }
 
@@ -60,8 +58,6 @@ export class AddingCardView extends View<HTMLDivElement> {
 
   @autobind
   private onFocusOut(_: Event): void {
-    console.log("you're losing focus of ", this.titleTextareaEl);
-
     this.currentEl.style.display = "none";
     CardController.onCloseAddingCard(this.parentListPos);
   }
@@ -71,6 +67,10 @@ export class AddingCardView extends View<HTMLDivElement> {
    * with the value of input.
    */
   private addChild(): void {
+    if (!this.titleTextareaEl.value) {
+      return;
+    }
+
     this.nextView = new AddedCardView(
       new TemplateHelper<HTMLDivElement>(
         this.templateHelper.getCurElIdOrClassName,
@@ -94,7 +94,10 @@ export class AddingCardView extends View<HTMLDivElement> {
   public onClickAddCardAgain(): void {
     // show and focus adding-card on clicking add-card again
     this.currentEl.style.display = "block";
-    delay(() => this.titleTextareaEl.focus(), 1);
+    delay(() => {
+      this.titleTextareaEl.focus();
+      this.reset();
+    }, 1);
   }
 
   public closeAddingCardForced(): void {
@@ -102,3 +105,27 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.titleTextareaEl.blur();
   }
 }
+
+
+// @Autobind
+//   dragOverHandler(event: DragEvent): void {
+//     if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
+//       event.preventDefault(); // drop is only triggered without this.
+//       const listEl = <HTMLUListElement>this.element.querySelector("ul")!;
+//       listEl.classList.add("droppable");
+//     }
+//   }
+
+//   @Autobind
+//   dropHandler(event: DragEvent): void {
+//     const prjId: string = event.dataTransfer!.getData("text/plain");
+//     ProjectState.instance.moveProject(prjId, this.type);
+//   }
+
+//   @Autobind
+//   dragLeaveHandler(_: DragEvent): void {
+//     const listEl = <HTMLUListElement>this.element.querySelector("ul")!;
+//     if (listEl.classList.contains("droppable")) {
+//       listEl.classList.remove("droppable");
+//     }
+//   }

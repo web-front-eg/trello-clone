@@ -1,5 +1,12 @@
 import { delay } from "../util/timer.js";
-import { IList } from "./IList.js";
+interface ICard {
+  content: string;
+}
+
+interface IList {
+  title: string;
+  cards: Array<ICard>;
+}
 
 interface IState {
   columns: Array<IList>;
@@ -54,7 +61,7 @@ class Model {
     while (true) {
       try {
         await delay(this.save, saveInterval * 1000);
-    } catch (e: unknown) {
+      } catch (e: unknown) {
         console.error(`save automatically failed! error status code: ${e}`);
       }
     }
@@ -62,14 +69,16 @@ class Model {
 
   public addList(title: string): void {
     this.state.columns.push(<IList>{ title, cards: [] });
-    console.log(title);
-    console.log(this.state);
   }
 
-  public addCard(listPos: number, content: string): void {
-    this.state.columns[listPos].cards.push({ content });
-    console.log(listPos, content);
+  public addCard(listPos: number, content: string): number {
+    const cardsArr = this.state.columns[listPos].cards;
+    const order = cardsArr.length;
+    cardsArr.push({ content });
+
     console.log(this.state);
+
+    return order;
   }
 
   public moveCard(

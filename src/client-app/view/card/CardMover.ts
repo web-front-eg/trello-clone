@@ -9,20 +9,13 @@ export class CardMover {
     "afterbegin"
   );
 
-  private readonly originalPosEl: HTMLElement;
+  // private readonly originalPosEl: HTMLElement;
 
   constructor(
     private readonly cardEl: HTMLDivElement,
     private readonly cardPos: number
   ) {
     this.cardEl.draggable = true;
-    this.originalPosEl = document.createElement("div");
-    this.originalPosEl.id = "original-pos";
-    // this.cardEl.insertAdjacentElement("beforebegin", this.originalPosEl);
-    this.cardEl.appendChild(this.originalPosEl);
-
-    // console.log(this.originalPosEl);
-
     this.bind();
   }
 
@@ -42,22 +35,11 @@ export class CardMover {
     //   1. rotate the target tiny bit
     //   2. replace the target with a dummy to indicate position of the target
 
-    console.log("Drag start!");
-
     if (!e.dataTransfer) {
       return;
     }
 
     const targetEvent = (e as Event).target as HTMLElement;
-
-    // document.getElementById("#dummy-hider")?.appendChild(targetEvent);
-    // ?.insertAdjacentElement("afterbegin", targetEvent);
-
-    // this.originalPosEl.appendChild(targetEvent);
-    // targetEvent.insertAdjacentElement(
-    //   "beforeend",
-    //   CardMover.dummyCardEl.getCreatedEl
-    // );
 
     e.dataTransfer.setData("text/plain", targetEvent.id);
     e.dataTransfer.effectAllowed = "move";
@@ -68,15 +50,6 @@ export class CardMover {
     // TODO: End dragging
     // -> turn off the move effect
     console.log("Drag end!");
-
-    // this.originalPosEl.insertAdjacentElement(
-    //   "beforebegin",
-    //   e.target as HTMLElement
-    // );
-
-    // document
-    //   .getElementById("#dummy-hider")
-    //   ?.insertAdjacentElement("afterbegin", CardMover.dummyCardEl.getCreatedEl);
   }
 
   @autobind
@@ -90,8 +63,13 @@ export class CardMover {
       return;
     }
 
+    const targetEl = e.target as HTMLElement;
+    targetEl.insertAdjacentElement(
+      "afterend",
+      CardMover.dummyCardEl.getCreatedEl
+    );
+
     e.preventDefault();
-    // console.log(`drag over!!`);
     // TODO: change css to indicate card is being dragged and it's over the list
   }
 
@@ -110,7 +88,7 @@ export class CardMover {
 
     if (targetEl.className === draggableEl!.className) {
       targetEl!.insertAdjacentElement("afterend", draggableEl!);
-      console.log(targetEl, draggableEl);
+      // console.log(targetEl, draggableEl);
     }
 
     // console.log("drop!", draggableId);

@@ -1,4 +1,4 @@
 export interface IDraggable {
-  dragStartHandler?(e: DragEvent): void;
-  dragEndHandler?(e: DragEvent): void;
+  onDragStart?(e: DragEvent): void;
+  onDragEnd?(e: DragEvent): void;
 }

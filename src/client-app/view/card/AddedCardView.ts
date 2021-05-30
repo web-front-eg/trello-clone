@@ -2,12 +2,14 @@ import { View } from "../View.js";
 import { IDraggable } from "../../model/IDraggable";
 import { TemplateHelper } from "../../template/TemplateHelper";
 import { CardController } from "../../controller/CardController.js";
+import { autobind } from "../../decorator/autobind.js";
 
 export class AddedCardView extends View<HTMLDivElement> implements IDraggable {
   /**
    *
    */
-  private readonly title: HTMLParagraphElement;
+  private readonly titleEl: HTMLParagraphElement;
+  public readonly id: number;
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
@@ -16,10 +18,10 @@ export class AddedCardView extends View<HTMLDivElement> implements IDraggable {
   ) {
     super(templateHelper, "AddedCardView");
 
-    this.title = this.currentEl.querySelector(
+    this.titleEl = this.currentEl.querySelector(
       ".list__added-card__title"
     )! as HTMLParagraphElement;
-    this.title.textContent = content;
+    this.titleEl.textContent = content;
 
     CardController.onSetContentInAddedCard(parentListPos, content);
 
@@ -27,14 +29,23 @@ export class AddedCardView extends View<HTMLDivElement> implements IDraggable {
   }
 
   protected init(): void {
-    //
+    this.currentEl.addEventListener("dragstart", this.onDragStart);
   }
 
   protected reset(): void {
     //
   }
 
-  public dragStartHandler(e: DragEvent): void {}
+  @autobind
+  public onDragStart(e: DragEvent): void {
+    console.log("Drag start!", this.id);
 
-  public dragEndHandler(e: DragEvent): void {}
+    e.dataTransfer!.setData("text/plain", this.id.toString());
+    e.dataTransfer!.effectAllowed = "move";
+  }
+
+  @autobind
+  public onDragEnd(e: DragEvent): void {
+    //
+  }
 }

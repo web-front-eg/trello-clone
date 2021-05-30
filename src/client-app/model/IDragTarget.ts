@@ -1,5 +1,5 @@
 export interface IDragTarget {
-  dragOverHandler?(e: DragEvent): void;
-  dropHandler?(e: DragEvent): void;
-  dragLeaveHandler?(e: DragEvent): void;
+  onDragOver?(e: DragEvent): void;
+  onDrop?(e: DragEvent): void;
+  onDragLeave?(e: DragEvent): void;
 }

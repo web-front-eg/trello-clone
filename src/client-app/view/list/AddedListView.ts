@@ -4,6 +4,8 @@ import { IDragTarget } from "../../model/IDragTarget";
 import { AddCardView } from "../card/AddCardView.js";
 import * as Templates from "../../template/TemplateNames.js";
 import { ListController } from "../../controller/ListController.js";
+import { autobind } from "../../decorator/autobind.js";
+// import { CardController } from "controller/CardController.js";
 
 export class AddedListView extends View<HTMLDivElement> implements IDragTarget {
   private readonly titleEl: HTMLElement;
@@ -27,6 +29,11 @@ export class AddedListView extends View<HTMLDivElement> implements IDragTarget {
   }
 
   protected init(): void {
+    //
+    this.currentEl.addEventListener("dragover", this.onDragOver);
+    this.currentEl.addEventListener("drop", this.onDrop);
+    this.currentEl.addEventListener("dragleave", this.onDragLeave);
+
     // attach add card initially
     if (!this.nextView) {
       this.nextView = new AddCardView(
@@ -41,9 +48,30 @@ export class AddedListView extends View<HTMLDivElement> implements IDragTarget {
     }
   }
 
-  public dragOverHandler(e: DragEvent): void {}
+  @autobind
+  public onDragOver(e: DragEvent): void {
+    if (!e.dataTransfer || e.dataTransfer.types[0] !== "text/plain") {
+      return;
+    }
 
-  public dropHandler(e: DragEvent): void {}
+    e.preventDefault();
+    // console.log(`drag over!!`);
+    // TODO: change css to indicate card is being dragged and it's over the list
+  }
 
-  public dragLeaveHandler(e: DragEvent): void {}
+  @autobind
+  public onDrop(e: DragEvent): void {
+    const card = e.dataTransfer!.getData("text/plain");
+    console.log("drop!", card);
+
+    // move the card!
+    // CardController.
+  }
+
+  @autobind
+  public onDragLeave(e: DragEvent): void {
+    console.log("drag leave!");
+
+    // TODO: stop highlighting the list!
+  }
 }

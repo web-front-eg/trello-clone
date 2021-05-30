@@ -34,7 +34,7 @@ export class ListsView extends View<HTMLDivElement> {
     //
   }
 
-  public addNewLists(): void {
+  public attachNewLists(): void {
     this.templateHelper = new TemplateHelper<HTMLDivElement>(
       this.templateHelper.getCurElIdOrClassName,
       Template.lists,

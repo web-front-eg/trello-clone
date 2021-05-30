@@ -51,12 +51,12 @@ export class AddCardView extends View<HTMLDivElement> {
     this.currentEl.style.display = "none";
   }
 
-  public onCloseAddingCard(): void {
+  public reopen(): void {
     // show add-card on closing adding-card
     this.currentEl.style.display = "block";
   }
 
-  public onAddingCardAdded(addingCardView: AddingCardView): void {
+  public moveAddCardUnderAddingCard(addingCardView: AddingCardView): void {
     // attach add-card under the attached adding-card
     addingCardView.currentEl.insertAdjacentElement("afterend", this.currentEl);
   }

@@ -15,7 +15,7 @@ export class AddingCardView extends View<HTMLDivElement> {
     templateHelper: TemplateHelper<HTMLDivElement>,
     public readonly parentListPos: number
   ) {
-    super(templateHelper, "AddingCardView");    
+    super(templateHelper, "AddingCardView");
 
     this.titleTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
@@ -85,11 +85,11 @@ export class AddingCardView extends View<HTMLDivElement> {
       this.currentEl
     );
 
-    CardController.onAddingCardAdded(this.parentListPos);
+    CardController.onNewAddedCardAdded(this.parentListPos);
     this.reset();
   }
 
-  public onClickAddCardAgain(): void {
+  public reopen(): void {
     // show and focus adding-card on clicking add-card again
     this.currentEl.style.display = "block";
     delay(() => {

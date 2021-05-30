@@ -2,24 +2,25 @@ import { ViewCache } from "./ViewCache.js";
 import Model from "../model/Model.js";
 
 export namespace CardController {
-  export const onClickAddCardAgain = (idx: number): void => {
-    ViewCache.getAddingCardView(idx).onClickAddCardAgain();
-  };
+  export function onClickAddCardAgain(idx: number): void {
+    ViewCache.getAddingCardView(idx).reopen();
+  }
 
-  export const onCloseAddingCard = (idx: number): void => {
-    ViewCache.getAddCardView(idx).onCloseAddingCard();
-  };
+  export function onCloseAddingCard(idx: number): void {
+    ViewCache.getAddCardView(idx).reopen();
+  }
 
-  export const onAddingCardAdded = (idx: number): void => {
-    ViewCache.getAddCardView(idx).onAddingCardAdded(
+  export function onNewAddedCardAdded(idx: number): void {
+    ViewCache.getAddCardView(idx).moveAddCardUnderAddingCard(
       ViewCache.getAddingCardView(idx)
     );
-  };
+  }
 
-  export const onSetContentInAddedCard = (
+  export function onSetContentInAddedCard(
     listPos: number,
     content: string
-  ): number => {
-    return Model.addCard(listPos, content);
-  };
+  ): number {
+    const currentCardPos = Model.addNewCard(listPos, content);
+    return currentCardPos;
+  }
 }

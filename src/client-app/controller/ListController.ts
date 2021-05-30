@@ -3,7 +3,7 @@ import Model from "../model/Model.js";
 
 export namespace ListController {
   export const addNewColumn = (): void => {
-    ViewCache.columnsView.addNewColumn();
+    ViewCache.listsView.addNewLists();
   };
 
   export const onClickAddListAgain = (): void => {
@@ -15,7 +15,7 @@ export namespace ListController {
   };
 
   export const attachAddListToNewColumn = (): void => {
-    ViewCache.columnsView.attachToNewColumnFrom(ViewCache.addListView);
+    ViewCache.listsView.attachToNewListsFrom(ViewCache.addListView);
   };
 
   export const onSetTitleInAddedList = (title: string): void => {

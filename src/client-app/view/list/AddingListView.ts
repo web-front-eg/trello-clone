@@ -69,7 +69,7 @@ export class AddingListView extends View<HTMLDivElement> {
      */
     this.nextView = new AddedListView(
       new TemplateHelper<HTMLDivElement>(
-        ".column",
+        ".lists",
         Template.addedList,
         "beforeend",
         false,

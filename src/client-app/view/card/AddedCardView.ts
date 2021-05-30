@@ -5,19 +5,23 @@ import { CardController } from "../../controller/CardController.js";
 
 export class AddedCardView extends View<HTMLDivElement> implements IDraggable {
   /**
-   * 
+   *
    */
   private readonly title: HTMLParagraphElement;
 
-  constructor(templateHelper: TemplateHelper<HTMLDivElement>, content: string) {
+  constructor(
+    templateHelper: TemplateHelper<HTMLDivElement>,
+    content: string,
+    parentListPos: number
+  ) {
     super(templateHelper, "AddedCardView");
 
     this.title = this.currentEl.querySelector(
       ".list__added-card__title"
     )! as HTMLParagraphElement;
     this.title.textContent = content;
-    
-    CardController.onSetContentInAddedCard(View.currentListPosition, content);
+
+    CardController.onSetContentInAddedCard(parentListPos, content);
 
     this.init();
   }

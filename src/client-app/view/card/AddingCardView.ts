@@ -10,12 +10,15 @@ import { delay } from "../../util/timer.js";
 export class AddingCardView extends View<HTMLDivElement> {
   private readonly titleTextareaEl: HTMLTextAreaElement;
   private readonly addBtnEl: HTMLButtonElement;
+  public readonly parentListPos: number;
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
-    public parentListPos: number
+    parentListPos: number
   ) {
     super(templateHelper, "AddingCardView");
+
+    this.parentListPos = parentListPos;
 
     this.titleTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
@@ -75,7 +78,8 @@ export class AddingCardView extends View<HTMLDivElement> {
         "beforebegin",
         true
       ),
-      this.titleTextareaEl.value
+      this.titleTextareaEl.value,
+      this.parentListPos
     );
 
     this.nextView.templateHelper.insertAtManually(

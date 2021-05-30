@@ -1,7 +1,7 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { autobind } from "../../decorator/autobind.js";
-import * as Templates from "../../template/TemplateNames.js";
+import { Template } from "../../template/TemplateNames.js";
 import { AddingListView } from "./AddingListView.js";
 import { ViewCache } from "../../controller/ViewCache.js";
 
@@ -34,7 +34,7 @@ export class AddListView extends View<HTMLDivElement> {
       this.nextView = new AddingListView(
         new TemplateHelper<HTMLDivElement>(
           this.templateHelper.getCurElIdOrClassName,
-          Templates.addingList,
+          Template.addingList,
           "afterend"
         )
       );

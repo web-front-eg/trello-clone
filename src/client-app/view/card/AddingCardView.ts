@@ -2,7 +2,7 @@ import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { AddedCardView } from "./AddedCardView.js";
 import { autobind } from "../../decorator/autobind.js";
-import * as Templates from "../../template/TemplateNames.js";
+import { Template } from "../../template/TemplateNames.js";
 import { ViewCache } from "../../controller/ViewCache.js";
 import { CardController } from "../../controller/CardController.js";
 import { delay } from "../../util/timer.js";
@@ -74,13 +74,14 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.nextView = new AddedCardView(
       new TemplateHelper<HTMLDivElement>(
         this.templateHelper.getCurElIdOrClassName,
-        Templates.addedCard,
+        Template.addedCard,
         "beforebegin",
         true
       ),
       this.titleTextareaEl.value,
       this.parentListPos
     );
+    this.nextView.templateHelper.getCreatedEl.id = `${this.titleTextareaEl.value}-${this.parentListPos}`;
 
     this.nextView.templateHelper.insertAtManually(
       "beforebegin",
@@ -105,7 +106,6 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.titleTextareaEl.blur();
   }
 }
-
 
 // @Autobind
 //   dragOverHandler(event: DragEvent): void {

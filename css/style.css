@@ -431,6 +431,7 @@ nav .btn {
 }
 
 .list__added-inside {
+  pointer-events: none;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -448,8 +449,13 @@ nav .btn {
   background-color: #fff;
 }
 
-.list__added-card p {
+.list__dummy-card {
+  padding: 4px;
+
+  color: var(--color-text-dark2);
+  visibility: visible;
 }
 
-.list__added-card i {
+.list__dummy-card.hidden {
+  visibility: hidden;
 }

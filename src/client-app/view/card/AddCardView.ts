@@ -2,7 +2,7 @@ import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { AddingCardView } from "./AddingCardView.js";
 import { autobind } from "../../decorator/autobind.js";
-import * as Templates from "../../template/TemplateNames.js";
+import { Template } from "../../template/TemplateNames.js";
 import { ViewCache } from "../../controller/ViewCache.js";
 import { CardController } from "../../controller/CardController.js";
 
@@ -31,7 +31,7 @@ export class AddCardView extends View<HTMLDivElement> {
       this.nextView = new AddingCardView(
         new TemplateHelper<HTMLDivElement>(
           this.templateHelper.getCurElIdOrClassName,
-          Templates.addingCard,
+          Template.addingCard,
           "afterend",
           true
         ),

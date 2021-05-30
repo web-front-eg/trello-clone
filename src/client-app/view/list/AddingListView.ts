@@ -2,7 +2,7 @@ import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { autobind } from "../../decorator/autobind.js";
 import { AddedListView } from "./AddedListView.js";
-import * as Templates from "../../template/TemplateNames.js";
+import { Template } from "../../template/TemplateNames.js";
 import { ListController } from "../../controller/ListController.js";
 import { ViewCache } from "../../controller/ViewCache.js";
 
@@ -70,7 +70,7 @@ export class AddingListView extends View<HTMLDivElement> {
     this.nextView = new AddedListView(
       new TemplateHelper<HTMLDivElement>(
         ".column",
-        Templates.addedList,
+        Template.addedList,
         "beforeend",
         false,
         View.currentListPosition

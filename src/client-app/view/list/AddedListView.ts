@@ -1,7 +1,7 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { AddCardView } from "../card/AddCardView.js";
-import * as Templates from "../../template/TemplateNames.js";
+import { Template } from "../../template/TemplateNames.js";
 import { ListController } from "../../controller/ListController.js";
 
 export class AddedListView extends View<HTMLDivElement> {
@@ -31,7 +31,7 @@ export class AddedListView extends View<HTMLDivElement> {
       this.nextView = new AddCardView(
         new TemplateHelper<HTMLParagraphElement>(
           this.templateHelper.getCurElIdOrClassName,
-          Templates.addCard,
+          Template.addCard,
           "afterend",
           false,
           View.currentListPosition

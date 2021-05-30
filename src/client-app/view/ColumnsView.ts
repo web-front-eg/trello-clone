@@ -1,6 +1,6 @@
 import { ViewCache } from "../controller/ViewCache.js";
 import { TemplateHelper } from "../template/TemplateHelper.js";
-import * as Templates from "../template/TemplateNames.js";
+import { Template } from "../template/TemplateNames.js";
 import { AddListView } from "./list/AddListView.js";
 import { View } from "./View.js";
 
@@ -12,7 +12,7 @@ export class ColumnsView extends View<HTMLDivElement> {
     super(
       new TemplateHelper<HTMLDivElement>(
         "#root",
-        Templates.column,
+        Template.column,
         "afterbegin"
       ),
       "ColumnsView"
@@ -22,7 +22,7 @@ export class ColumnsView extends View<HTMLDivElement> {
     this.nextView = new AddListView(
       new TemplateHelper<HTMLDivElement>(
         this.templateHelper.getCurElIdOrClassName,
-        Templates.addList,
+        Template.addList,
         "afterbegin"
       )
     );
@@ -41,7 +41,7 @@ export class ColumnsView extends View<HTMLDivElement> {
   public addNewColumn(): void {
     this.templateHelper = new TemplateHelper<HTMLDivElement>(
       this.templateHelper.getCurElIdOrClassName,
-      Templates.column,
+      Template.column,
       "afterend",
       false,
       ++View.currentListPosition

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./dist/server/server.js"
+    "start": "lite-server",
+    "serve": "nodemon ./dist/server/server.js"
   },
   "keywords": [],
   "author": "",

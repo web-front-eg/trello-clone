@@ -41,7 +41,7 @@ class App {
     // static files
     // console.log(path.join(__dirname, "../public"));
     
-    this.app.use("/", express.static(path.join(__dirname, "../public")));
+    // this.app.use("/", express.static(path.join(__dirname, "../public")));
     // this.app.use(express.static("public"));
 
     // routers

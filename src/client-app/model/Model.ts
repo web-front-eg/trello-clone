@@ -20,14 +20,14 @@ class Model {
       lists: [],
     };
 
-    // this.saveAutomatically(saveInterval);
-    // this.syncAutomatically(syncInterval);
+    this.saveAutomatically(saveInterval);
+    this.syncAutomatically(syncInterval);
   }
 
   public save(): boolean {
     try {
       // TOOD: POST data to server
-
+      console.log("saved!", this.state);
       return true;
     } catch (e: unknown) {
       return false;
@@ -37,7 +37,7 @@ class Model {
   public sync(): boolean {
     try {
       // TODO: GET data from server and apply into state
-
+      console.log("synchronized!", this.state);
       return true;
     } catch (e: unknown) {
       return false;
@@ -72,14 +72,13 @@ class Model {
     const cardsArr = this.state.lists[listPos].cards;
     const order = cardsArr.length;
     cardsArr.push({ content });
-    console.log(this.state);
 
     return order;
   }
 
   public updateCards(newState: IState): void {
     this.state = newState;
-    // console.log(this.state);
+    console.log(this.state);
   }
 }
 

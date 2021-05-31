@@ -4,18 +4,14 @@ import { Template } from "../template/TemplateNames.js";
 import { AddListView } from "./list/AddListView.js";
 import { View } from "./View.js";
 
-export class ColumnsView extends View<HTMLDivElement> {
+export class ListsView extends View<HTMLDivElement> {
   constructor() {
     // 1. init template injector
     //    attach list under the #root
     //    add-list 를 #root 아래에 붙임
     super(
-      new TemplateHelper<HTMLDivElement>(
-        "#root",
-        Template.column,
-        "afterbegin"
-      ),
-      "ColumnsView"
+      new TemplateHelper<HTMLDivElement>("#root", Template.lists, "afterbegin"),
+      "ListsView"
     );
 
     // 2. attach the initial .add-list template under #root
@@ -31,24 +27,24 @@ export class ColumnsView extends View<HTMLDivElement> {
   }
 
   protected init(): void {
-    ViewCache.columnsView = this;
+    ViewCache.listsView = this;
   }
 
   protected reset(): void {
     //
   }
 
-  public addNewColumn(): void {
+  public attachNewLists(): void {
     this.templateHelper = new TemplateHelper<HTMLDivElement>(
       this.templateHelper.getCurElIdOrClassName,
-      Template.column,
+      Template.lists,
       "afterend",
       false,
       ++View.currentListPosition
     );
   }
 
-  public attachToNewColumnFrom(addListView: AddListView): void {
+  public attachToNewListsFrom(addListView: AddListView): void {
     // attach add-list to new parent element
     this.templateHelper.getCreatedEl.insertAdjacentElement(
       "afterbegin",

@@ -59,17 +59,16 @@ export class AddingListView extends View<HTMLDivElement> {
   }
 
   private addChild(): void {
-    // AddedList 추가 전에 새로운 column 추가
-    ListController.addNewColumn();
-    // AddList 를 새로운 column 의 child로 이동
-    ListController.attachAddListToNewColumn();
+    // AddedList 추가 전에 새로운 lists 추가
+    // AddList 를 새로운 lists 의 child로 이동
+    ListController.onNewListsAdded();
 
     /**
      * create a new AddListView
      */
     this.nextView = new AddedListView(
       new TemplateHelper<HTMLDivElement>(
-        ".column",
+        ".lists",
         Template.addedList,
         "beforeend",
         false,
@@ -84,7 +83,7 @@ export class AddingListView extends View<HTMLDivElement> {
   /**
    * show adding-list and auto-focus at the input
    */
-  public onClickAddListAgain(): void {
+  public reopen(): void {
     this.currentEl.style.display = "block";
     this.titleInputEl.focus();
   }

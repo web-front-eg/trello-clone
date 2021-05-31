@@ -1,5 +1,5 @@
 export namespace Template {
-  export const column = "template__column";
+  export const lists = "template__lists";
 
   export const addList = "template__add-list";
   export const addingList = "template__adding-list";
@@ -9,5 +9,5 @@ export namespace Template {
   export const addingCard = "template__adding-card";
   export const addedCard = "template__added-card";
 
-  export const dummyCard = "template__dummy-card";
+  export const movingCardPosIndicator = "template__moving-card-pos-indicator";
 }

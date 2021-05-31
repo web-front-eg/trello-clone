@@ -4,6 +4,7 @@ import { autobind } from "../../decorator/autobind.js";
 import { Template } from "../../template/TemplateNames.js";
 import { AddingListView } from "./AddingListView.js";
 import { ViewCache } from "../../controller/ViewCache.js";
+import { ListController } from "../../controller/ListController.js";
 
 /**
  * Add List -> make a new AddingListView
@@ -19,7 +20,7 @@ export class AddListView extends View<HTMLDivElement> {
     // cache instance
     ViewCache.addListView = this;
 
-    this.currentEl.addEventListener("click", this.onClickAddList);
+    this.currentEl.addEventListener("click", this.onClick);
     this.currentEl.addEventListener("focusout", this.onFocusOut);
   }
 
@@ -28,7 +29,7 @@ export class AddListView extends View<HTMLDivElement> {
   }
 
   @autobind
-  private onClickAddList(_: Event): void {
+  private onClick(_: Event): void {
     // re-using adding-list
     if (!this.nextView) {
       this.nextView = new AddingListView(
@@ -40,7 +41,7 @@ export class AddListView extends View<HTMLDivElement> {
       );
     }
 
-    ViewCache.addingListView.onClickAddListAgain();
+    ListController.onClickAddListAgain();
     this.reset();
   }
 
@@ -50,7 +51,7 @@ export class AddListView extends View<HTMLDivElement> {
     this.currentEl.style.display = "none";
   }
 
-  public onClose(): void {
+  public reopen(): void {
     // show add-list on closing adding-card
     this.currentEl.style.display = "block";
   }

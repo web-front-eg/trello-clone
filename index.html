@@ -112,12 +112,13 @@
     <!-- 3. card lists -->
     <section id="root"></section>
 
-    <div id="dummy-hider"></div>
+    <div id="moving-card-pos-indicator-disabled"></div>
 
     <!-- templates -->
-    <!-- 1. column template -->
-    <template id="template__column">
-      <div class="column"></div>
+
+    <!-- 1. lists template -->
+    <template id="template__lists">
+      <div class="lists"></div>
     </template>
 
     <!-- 2. add list template -->
@@ -138,7 +139,7 @@
 
     <!-- 4. added list (title) template -->
     <template id="template__added-list">
-      <div class="list__title">
+      <div class="list__title" draggable="true">
         <strong></strong>
         <i class="fas fa-ellipsis-h"></i>
       </div>
@@ -168,7 +169,7 @@
 
     <!-- 7. added card template -->
     <template id="template__added-card">
-      <div class="list__added-card">
+      <div class="list__added-card" draggable="true">
         <div class="list__added-inside">
           <p class="list__added-card__title"></p>
           <i class="fas fa-pencil-alt"></i>
@@ -177,8 +178,10 @@
     </template>
 
     <!-- 8. dummy card template -->
-    <template id="template__dummy-card">
-      <div class="list__dummy-card"></div>
+    <template id="template__moving-card-pos-indicator">
+      <div class="list__moving-card-pos-indicator hidden">
+        <div class="list__moving-card-pos-indicator-inside"></div>
+      </div>
     </template>
   </body>
 </html>

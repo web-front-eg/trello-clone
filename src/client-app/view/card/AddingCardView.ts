@@ -10,15 +10,12 @@ import { delay } from "../../util/timer.js";
 export class AddingCardView extends View<HTMLDivElement> {
   private readonly titleTextareaEl: HTMLTextAreaElement;
   private readonly addBtnEl: HTMLButtonElement;
-  public readonly parentListPos: number;
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
-    parentListPos: number
+    public readonly parentListPos: number
   ) {
     super(templateHelper, "AddingCardView");
-
-    this.parentListPos = parentListPos;
 
     this.titleTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
@@ -88,11 +85,11 @@ export class AddingCardView extends View<HTMLDivElement> {
       this.currentEl
     );
 
-    CardController.onAddingCardAdded(this.parentListPos);
+    CardController.onNewAddedCardAdded(this.parentListPos);
     this.reset();
   }
 
-  public onClickAddCardAgain(): void {
+  public reopen(): void {
     // show and focus adding-card on clicking add-card again
     this.currentEl.style.display = "block";
     delay(() => {
@@ -106,26 +103,3 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.titleTextareaEl.blur();
   }
 }
-
-// @Autobind
-//   dragOverHandler(event: DragEvent): void {
-//     if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
-//       event.preventDefault(); // drop is only triggered without this.
-//       const listEl = <HTMLUListElement>this.element.querySelector("ul")!;
-//       listEl.classList.add("droppable");
-//     }
-//   }
-
-//   @Autobind
-//   dropHandler(event: DragEvent): void {
-//     const prjId: string = event.dataTransfer!.getData("text/plain");
-//     ProjectState.instance.moveProject(prjId, this.type);
-//   }
-
-//   @Autobind
-//   dragLeaveHandler(_: DragEvent): void {
-//     const listEl = <HTMLUListElement>this.element.querySelector("ul")!;
-//     if (listEl.classList.contains("droppable")) {
-//       listEl.classList.remove("droppable");
-//     }
-//   }

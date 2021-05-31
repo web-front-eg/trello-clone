@@ -6,7 +6,7 @@ import { AddListView } from "./list/AddListView.js";
 import { AddingListView } from "./list/AddingListView.js";
 import { AddedListView } from "./list/AddedListView.js";
 
-import { ColumnsView } from "./ColumnsView.js";
+import { ListsView } from "./ListsView.js";
 
 import { View } from "./View.js";
 
@@ -17,6 +17,6 @@ export {
   AddListView,
   AddingListView,
   AddedListView,
-  ColumnsView,
+  ListsView,
   View,
 };

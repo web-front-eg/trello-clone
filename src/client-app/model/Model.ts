@@ -67,11 +67,11 @@ class Model {
     }
   }
 
-  public addList(title: string): void {
+  public addNewList(title: string): void {
     this.state.columns.push(<IList>{ title, cards: [] });
   }
 
-  public addCard(listPos: number, content: string): number {
+  public addNewCard(listPos: number, content: string): number {
     const cardsArr = this.state.columns[listPos].cards;
     const order = cardsArr.length;
     cardsArr.push({ content });

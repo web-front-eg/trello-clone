@@ -2,23 +2,20 @@ import { ViewCache } from "./ViewCache.js";
 import Model from "../model/Model.js";
 
 export namespace ListController {
-  export const addNewColumn = (): void => {
-    ViewCache.columnsView.addNewColumn();
-  };
+  export function onNewListsAdded(): void {
+    ViewCache.listsView.attachNewLists();
+    ViewCache.listsView.attachToNewListsFrom(ViewCache.addListView);
+  }
 
-  export const onClickAddListAgain = (): void => {
-    ViewCache.addingListView.onClickAddListAgain();
-  };
+  export function onClickAddListAgain(): void {
+    ViewCache.addingListView.reopen();
+  }
 
-  export const onCloseAddingList = (): void => {
-    ViewCache.addListView.onClose();
-  };
+  export function onCloseAddingList(): void {
+    ViewCache.addListView.reopen();
+  }
 
-  export const attachAddListToNewColumn = (): void => {
-    ViewCache.columnsView.attachToNewColumnFrom(ViewCache.addListView);
-  };
-
-  export const onSetTitleInAddedList = (title: string): void => {
-    Model.addList(title);
-  };
+  export function onSetTitleInAddedList(title: string): void {
+    Model.addNewList(title);
+  }
 }

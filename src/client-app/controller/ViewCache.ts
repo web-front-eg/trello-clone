@@ -5,7 +5,7 @@ import {
   AddCardView,
   AddingCardView,
   AddedCardView,
-  ColumnsView,
+  ListsView,
   View,
 } from "../view/index.js";
 
@@ -13,17 +13,17 @@ export class ViewCache {
   /**
    *
    */
-  private static _columnsView: ColumnsView;
+  private static _listsView: ListsView;
 
-  public static get columnsView(): ColumnsView {
-    if (!ViewCache._columnsView) {
-      throw new Error("No cached columns view valid!");
+  public static get listsView(): ListsView {
+    if (!ViewCache._listsView) {
+      throw new Error("No cached lists view valid!");
     }
-    return ViewCache._columnsView;
+    return ViewCache._listsView;
   }
 
-  public static set columnsView(view: ColumnsView) {
-    ViewCache._columnsView = view;
+  public static set listsView(view: ListsView) {
+    ViewCache._listsView = view;
   }
 
   /**
@@ -61,10 +61,33 @@ export class ViewCache {
   /**
    *
    */
+  private static _addedListViews: Array<AddedListView> = [];
+
+  public static getAddedListView(idx: number): AddedListView {
+    if (ViewCache._addedListViews.length < 0) {
+      throw new Error("No cached added card view valid!");
+    }
+
+    if (idx < 0 || idx > ViewCache._addCardViews.length) {
+      throw new Error(
+        "idx can't be 0 below or over the length of addedListViews amount"
+      );
+    }
+
+    return ViewCache._addedListViews[idx];
+  }
+
+  public static set setAddedListView(view: AddedListView) {
+    ViewCache._addedListViews.push(view);
+  }
+
+  /**
+   *
+   */
   private static _addCardViews: Array<AddCardView> = [];
 
   public static getAddCardView(idx: number): AddCardView {
-    if (!ViewCache._addCardViews) {
+    if (ViewCache._addCardViews.length < 0) {
       throw new Error("No cached add card view valid!");
     }
 
@@ -87,7 +110,7 @@ export class ViewCache {
   private static _addingCardView: Array<AddingCardView> = [];
 
   public static getAddingCardView(idx: number): AddingCardView {
-    if (!ViewCache._addingCardView) {
+    if (ViewCache._addingCardView.length < 0) {
       throw new Error("No cached adding card view valid!");
     }
 

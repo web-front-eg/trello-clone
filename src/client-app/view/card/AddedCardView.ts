@@ -1,16 +1,14 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper";
 import { CardController } from "../../controller/CardController.js";
-import { CardMover } from "./CardMover.js";
+import { CardDragDrop } from "../drag-drop/CardDragDrop.js";
 
 export class AddedCardView extends View<HTMLDivElement> {
   /**
    *
    */
   private readonly titleEl: HTMLParagraphElement;
-  // private readonly parentListPos: number;
-  // private readonly currentCardPos: number;
-  private readonly cardMover: CardMover;
+  private readonly dragDrop: CardDragDrop;
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
@@ -19,7 +17,7 @@ export class AddedCardView extends View<HTMLDivElement> {
   ) {
     super(templateHelper, "AddedCardView");
 
-    // this.parentListPos = parentListPos;
+    console.log(parentListPos);
 
     this.titleEl = this.currentEl.querySelector(
       ".list__added-card__title"
@@ -31,7 +29,8 @@ export class AddedCardView extends View<HTMLDivElement> {
       content
     );
 
-    this.cardMover = new CardMover(this.currentEl, currentCardPos);
+    this.dragDrop = new CardDragDrop(this.currentEl, currentCardPos);
+
     this.init();
   }
 

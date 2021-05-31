@@ -1,12 +1,10 @@
 import { Template } from "../../template/TemplateNames.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
-import Model from "../../model/Model.js";
+import Model, { ICard, IList, IState } from "../../model/Model.js";
 
 export namespace DragDrop {
   type TyTransferredDataOnDrag = {
     draggableId: string;
-    fromListPos: number;
-    fromCardPos: number;
   };
 
   const movingCardIndicatorTemplateHelper = new TemplateHelper<HTMLDivElement>(
@@ -22,11 +20,7 @@ export namespace DragDrop {
     "moving-card-pos-indicator-disabled"
   )! as HTMLDivElement;
 
-  export const onDragStart = (
-    e: DragEvent,
-    fromListPos: number,
-    fromCardPos: number
-  ): void => {
+  export const onDragStart = (e: DragEvent): void => {
     // -> turn on the move effect
     //   1. rotate the target tiny bit
     //   2. replace the target with a dummy to indicate position of the target
@@ -37,8 +31,6 @@ export namespace DragDrop {
 
     const transferred = <TyTransferredDataOnDrag>{
       draggableId: targetEvent.id,
-      fromListPos,
-      fromCardPos,
     };
     e.dataTransfer!.setData("text/plain", JSON.stringify(transferred));
     e.dataTransfer!.effectAllowed = "move";
@@ -94,9 +86,7 @@ export namespace DragDrop {
     }
 
     const transferred = e.dataTransfer!.getData("text/plain");
-    const { draggableId, fromListPos, fromCardPos } = JSON.parse(
-      transferred
-    ) as TyTransferredDataOnDrag;
+    const { draggableId } = JSON.parse(transferred) as TyTransferredDataOnDrag;
 
     const draggableEl = document.getElementById(draggableId);
 
@@ -107,34 +97,55 @@ export namespace DragDrop {
       return;
     }
 
-    const rootEl = currentListEl.parentElement;
-
-    let toListPos: number = -99;
-    rootEl?.childNodes.forEach((node: ChildNode, i: number) => {
-      if (node.isSameNode(currentListEl)) {
-        toListPos = i;
-      }
-    });
-
-    let toCardPos: number = Array.from(
-      currentListEl.querySelectorAll(".list__added-card")
-    ).findIndex((card: Element) => card.id === targetEl.id);
-
-    // attach as a first card
-    if (toCardPos == -1) {
-      toCardPos = 0;
-    }
-
-    console.log(
-      `move from [${fromListPos}, ${fromCardPos}] to [${toListPos}, ${toCardPos}]`
-    );
+    const rootEl = currentListEl.parentElement!;
 
     targetEl!.insertAdjacentElement("afterend", draggableEl!);
 
-    Model.moveCard(fromListPos, fromCardPos, toListPos, toCardPos);
+    Model.updateCards(makeNewState(rootEl));
   }
 
-  // export function onDragLeave(e: DragEvent): void {
-  //   // TODO: stop highlighting the list!
-  // }
+  function makeNewState(rootEl: HTMLElement): IState {
+    const newState = <IState>{
+      lists: [],
+    };
+
+    // 1. lists 추가
+    // lists 가져오기
+    const allLists = Array.from(rootEl?.querySelectorAll(".lists")!);
+    newState.lists = new Array<IList>(allLists.length - 1);
+    // 각 lists 의 타이틀 가져오기
+    const allListsTitles = allLists.map(
+      lists => lists.firstElementChild?.firstElementChild?.innerHTML
+    );
+
+    // 2. list 추가
+    // 각 lists 에 title 를 추가한 새로운 list 를 추가
+    allListsTitles.forEach((title: string | undefined, i: number) => {
+      if (title) {
+        const newList = <IList>{ title, cards: [] };
+        newState.lists[i] = newList;
+      }
+    });
+
+    // 3. card 추가
+    // added-card 가져오기
+    const allAddedCards = allLists.map(
+      lists => lists.querySelectorAll(".list__added-card")!
+    );
+    // 필요 없는 부분 pop
+    allAddedCards.pop();
+
+    // 첫 번째 루프 - i 번째 lists 이용
+    allAddedCards.forEach((cards: NodeListOf<Element>, i: number) => {
+      // 두 번째 루프 - j 번째 cards 이용
+      cards.forEach((card: Element, j: number) => {
+        const content = card.firstElementChild?.firstElementChild?.innerHTML;
+        if (content) {
+          const newCard = <ICard>{ content };
+          newState.lists[i].cards[j] = newCard;
+        }
+      });
+    });
+    return newState;
+  }
 }

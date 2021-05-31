@@ -14,7 +14,7 @@ export class AddingCardView extends View<HTMLDivElement> {
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
-    public readonly parentListPos: number
+    public parentListPos: number
   ) {
     super(templateHelper, "AddingCardView");
 
@@ -32,12 +32,12 @@ export class AddingCardView extends View<HTMLDivElement> {
   }
 
   protected init(): void {
-    ViewCache.setAddingCardView = this;
+    ViewCache.addingCardView = this;
 
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
     this.titleTextareaEl.addEventListener("keypress", this.onPressEnterKey);
     // this.currentEl.addEventListener("focusout", this.onFocusOut);
-    this.addBtnEl.addEventListener("focusout", this.onFocusOut);
+    // this.addBtnEl.addEventListener("focusout", this.onFocusOut);
     this.closeIconEl.addEventListener("click", this.closeAddingCardForcely);
 
     this.reset();
@@ -59,11 +59,11 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.addCard();
   }
 
-  @autobind
-  private onFocusOut(_: Event): void {
-    this.currentEl.style.display = "none";
-    CardController.onCloseAddingCard(this.parentListPos);
-  }
+  // @autobind
+  // private onFocusOut(_: Event): void {
+  //   this.currentEl.style.display = "none";
+  //   CardController.onCloseAddingCard(this.parentListPos);
+  // }
 
   /**
    * set the content of adding-card, which is the title of added-card
@@ -103,6 +103,8 @@ export class AddingCardView extends View<HTMLDivElement> {
       this.currentEl
     );
     // add card 도 생성된 added card 아래로 이동
+    // console.log(this.parentListPos);
+
     CardController.onNewAddedCardAdded(this.parentListPos);
 
     this.reset();

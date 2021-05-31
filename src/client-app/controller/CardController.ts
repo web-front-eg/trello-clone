@@ -2,8 +2,8 @@ import { ViewCache } from "./ViewCache.js";
 import Model from "../model/Model.js";
 
 export namespace CardController {
-  export function onClickAddCardAgain(idx: number): void {
-    ViewCache.getAddingCardView(idx).reopen();
+  export function onClickAddCardAgain(): void {
+    ViewCache.addingCardView.reopen();
   }
 
   export function onCloseAddingCard(idx: number): void {
@@ -11,9 +11,7 @@ export namespace CardController {
   }
 
   export function onNewAddedCardAdded(idx: number): void {
-    ViewCache.getAddCardView(idx).moveAddCardUnder(
-      ViewCache.getAddingCardView(idx)
-    );
+    ViewCache.getAddCardView(idx).moveAddCardUnder(ViewCache.addingCardView);
   }
 
   export function onSetContentInAddedCard(

@@ -107,29 +107,44 @@ export class ViewCache {
   /**
    *
    */
-  private static _addingCardView: Array<AddingCardView> = [];
 
-  public static getAddingCardView(idx: number): AddingCardView {
-    if (ViewCache._addingCardView.length < 0) {
+  private static _addingCardView: AddingCardView;
+
+  public static get addingCardView(): AddingCardView {
+    if (!ViewCache._addingCardView) {
       throw new Error("No cached adding card view valid!");
     }
 
-    if (idx < 0 || idx > ViewCache._addCardViews.length) {
-      throw new Error(
-        "idx can't be 0 below or over the length of addingCardViews amount"
-      );
-    }
-
-    const found = ViewCache._addingCardView.find(
-      addingCardView => addingCardView.parentListPos === idx
-    );
-    if (!found) {
-      throw new Error("No correspondant adding card!");
-    }
-    return found;
+    return ViewCache._addingCardView;
   }
 
-  public static set setAddingCardView(view: AddingCardView) {
-    ViewCache._addingCardView.push(view);
+  public static set addingCardView(view: AddingCardView) {
+    ViewCache._addingCardView = view;
   }
+
+  // private static _addingCardView: Array<AddingCardView> = [];
+
+  // public static getAddingCardView(idx: number): AddingCardView {
+  //   if (ViewCache._addingCardView.length < 0) {
+  //     throw new Error("No cached adding card view valid!");
+  //   }
+
+  //   if (idx < 0 || idx > ViewCache._addCardViews.length) {
+  //     throw new Error(
+  //       "idx can't be 0 below or over the length of addingCardViews amount"
+  //     );
+  //   }
+
+  //   const found = ViewCache._addingCardView.find(
+  //     addingCardView => addingCardView.parentListPos === idx
+  //   );
+  //   if (!found) {
+  //     throw new Error("No correspondant adding card!");
+  //   }
+  //   return found;
+  // }
+
+  // public static set setAddingCardView(view: AddingCardView) {
+  //   ViewCache._addingCardView.push(view);
+  // }
 }

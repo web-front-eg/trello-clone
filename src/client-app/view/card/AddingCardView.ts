@@ -32,7 +32,7 @@ export class AddingCardView extends View<HTMLDivElement> {
 
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
     this.titleTextareaEl.addEventListener("keypress", this.onPressEnterKey);
-    this.titleTextareaEl.addEventListener("focusout", this.onFocusOut);
+    this.addBtnEl.addEventListener("focusout", this.onFocusOut);
 
     this.reset();
   }
@@ -43,14 +43,14 @@ export class AddingCardView extends View<HTMLDivElement> {
 
   @autobind
   private onClickAddCard(_: Event): void {
-    this.addChild();
+    this.addCard();
   }
 
   @autobind
   private onPressEnterKey(e: Event): void {
     if ((e as KeyboardEvent).key !== "Enter") return;
 
-    this.addChild();
+    this.addCard();
   }
 
   @autobind
@@ -63,11 +63,20 @@ export class AddingCardView extends View<HTMLDivElement> {
    * set the content of adding-card, which is the title of added-card
    * with the value of input.
    */
-  private addChild(): void {
+  private addCard(): void {
+    // 공백 X
     if (!this.titleTextareaEl.value) {
       return;
     }
 
+    let content: string = this.titleTextareaEl.value;
+    // 다음 카드부터, content 앞에 개행문자(\n) 이 있으면 split 해서 없앰
+    const s = this.titleTextareaEl.value.split("\n");
+    if (s[1]) {
+      content = s[1];
+    }
+
+    // addedCard 생성
     this.nextView = new AddedCardView(
       new TemplateHelper<HTMLDivElement>(
         this.templateHelper.getCurElIdOrClassName,
@@ -75,17 +84,21 @@ export class AddingCardView extends View<HTMLDivElement> {
         "beforebegin",
         true
       ),
-      this.titleTextareaEl.value,
+      content,
       this.parentListPos
     );
+
+    // 생성된 addedCard 에 ID 추가
     this.nextView.templateHelper.getCreatedEl.id = `${this.titleTextareaEl.value}-${this.parentListPos}`;
 
+    // adding card 를 생성된 added card 아래로 이동
     this.nextView.templateHelper.insertAtManually(
       "beforebegin",
       this.currentEl
     );
-
+    // add card 도 생성된 added card 아래로 이동
     CardController.onNewAddedCardAdded(this.parentListPos);
+
     this.reset();
   }
 

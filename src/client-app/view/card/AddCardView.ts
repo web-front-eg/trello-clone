@@ -8,6 +8,7 @@ import { CardController } from "../../controller/CardController.js";
 
 export class AddCardView extends View<HTMLDivElement> {
   private readonly fixedAddCardPos: number = View.currentListPosition;
+
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
     super(templateHelper, "AddCardView");
     this.init();
@@ -38,10 +39,12 @@ export class AddCardView extends View<HTMLDivElement> {
         this.fixedAddCardPos
       );
     } else {
+      //
       CardController.onClickAddCardAgain(this.fixedAddCardPos);
     }
 
     this.nextView.templateHelper.insertAtManually("afterend", this.currentEl);
+    // CardController.
     this.reset();
   }
 

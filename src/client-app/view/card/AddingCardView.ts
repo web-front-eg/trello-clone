@@ -10,6 +10,7 @@ import { delay } from "../../util/timer.js";
 export class AddingCardView extends View<HTMLDivElement> {
   private readonly titleTextareaEl: HTMLTextAreaElement;
   private readonly addBtnEl: HTMLButtonElement;
+  private readonly closeIconEl: HTMLElement;
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
@@ -24,6 +25,9 @@ export class AddingCardView extends View<HTMLDivElement> {
 
     this.addBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
 
+    this.closeIconEl = this.currentEl.querySelector(
+      ".fa-times"
+    )! as HTMLElement;
     this.init();
   }
 
@@ -32,7 +36,9 @@ export class AddingCardView extends View<HTMLDivElement> {
 
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
     this.titleTextareaEl.addEventListener("keypress", this.onPressEnterKey);
+    // this.currentEl.addEventListener("focusout", this.onFocusOut);
     this.addBtnEl.addEventListener("focusout", this.onFocusOut);
+    this.closeIconEl.addEventListener("click", this.closeAddingCardForcely);
 
     this.reset();
   }
@@ -111,8 +117,10 @@ export class AddingCardView extends View<HTMLDivElement> {
     }, 1);
   }
 
-  public closeAddingCardForced(): void {
+  @autobind
+  public closeAddingCardForcely(): void {
     this.currentEl.style.display = "none";
     this.titleTextareaEl.blur();
+    CardController.onCloseAddingCard(this.parentListPos);
   }
 }

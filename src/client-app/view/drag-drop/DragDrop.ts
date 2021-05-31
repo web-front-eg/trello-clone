@@ -1,7 +1,14 @@
 import { Template } from "../../template/TemplateNames.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
+import Model from "../../model/Model.js";
 
 export namespace DragDrop {
+  type TyTransferredDataOnDrag = {
+    draggableId: string;
+    fromListPos: number;
+    fromCardPos: number;
+  };
+
   const movingCardIndicatorTemplateHelper = new TemplateHelper<HTMLDivElement>(
     "#moving-card-pos-indicator-disabled",
     Template.movingCardPosIndicator,
@@ -15,7 +22,11 @@ export namespace DragDrop {
     "moving-card-pos-indicator-disabled"
   )! as HTMLDivElement;
 
-  export const onDragStart = (e: DragEvent): void => {
+  export const onDragStart = (
+    e: DragEvent,
+    fromListPos: number,
+    fromCardPos: number
+  ): void => {
     // -> turn on the move effect
     //   1. rotate the target tiny bit
     //   2. replace the target with a dummy to indicate position of the target
@@ -24,7 +35,12 @@ export namespace DragDrop {
     // e.dataTransfer & e.target 은 무조건 유효
     const targetEvent = e.target! as HTMLElement;
 
-    e.dataTransfer!.setData("text/plain", targetEvent.id);
+    const transferred = <TyTransferredDataOnDrag>{
+      draggableId: targetEvent.id,
+      fromListPos,
+      fromCardPos,
+    };
+    e.dataTransfer!.setData("text/plain", JSON.stringify(transferred));
     e.dataTransfer!.effectAllowed = "move";
   };
 
@@ -77,17 +93,45 @@ export namespace DragDrop {
       throw new Error("draggable data hasn't been transferred!");
     }
 
-    const draggableId = e.dataTransfer!.getData("text/plain");
+    const transferred = e.dataTransfer!.getData("text/plain");
+    const { draggableId, fromListPos, fromCardPos } = JSON.parse(
+      transferred
+    ) as TyTransferredDataOnDrag;
+
     const draggableEl = document.getElementById(draggableId);
 
     const targetEl = e.target! as HTMLElement;
 
+    const currentListEl = targetEl.parentElement;
+    if (!currentListEl) {
+      return;
+    }
+
+    const rootEl = currentListEl.parentElement;
+
+    let toListPos: number = -99;
+    rootEl?.childNodes.forEach((node: ChildNode, i: number) => {
+      if (node.isSameNode(currentListEl)) {
+        toListPos = i;
+      }
+    });
+
+    let toCardPos: number = Array.from(
+      currentListEl.querySelectorAll(".list__added-card")
+    ).findIndex((card: Element) => card.id === targetEl.id);
+
+    // attach as a first card
+    if (toCardPos == -1) {
+      toCardPos = 0;
+    }
+
+    console.log(
+      `move from [${fromListPos}, ${fromCardPos}] to [${toListPos}, ${toCardPos}]`
+    );
+
     targetEl!.insertAdjacentElement("afterend", draggableEl!);
 
-    // console.log("drop!", draggableId);
-
-    // transfer the card data!
-    // CardController.
+    Model.moveCard(fromListPos, fromCardPos, toListPos, toCardPos);
   }
 
   // export function onDragLeave(e: DragEvent): void {

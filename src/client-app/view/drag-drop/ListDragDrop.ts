@@ -7,6 +7,6 @@ export class ListDragDrop {
 
   private bind(): void {
     this.addedListEl.addEventListener("dragover", DragDrop.onDragOver);
-    this.addedListEl.addEventListener("drop", DragDrop.onDrop);
+    this.addedListEl.addEventListener("drop", e => DragDrop.onDrop(e, ));
   }
 }

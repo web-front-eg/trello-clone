@@ -17,8 +17,6 @@ export class AddedCardView extends View<HTMLDivElement> {
   ) {
     super(templateHelper, "AddedCardView");
 
-    console.log(parentListPos);
-
     this.titleEl = this.currentEl.querySelector(
       ".list__added-card__title"
     )! as HTMLParagraphElement;
@@ -29,7 +27,11 @@ export class AddedCardView extends View<HTMLDivElement> {
       content
     );
 
-    this.dragDrop = new CardDragDrop(this.currentEl, currentCardPos);
+    this.dragDrop = new CardDragDrop(
+      this.currentEl,
+      parentListPos,
+      currentCardPos
+    );
 
     this.init();
   }

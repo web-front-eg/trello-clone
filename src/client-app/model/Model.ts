@@ -75,9 +75,6 @@ class Model {
     const cardsArr = this.state.columns[listPos].cards;
     const order = cardsArr.length;
     cardsArr.push({ content });
-
-    console.log(this.state);
-
     return order;
   }
 
@@ -110,6 +107,7 @@ class Model {
     }
 
     this.state.columns[toListPos].cards[toCardPos] = targetCard;
+    console.log(this.state);
   }
 }
 

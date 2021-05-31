@@ -1,7 +1,12 @@
 import { Template } from "../../template/TemplateNames.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
+import Model, { ICard, IList, IState } from "../../model/Model.js";
 
 export namespace DragDrop {
+  type TyTransferredDataOnDrag = {
+    draggableId: string;
+  };
+
   const movingCardIndicatorTemplateHelper = new TemplateHelper<HTMLDivElement>(
     "#moving-card-pos-indicator-disabled",
     Template.movingCardPosIndicator,
@@ -24,7 +29,10 @@ export namespace DragDrop {
     // e.dataTransfer & e.target 은 무조건 유효
     const targetEvent = e.target! as HTMLElement;
 
-    e.dataTransfer!.setData("text/plain", targetEvent.id);
+    const transferred = <TyTransferredDataOnDrag>{
+      draggableId: targetEvent.id,
+    };
+    e.dataTransfer!.setData("text/plain", JSON.stringify(transferred));
     e.dataTransfer!.effectAllowed = "move";
   };
 
@@ -77,20 +85,67 @@ export namespace DragDrop {
       throw new Error("draggable data hasn't been transferred!");
     }
 
-    const draggableId = e.dataTransfer!.getData("text/plain");
+    const transferred = e.dataTransfer!.getData("text/plain");
+    const { draggableId } = JSON.parse(transferred) as TyTransferredDataOnDrag;
+
     const draggableEl = document.getElementById(draggableId);
 
     const targetEl = e.target! as HTMLElement;
 
+    const currentListEl = targetEl.parentElement;
+    if (!currentListEl) {
+      return;
+    }
+
+    const rootEl = currentListEl.parentElement!;
+
     targetEl!.insertAdjacentElement("afterend", draggableEl!);
 
-    // console.log("drop!", draggableId);
-
-    // transfer the card data!
-    // CardController.
+    Model.updateCards(makeNewState(rootEl));
   }
 
-  // export function onDragLeave(e: DragEvent): void {
-  //   // TODO: stop highlighting the list!
-  // }
+  function makeNewState(rootEl: HTMLElement): IState {
+    const newState = <IState>{
+      lists: [],
+    };
+
+    // 1. lists 추가
+    // lists 가져오기
+    const allLists = Array.from(rootEl?.querySelectorAll(".lists")!);
+    newState.lists = new Array<IList>(allLists.length - 1);
+    // 각 lists 의 타이틀 가져오기
+    const allListsTitles = allLists.map(
+      lists => lists.firstElementChild?.firstElementChild?.innerHTML
+    );
+
+    // 2. list 추가
+    // 각 lists 에 title 를 추가한 새로운 list 를 추가
+    allListsTitles.forEach((title: string | undefined, i: number) => {
+      if (title) {
+        const newList = <IList>{ title, cards: [] };
+        newState.lists[i] = newList;
+      }
+    });
+
+    // 3. card 추가
+    // added-card 가져오기
+    const allAddedCards = allLists.map(
+      lists => lists.querySelectorAll(".list__added-card")!
+    );
+    // 필요 없는 부분 pop
+    allAddedCards.pop();
+
+    // 첫 번째 루프 - i 번째 lists 이용
+    allAddedCards.forEach((cards: NodeListOf<Element>, i: number) => {
+      // 두 번째 루프 - j 번째 cards 이용
+      cards.forEach((card: Element, j: number) => {
+        const content = card.firstElementChild?.firstElementChild?.innerHTML;
+        if (content) {
+          const newCard = <ICard>{ content };
+          newState.lists[i].cards[j] = newCard;
+        }
+      });
+    });
+    return newState;
+  }
 }

@@ -23,24 +23,34 @@ export namespace DragDrop {
   export const onDragStart = (e: DragEvent): void => {
     // -> turn on the move effect
     //   1. rotate the target tiny bit
-    //   2. replace the target with a dummy to indicate position of the target
 
     // e.dataTransfer & e.target never be invalid
     // e.dataTransfer & e.target 은 무조건 유효
-    const targetEvent = e.target! as HTMLElement;
+    const targetEl = e.target! as HTMLElement;
+    targetEl.classList.toggle("dragged");
 
     const transferred = <TyTransferredDataOnDrag>{
-      draggableId: targetEvent.id,
+      draggableId: targetEl.id,
     };
     e.dataTransfer!.setData("text/plain", JSON.stringify(transferred));
     e.dataTransfer!.effectAllowed = "move";
+
+    // const dragImageNode = targetEl.cloneNode(true);
+    // document.body.appendChild(dragImageNode);
+    // console.log(dragImageNode);
+
+    // const dragImageEl = dragImageNode as HTMLElement;
+    // dragImageEl.style.width = targetEl.style.width + "px";
+    // dragImageEl.style.height = targetEl.style.height + "px";
+    // e.dataTransfer!.setDragImage(dragImageEl, 10, 10);
   };
 
-  export function onDragEnd(_: DragEvent): void {
+  export function onDragEnd(e: DragEvent): void {
     temporaryIndicatorPosEl.insertAdjacentElement("afterend", indicatorEl);
     if (!indicatorEl.classList.contains("hidden")) {
       indicatorEl.classList.add("hidden");
     }
+    (e.target as HTMLElement).classList.toggle("dragged");
   }
 
   export function onDragOver(e: DragEvent): void {

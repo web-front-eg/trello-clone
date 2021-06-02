@@ -59,6 +59,10 @@ export class AddingListView extends View<HTMLDivElement> {
   }
 
   private addChild(): void {
+    if (!this.titleInputEl.value) {
+      return;
+    }
+
     // AddedList 추가 전에 새로운 lists 추가
     // AddList 를 새로운 lists 의 child로 이동
     ListController.onNewListsAdded();

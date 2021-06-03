@@ -1,16 +1,6 @@
+import { Service } from "../service/Service.js";
 import { delay } from "../util/timer.js";
-export interface ICard {
-  content: string;
-}
-
-export interface IList {
-  title: string;
-  cards: Array<ICard>;
-}
-
-export interface IState {
-  lists: Array<IList>;
-}
+import { IList, IState } from "./ModelInterface.js";
 
 class Model {
   private state: IState;
@@ -20,32 +10,41 @@ class Model {
       lists: [],
     };
 
-    this.saveAutomatically(saveInterval);
-    this.syncAutomatically(syncInterval);
+    // this.saveAutomatically(saveInterval);
+    // this.syncAutomatically(syncInterval);
+
+    document
+      .querySelector(".save")!
+      .addEventListener("click", e => this.save.bind(this, e));
+    document
+      .querySelector(".load")!
+      .addEventListener("click", e => this.load.bind(this, e));
   }
 
-  public save(): void {
+  public async save(): Promise<void> {
     try {
       // TOOD: POST data to server
+      await Service.POST_SaveLists(this.state);
       console.log("saved!");
     } catch (e: unknown) {
       console.error("Save failed! : ", e);
     }
   }
 
-  public sync(): void {
+  public async load(): Promise<void> {
     try {
       // TODO: GET data from server and apply into state
-      console.log("synchronized!");
+      await Service.GET_LoadLists();
+      console.log("loaded!");
     } catch (e: unknown) {
-      console.error("Synchronization failed! : ", e);
+      console.error("Load failed! : ", e);
     }
   }
 
-  public async syncAutomatically(syncInterval: number): Promise<void> {
+  public async loadAutomatically(syncInterval: number): Promise<void> {
     while (true) {
       try {
-        await delay(this.sync, syncInterval * 1000);
+        await delay(this.load, syncInterval * 1000);
       } catch (e: unknown) {
         console.error(`sync automatically failed! error status code: ${e}`);
       }

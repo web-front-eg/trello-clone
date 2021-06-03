@@ -1,0 +1,24 @@
+### POST - save lists
+POST http://localhost:8080/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "lists": {
+    "title": "test title",
+    "cards": [
+      {
+        "content": "test content1"
+      },
+      {
+        "content": "test content2"
+      },
+      {
+        "content": "test content3"
+      }
+    ]
+  }
+}
+
+### GET - load lists
+GET http://localhost:8080/ HTTP/1.1
+Content-Type: application/json

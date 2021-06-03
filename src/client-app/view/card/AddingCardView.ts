@@ -8,7 +8,7 @@ import { CardController } from "../../controller/CardController.js";
 import { delay } from "../../util/timer.js";
 
 export class AddingCardView extends View<HTMLDivElement> {
-  private readonly titleTextareaEl: HTMLTextAreaElement;
+  private readonly contentTextareaEl: HTMLTextAreaElement;
   private readonly addBtnEl: HTMLButtonElement;
   private readonly closeIconEl: HTMLElement;
 
@@ -18,10 +18,10 @@ export class AddingCardView extends View<HTMLDivElement> {
   ) {
     super(templateHelper, "AddingCardView");
 
-    this.titleTextareaEl = this.currentEl
+    this.contentTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
 
-    delay(() => this.titleTextareaEl.focus(), 1);
+    delay(() => this.contentTextareaEl.focus(), 0);
 
     this.addBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
 
@@ -35,16 +35,22 @@ export class AddingCardView extends View<HTMLDivElement> {
     ViewCache.addingCardView = this;
 
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
-    this.titleTextareaEl.addEventListener("keypress", this.onPressEnterKey);
-    // this.currentEl.addEventListener("focusout", this.onFocusOut);
-    // this.addBtnEl.addEventListener("focusout", this.onFocusOut);
+    this.contentTextareaEl.addEventListener("keypress", this.onPressEnterKey);
     this.closeIconEl.addEventListener("click", this.closeAddingCardForcely);
 
     this.reset();
   }
 
   protected reset(): void {
-    this.titleTextareaEl.value = "";
+    this.contentTextareaEl.value = "";
+  }
+
+  public load(newContent: string): void {
+    this.contentTextareaEl.value = newContent;
+  }
+
+  public click(): void {
+    this.addBtnEl.click();
   }
 
   @autobind
@@ -59,27 +65,21 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.addCard();
   }
 
-  // @autobind
-  // private onFocusOut(_: Event): void {
-  //   this.currentEl.style.display = "none";
-  //   CardController.onCloseAddingCard(this.parentListPos);
-  // }
-
   /**
    * set the content of adding-card, which is the title of added-card
    * with the value of input.
    */
   private addCard(): void {
     // 공백 X
-    if (!this.titleTextareaEl.value) {
+    if (!this.contentTextareaEl.value) {
       return;
     }
 
-    let content: string = this.titleTextareaEl.value;
+    let content: string = this.contentTextareaEl.value;
     // 다음 카드부터, content 앞에 개행문자(\n) 이 있으면 split 해서 없앰
-    const s = this.titleTextareaEl.value.split("\n");
-    if (s[1]) {
-      content = s[1];
+    const splitted = this.contentTextareaEl.value.split("\n");
+    if (splitted[1]) {
+      content = splitted[1];
     }
 
     // addedCard 생성
@@ -94,17 +94,16 @@ export class AddingCardView extends View<HTMLDivElement> {
       this.parentListPos
     );
 
-    // 생성된 addedCard 에 ID 추가
-    this.nextView.templateHelper.getCreatedEl.id = `${this.titleTextareaEl.value}-${this.parentListPos}`;
+    // 생성된 added card 에 ID 추가
+    this.nextView.templateHelper.getCreatedEl.id = `${this.contentTextareaEl.value}-${this.parentListPos}`;
 
     // adding card 를 생성된 added card 아래로 이동
     this.nextView.templateHelper.insertAtManually(
       "beforebegin",
       this.currentEl
     );
-    // add card 도 생성된 added card 아래로 이동
-    // console.log(this.parentListPos);
 
+    // add card 도 생성된 added card 아래로 이동
     CardController.onNewAddedCardAdded(this.parentListPos);
 
     this.reset();
@@ -114,15 +113,15 @@ export class AddingCardView extends View<HTMLDivElement> {
     // show and focus adding-card on clicking add-card again
     this.currentEl.style.display = "block";
     delay(() => {
-      this.titleTextareaEl.focus();
+      this.contentTextareaEl.focus();
       this.reset();
-    }, 1);
+    }, 0);
   }
 
   @autobind
   public closeAddingCardForcely(): void {
     this.currentEl.style.display = "none";
-    this.titleTextareaEl.blur();
+    this.contentTextareaEl.blur();
     CardController.onCloseAddingCard(this.parentListPos);
   }
 }

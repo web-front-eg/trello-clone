@@ -28,6 +28,10 @@ export class AddListView extends View<HTMLDivElement> {
     this.currentEl.style.display = "none";
   }
 
+  public click(): void {
+    this.currentEl.click();
+  }
+
   @autobind
   private onClick(_: Event): void {
     // re-using adding-list

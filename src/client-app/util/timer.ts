@@ -1,3 +1,9 @@
+/**
+ * Promise-fied setTimeout
+ * @param fn
+ * @param delay unit: second
+ * @returns
+ */
 export const delay = (fn: Function, delay: number): Promise<void> =>
   new Promise((resolve, reject) =>
     setTimeout(() => {
@@ -7,9 +13,15 @@ export const delay = (fn: Function, delay: number): Promise<void> =>
       } catch (e: unknown) {
         reject(e);
       }
-    }, delay)
+    }, delay * 1000)
   );
 
+/**
+ * Promise-fied setInterval
+ * @param fn
+ * @param interval unit: second
+ * @returns
+ */
 export const interval = (fn: Function, interval: number): Promise<void> =>
   new Promise((resolve, reject) =>
     setInterval(() => {
@@ -19,5 +31,5 @@ export const interval = (fn: Function, interval: number): Promise<void> =>
       } catch (e: unknown) {
         reject(e);
       }
-    }, interval)
+    }, interval * 1000)
   );

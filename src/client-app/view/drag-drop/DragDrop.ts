@@ -1,6 +1,7 @@
 import { Template } from "../../template/TemplateNames.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
-import Model, { ICard, IList, IState } from "../../model/Model.js";
+import Model from "../../model/Model.js";
+import { ICard, IList, IState } from "../../model/ModelInterface.js";
 
 export namespace DragDrop {
   type TyTransferredDataOnDrag = {
@@ -23,24 +24,34 @@ export namespace DragDrop {
   export const onDragStart = (e: DragEvent): void => {
     // -> turn on the move effect
     //   1. rotate the target tiny bit
-    //   2. replace the target with a dummy to indicate position of the target
 
     // e.dataTransfer & e.target never be invalid
     // e.dataTransfer & e.target 은 무조건 유효
-    const targetEvent = e.target! as HTMLElement;
+    const targetEl = e.target! as HTMLElement;
+    targetEl.classList.toggle("dragged");
 
     const transferred = <TyTransferredDataOnDrag>{
-      draggableId: targetEvent.id,
+      draggableId: targetEl.id,
     };
     e.dataTransfer!.setData("text/plain", JSON.stringify(transferred));
     e.dataTransfer!.effectAllowed = "move";
+
+    // const dragImageNode = targetEl.cloneNode(true);
+    // document.body.appendChild(dragImageNode);
+    // console.log(dragImageNode);
+
+    // const dragImageEl = dragImageNode as HTMLElement;
+    // dragImageEl.style.width = targetEl.style.width + "px";
+    // dragImageEl.style.height = targetEl.style.height + "px";
+    // e.dataTransfer!.setDragImage(dragImageEl, 10, 10);
   };
 
-  export function onDragEnd(_: DragEvent): void {
+  export function onDragEnd(e: DragEvent): void {
     temporaryIndicatorPosEl.insertAdjacentElement("afterend", indicatorEl);
     if (!indicatorEl.classList.contains("hidden")) {
       indicatorEl.classList.add("hidden");
     }
+    (e.target as HTMLElement).classList.toggle("dragged");
   }
 
   export function onDragOver(e: DragEvent): void {
@@ -89,7 +100,6 @@ export namespace DragDrop {
     const { draggableId } = JSON.parse(transferred) as TyTransferredDataOnDrag;
 
     const draggableEl = document.getElementById(draggableId);
-
     const targetEl = e.target! as HTMLElement;
 
     const currentListEl = targetEl.parentElement;
@@ -97,55 +107,8 @@ export namespace DragDrop {
       return;
     }
 
-    const rootEl = currentListEl.parentElement!;
-
     targetEl!.insertAdjacentElement("afterend", draggableEl!);
 
-    Model.updateCards(makeNewState(rootEl));
-  }
-
-  function makeNewState(rootEl: HTMLElement): IState {
-    const newState = <IState>{
-      lists: [],
-    };
-
-    // 1. lists 추가
-    // lists 가져오기
-    const allLists = Array.from(rootEl?.querySelectorAll(".lists")!);
-    newState.lists = new Array<IList>(allLists.length - 1);
-    // 각 lists 의 타이틀 가져오기
-    const allListsTitles = allLists.map(
-      lists => lists.firstElementChild?.firstElementChild?.innerHTML
-    );
-
-    // 2. list 추가
-    // 각 lists 에 title 를 추가한 새로운 list 를 추가
-    allListsTitles.forEach((title: string | undefined, i: number) => {
-      if (title) {
-        const newList = <IList>{ title, cards: [] };
-        newState.lists[i] = newList;
-      }
-    });
-
-    // 3. card 추가
-    // added-card 가져오기
-    const allAddedCards = allLists.map(
-      lists => lists.querySelectorAll(".list__added-card")!
-    );
-    // 필요 없는 부분 pop
-    allAddedCards.pop();
-
-    // 첫 번째 루프 - i 번째 lists 이용
-    allAddedCards.forEach((cards: NodeListOf<Element>, i: number) => {
-      // 두 번째 루프 - j 번째 cards 이용
-      cards.forEach((card: Element, j: number) => {
-        const content = card.firstElementChild?.firstElementChild?.innerHTML;
-        if (content) {
-          const newCard = <ICard>{ content };
-          newState.lists[i].cards[j] = newCard;
-        }
-      });
-    });
-    return newState;
+    Model.updateState();
   }
 }

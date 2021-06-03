@@ -24,7 +24,7 @@ export class AddCardView extends View<HTMLDivElement> {
   }
 
   protected reset(): void {
-    this.currentEl.style.display = "none";
+    this.close();
   }
 
   @autobind
@@ -42,7 +42,7 @@ export class AddCardView extends View<HTMLDivElement> {
       );
     } else {
       AddCardView.AddingCard.parentListPos = this.fixedAddCardPos;
-      CardController.onClickAddCardAgain();
+      CardController.onClickAddCardAgain(this.fixedAddCardPos);
     }
 
     // insert adding card into the current add card!
@@ -50,7 +50,6 @@ export class AddCardView extends View<HTMLDivElement> {
       "afterend",
       this.currentEl
     );
-
     this.reset();
   }
 
@@ -58,11 +57,15 @@ export class AddCardView extends View<HTMLDivElement> {
   // private onFocusOut(_: Event): void {
   //   // hide add-card automatically on focusing out
   //   this.currentEl.style.display = "none";
-  // }
+  // }  
 
   public reopen(): void {
     // show add-card on closing adding-card
     this.currentEl.style.display = "block";
+  }
+
+  public close(): void {
+    this.currentEl.style.display = "none";
   }
 
   public moveAddCardUnder(addingCardView: AddingCardView): void {

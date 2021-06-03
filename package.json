@@ -24,9 +24,7 @@
     "@types/node": "^15.6.0",
     "@types/regenerator-runtime": "^0.13.0",
     "@types/uuid": "^8.3.0",
-    "concurrently": "^6.1.0",
-    "lite-server": "^2.5.4",
-    "prettier": "^2.3.0",
+    "body-parser": "^1.19.0",
     "typescript": "^4.2.4"
   }
 }

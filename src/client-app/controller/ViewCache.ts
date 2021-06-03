@@ -100,6 +100,14 @@ export class ViewCache {
     return ViewCache._addCardViews[idx];
   }
 
+  public static getAddCardViewAll(): Array<AddCardView> {
+    if (ViewCache._addCardViews.length < 0) {
+      throw new Error("No cached add card view valid!");
+    }
+
+    return ViewCache._addCardViews;
+  }
+
   public static set setAddCardView(view: AddCardView) {
     ViewCache._addCardViews.push(view);
   }

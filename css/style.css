@@ -74,6 +74,15 @@ body {
   background-color: var(--color-trello-blue-500);
 }
 
+.save, .load {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 10px 15px;
+  margin: 5px 5px;
+
+  
+}
+
 .separator {
   width: 1px;
   height: 20px;
@@ -307,9 +316,6 @@ nav .btn {
   background-color: var(--color-trello-blue-800);
 }
 
-.list__add-list:active {
-}
-
 .list__adding-list {
   padding: 4px;
   box-sizing: border-box;
@@ -431,6 +437,15 @@ nav .btn {
   color: var(--color-text-dark2);
 }
 
+.list__added-card:hover {
+  cursor: pointer;
+}
+
+.list__added-card.dragged {
+  cursor: pointer;
+  /* transform: rotate(15deg); */
+}
+
 .list__added-inside {
   pointer-events: none;
   display: flex;
@@ -448,6 +463,17 @@ nav .btn {
 
   margin: 0 auto;
   background-color: #fff;
+
+  transform: rotate(0deg);
+}
+
+.list__added-card:hover .list__added-inside {
+  background-color: var(--color-text-dark1);
+}
+
+.list__added-card.dragged .list__added-inside {
+  background-color: #fff;
+  transform: rotate(15deg);
 }
 
 .list__moving-card-pos-indicator {

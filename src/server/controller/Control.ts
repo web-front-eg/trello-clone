@@ -40,7 +40,6 @@ export function loadLists(
     status: "success",
     data: {
       lists,
-      description: "lists successfully loaded!",
     },
   });
 }

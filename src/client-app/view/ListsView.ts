@@ -59,5 +59,5 @@ export class ListsView extends View<HTMLDivElement> {
 
     // click add-list since it's already created once
     addListView.currentEl.click();
-  }
+  }  
 }

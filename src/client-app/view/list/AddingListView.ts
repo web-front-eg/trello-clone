@@ -15,6 +15,7 @@ export class AddingListView extends View<HTMLDivElement> {
    *
    */
   private readonly saveBtnEl: HTMLButtonElement;
+  private readonly closeBtnEl: HTMLElement;
 
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
     super(templateHelper, "AddingListView");
@@ -23,6 +24,8 @@ export class AddingListView extends View<HTMLDivElement> {
     this.titleInputEl.focus();
 
     this.saveBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
+
+    this.closeBtnEl = this.currentEl.querySelector(".fa-times")! as HTMLElement;
 
     this.init();
   }
@@ -34,10 +37,19 @@ export class AddingListView extends View<HTMLDivElement> {
     this.saveBtnEl.addEventListener("click", this.onClickSaveBtn);
     this.titleInputEl.addEventListener("keypress", this.onPressEnterKey);
     this.currentEl.addEventListener("focusout", this.onFocusOut);
+    this.closeBtnEl.addEventListener("click", this.close);
   }
 
   protected reset(): void {
     this.titleInputEl.value = "";
+  }
+
+  public load(newTitle: string): void {
+    this.titleInputEl.value = newTitle;
+  }
+
+  public click(): void {
+    this.saveBtnEl.click();
   }
 
   @autobind
@@ -90,5 +102,10 @@ export class AddingListView extends View<HTMLDivElement> {
   public reopen(): void {
     this.currentEl.style.display = "block";
     this.titleInputEl.focus();
+  }
+
+  @autobind
+  private close(): void {
+    this.currentEl.style.display = "none";
   }
 }

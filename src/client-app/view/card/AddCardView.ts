@@ -57,7 +57,7 @@ export class AddCardView extends View<HTMLDivElement> {
   // private onFocusOut(_: Event): void {
   //   // hide add-card automatically on focusing out
   //   this.currentEl.style.display = "none";
-  // }
+  // }  
 
   public reopen(): void {
     // show add-card on closing adding-card

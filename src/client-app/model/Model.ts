@@ -15,7 +15,7 @@ export interface IState {
 class Model {
   private state: IState;
 
-  constructor(saveInterval: number = 5, syncInterval: number = 5) {
+  constructor(saveInterval: number = 5, syncInterval: number = 10) {
     this.state = {
       lists: [],
     };
@@ -24,23 +24,21 @@ class Model {
     this.syncAutomatically(syncInterval);
   }
 
-  public save(): boolean {
+  public save(): void {
     try {
       // TOOD: POST data to server
-      console.log("saved!", this.state);
-      return true;
+      console.log("saved!");
     } catch (e: unknown) {
-      return false;
+      console.error("Save failed! : ", e);
     }
   }
 
-  public sync(): boolean {
+  public sync(): void {
     try {
       // TODO: GET data from server and apply into state
-      console.log("synchronized!", this.state);
-      return true;
+      console.log("synchronized!");
     } catch (e: unknown) {
-      return false;
+      console.error("Synchronization failed! : ", e);
     }
   }
 

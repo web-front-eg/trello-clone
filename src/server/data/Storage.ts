@@ -1,7 +1,9 @@
 import * as Model from "../model/Model";
 
 class Storage {
-  private _state: Model.IState = {} as Model.IState;
+  private _state: Model.IState = {
+    lists: [],
+  } as Model.IState;
 
   public set state(newState: Model.IState) {
     this._state = newState;

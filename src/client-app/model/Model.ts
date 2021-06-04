@@ -14,7 +14,7 @@ class Model {
 
     this.rootEl = document.querySelector("#root")! as HTMLElement;
 
-    // this.detectAnyChangeAndLoad(detectInterval);
+    this.detectAnyChangeAndLoad(detectInterval);
 
     // document
     //   .querySelector(".save")!
@@ -43,8 +43,11 @@ class Model {
   }
 
   private async load(): Promise<void> {
-    this.state = await Service.GET_LoadLists();
-    this.renderFromState();
+    const loadedState: IState = await Service.GET_LoadLists();
+    console.log(loadedState);
+
+    // this.state = loadedState;
+    // this.renderFromState();
   }
 
   private async save(fromHTML: boolean = true): Promise<void> {
@@ -59,6 +62,8 @@ class Model {
       try {
         await delay(async () => {
           const hasChanged: boolean = await this.detectAnyChange();
+          console.log(`hasChanged: ${hasChanged}`);
+
           if (hasChanged) {
             await this.load();
           }

@@ -29,7 +29,7 @@ export function detectAnyChange(
   request: express.Request,
   response: express.Response
 ): void {
-  const { original } = request.body;
+  const { lists: original } = request.body;
 
   if (isDeepStrictEqual(storage.state, original)) {
     response.status(HTTP_CODES.OK).json({

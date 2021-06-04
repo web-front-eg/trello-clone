@@ -7,7 +7,7 @@ export class Service {
     const res = await fetch(Service.BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(lists),
+      body: JSON.stringify({ lists }),
     });
     const parsed = await res.json();
     console.log(parsed);
@@ -16,10 +16,12 @@ export class Service {
   public static async POST_DetectAnyChanges(
     original: Model.IState
   ): Promise<boolean> {
+    console.log("before sending detect!", original);
+
     const res = await fetch(`${Service.BASE_URL}detect`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(original),
+      body: JSON.stringify({ lists: original }),
     });
     const parsed = await res.json();
     return parsed.data as boolean;

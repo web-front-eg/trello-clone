@@ -1,6 +1,6 @@
 import { AddCardView } from "./card/AddCardView.js";
-import { AddingCardView } from "./card/AddingCardView";
-import { AddedCardView } from "./card/AddedCardView";
+import { AddingCardView } from "./card/AddingCardView.js";
+import { AddedCardView } from "./card/AddedCardView.js";
 
 import { AddListView } from "./list/AddListView.js";
 import { AddingListView } from "./list/AddingListView.js";

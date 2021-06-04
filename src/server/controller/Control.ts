@@ -2,6 +2,7 @@ import express from "express";
 import { HTTP_CODES } from "../model/ServerModel";
 import * as Model from "../model/Model";
 import storage from "../data/Storage";
+import { isDeepStrictEqual } from "util";
 
 export function saveLists(
   request: express.Request,
@@ -22,6 +23,25 @@ export function saveLists(
     status: "success",
     data: "lists are safely saved!",
   });
+}
+
+export function detectAnyChange(
+  request: express.Request,
+  response: express.Response
+): void {
+  const { original } = request.body;
+
+  if (isDeepStrictEqual(storage.state, original)) {
+    response.status(HTTP_CODES.OK).json({
+      status: "success",
+      data: false,
+    });
+  } else {
+    response.status(HTTP_CODES.BAD_REQUEST).json({
+      status: "success",
+      data: true,
+    });
+  }
 }
 
 export function loadLists(

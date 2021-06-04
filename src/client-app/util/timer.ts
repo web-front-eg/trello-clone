@@ -4,7 +4,7 @@
  * @param delay unit: second
  * @returns
  */
-export const delay = (fn: Function, delay: number): Promise<void> =>
+export const delay = (fn: Function = () => {}, delay: number): Promise<void> =>
   new Promise((resolve, reject) =>
     setTimeout(() => {
       try {

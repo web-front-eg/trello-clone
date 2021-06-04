@@ -7,23 +7,39 @@ class Model {
   private state: IState;
   private rootEl: HTMLElement;
 
-  constructor(saveInterval: number = 5, syncInterval: number = 10) {
+  constructor(detectInterval: number = 10) {
     this.state = {
       lists: [],
     };
 
     this.rootEl = document.querySelector("#root")! as HTMLElement;
 
-    // this.saveAutomatically(saveInterval);
-    // this.loadAutomatically(syncInterval);
+    // this.detectAnyChangeAndLoad(detectInterval);
 
-    document
-      .querySelector(".save")!
-      .addEventListener("click", this.save.bind(this));
+    // document
+    //   .querySelector(".save")!
+    //   .addEventListener("click", this.save.bind(this, true));
 
-    document
-      .querySelector(".load")!
-      .addEventListener("click", this.load.bind(this));
+    // document
+    //   .querySelector(".load")!
+    //   .addEventListener("click", this.load.bind(this));
+  }
+
+  public addNewList(title: string): void {
+    this.state.lists.push(<IList>{ title, cards: [] });
+    this.save(false);
+  }
+
+  public addNewCard(listPos: number, content: string): number {
+    const cardsArr = this.state.lists[listPos].cards;
+    const order = cardsArr.length;
+    cardsArr.push({ content });
+    this.save(false);
+    return order;
+  }
+
+  private async detectAnyChange(): Promise<boolean> {
+    return await Service.POST_DetectAnyChanges(this.state);
   }
 
   private async load(): Promise<void> {
@@ -31,48 +47,34 @@ class Model {
     this.renderFromState();
   }
 
-  private async save(): Promise<void> {
-    this.updateState();
+  private async save(fromHTML: boolean = true): Promise<void> {
+    if (fromHTML) {
+      this.updateState();
+    }
     await Service.POST_SaveLists(this.state);
   }
 
-  private async loadAutomatically(syncInterval: number): Promise<void> {
+  private async detectAnyChangeAndLoad(detectInterval: number): Promise<void> {
     while (true) {
       try {
-        await delay(this.load, syncInterval);
+        await delay(async () => {
+          const hasChanged: boolean = await this.detectAnyChange();
+          if (hasChanged) {
+            await this.load();
+          }
+        }, detectInterval);
       } catch (e: unknown) {
-        console.error(`sync automatically failed! error status code: ${e}`);
+        console.error(`detect automatically failed! error status code: ${e}`);
       }
     }
-  }
-
-  private async saveAutomatically(saveInterval: number): Promise<void> {
-    while (true) {
-      try {
-        await delay(this.save, saveInterval);
-      } catch (e: unknown) {
-        console.error(`save automatically failed! error status code: ${e}`);
-      }
-    }
-  }
-
-  public addNewList(title: string): void {
-    this.state.lists.push(<IList>{ title, cards: [] });
-  }
-
-  public addNewCard(listPos: number, content: string): number {
-    const cardsArr = this.state.lists[listPos].cards;
-    const order = cardsArr.length;
-    cardsArr.push({ content });
-    return order;
   }
 
   public updateState(): void {
-    this.state = this.makeNewState();
-    console.log(this.state);
+    this.state = this.makeNewStateFromHTML();
+    // console.log(this.state);
   }
 
-  public makeNewState(): IState {
+  public makeNewStateFromHTML(): IState {
     const newState = <IState>{
       lists: [],
     };
@@ -80,6 +82,9 @@ class Model {
     // 1. lists 추가
     // lists 가져오기
     const allLists = Array.from(this.rootEl.querySelectorAll(".lists")!);
+    if (!allLists) {
+      return newState;
+    }
     newState.lists = new Array<IList>(allLists.length - 1);
 
     // 각 lists 의 타이틀 가져오기
@@ -121,6 +126,10 @@ class Model {
 
   public renderFromState(): void {
     const { lists } = this.state;
+    if (!Array.isArray(lists)) {
+      return;
+    }
+
     const listsLength = lists.length;
     const listsTitles = lists.map(list => list.title);
     const cardsLength = lists.map(list => list.cards.length);
@@ -132,4 +141,4 @@ class Model {
   }
 }
 
-export default new Model(5, 10);
+export default new Model(5);

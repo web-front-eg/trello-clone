@@ -1,7 +1,6 @@
 import { Template } from "../../template/TemplateNames.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import Model from "../../model/Model.js";
-import { ICard, IList, IState } from "../../model/ModelInterface.js";
 
 export namespace DragDrop {
   type TyTransferredDataOnDrag = {

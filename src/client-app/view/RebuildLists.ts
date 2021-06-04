@@ -1,11 +1,9 @@
 import { AddListView } from "./list/AddListView.js";
 import { AddingListView } from "./list/AddingListView.js";
-import { ListsView } from "./ListsView.js";
-import { AddedCardView } from "./card/AddedCardView.js";
-import { AddedListView } from "./list/AddedListView.js";
 import { AddCardView } from "./card/AddCardView.js";
 import { AddingCardView } from "./card/AddingCardView.js";
 import { ViewCache } from "../controller/ViewCache.js";
+import { ListsView } from "./index.js";
 
 export const rebuildLists = (
   listsLen: number,
@@ -13,6 +11,7 @@ export const rebuildLists = (
   cardsLen: number[],
   cardsContents: string[][]
 ) => {
+  ViewCache.listsView = new ListsView();    
   const addList = ViewCache.listsView.nextView as AddListView;
 
   for (let i = 0; i < listsLen; ++i) {

@@ -34,7 +34,7 @@ export class ListsView extends View<HTMLDivElement> {
     //
   }
 
-  public attachNewLists(): void {
+  public attachNewLists(): void {    
     this.templateHelper = new TemplateHelper<HTMLDivElement>(
       this.templateHelper.getCurElIdOrClassName,
       Template.lists,
@@ -59,5 +59,5 @@ export class ListsView extends View<HTMLDivElement> {
 
     // click add-list since it's already created once
     addListView.currentEl.click();
-  }  
+  }
 }

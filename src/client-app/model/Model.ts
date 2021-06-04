@@ -4,7 +4,7 @@ import { delay } from "../util/timer.js";
 import { ICard, IList, IState } from "./ModelInterface.js";
 
 class Model {
-  private state: IState;
+  public state: IState;
   private rootEl: HTMLElement;
 
   constructor(detectInterval: number = 10) {
@@ -25,29 +25,25 @@ class Model {
     //   .addEventListener("click", this.load.bind(this));
   }
 
-  public addNewList(title: string): void {
+  public addNewList(title: string, isAutoUpdate: boolean): void {
     this.state.lists.push(<IList>{ title, cards: [] });
-    this.save(false);
+    if (!isAutoUpdate) {
+      this.save(false);
+    }
   }
 
-  public addNewCard(listPos: number, content: string): number {
+  public addNewCard(
+    listPos: number,
+    content: string,
+    isAutoUpdate: boolean
+  ): number {
     const cardsArr = this.state.lists[listPos].cards;
     const order = cardsArr.length;
     cardsArr.push({ content });
-    this.save(false);
+    if (!isAutoUpdate) {
+      this.save(false);
+    }
     return order;
-  }
-
-  private async detectAnyChange(): Promise<boolean> {
-    return await Service.POST_DetectAnyChanges(this.state);
-  }
-
-  private async load(): Promise<void> {
-    const loadedState: IState = await Service.GET_LoadLists();
-    console.log(loadedState);
-
-    // this.state = loadedState;
-    // this.renderFromState();
   }
 
   private async save(fromHTML: boolean = true): Promise<void> {
@@ -57,21 +53,32 @@ class Model {
     await Service.POST_SaveLists(this.state);
   }
 
-  private async detectAnyChangeAndLoad(detectInterval: number): Promise<void> {
-    while (true) {
-      try {
-        await delay(async () => {
-          const hasChanged: boolean = await this.detectAnyChange();
-          console.log(`hasChanged: ${hasChanged}`);
+  private async load(): Promise<void> {
+    const loadedLists = await Service.GET_LoadLists();
+    console.log("Incoming : ", loadedLists, " original : ", this.state.lists);
 
-          if (hasChanged) {
-            await this.load();
-          }
-        }, detectInterval);
+    // this.state.lists = lists;
+    this.renderFromState(loadedLists);
+  }
+
+  private async detectAnyChangeAndLoad(detectInterval: number): Promise<void> {
+    setInterval(async () => {
+      try {
+        const hasChanged: boolean = await Service.POST_DetectAnyChanges(
+          this.state
+        );
+        // console.log(`hasChanged: ${hasChanged}`);
+
+        if (hasChanged) {
+          await this.load();
+        }
       } catch (e: unknown) {
-        console.error(`detect automatically failed! error status code: ${e}`);
+        console.error(
+          `detect automatically failed! error status code: `,
+          e as Error
+        );
       }
-    }
+    }, detectInterval * 1000);
   }
 
   public updateState(): void {
@@ -101,7 +108,7 @@ class Model {
     // 각 lists 에 title 를 추가한 새로운 list 를 추가
     allListsTitles.forEach((title: string | undefined, i: number) => {
       if (title) {
-        const newList = <IList>{ title, cards: [] };
+        const newList = <IList>{ pos: i, title, cards: [] };
         newState.lists[i] = newList;
       }
     });
@@ -129,16 +136,11 @@ class Model {
     return newState;
   }
 
-  public renderFromState(): void {
-    const { lists } = this.state;
-    if (!Array.isArray(lists)) {
-      return;
-    }
-
-    const listsLength = lists.length;
-    const listsTitles = lists.map(list => list.title);
-    const cardsLength = lists.map(list => list.cards.length);
-    const cardsContents = lists.map(list =>
+  public renderFromState(loadedLists: IList[]): void {
+    const listsLength = loadedLists.length;
+    const listsTitles = loadedLists.map(list => list.title);
+    const cardsLength = loadedLists.map(list => list.cards.length);
+    const cardsContents = loadedLists.map(list =>
       list.cards.map(card => card.content)
     );
 

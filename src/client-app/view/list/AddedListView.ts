@@ -12,7 +12,8 @@ export class AddedListView extends View<HTMLDivElement> {
 
   constructor(
     templateHelper: TemplateHelper<HTMLParagraphElement>,
-    content: string
+    content: string,
+    isAutoUpdate: boolean = false
   ) {
     super(templateHelper, "AddedListView");
     this.dragDrop = new ListDragDrop(this.currentEl);
@@ -20,7 +21,7 @@ export class AddedListView extends View<HTMLDivElement> {
     this.titleEl = this.currentEl.querySelector("strong")! as HTMLElement;
 
     this.titleEl.innerText = content;
-    ListController.onSetTitleInAddedList(content);
+    ListController.onSetTitleInAddedList(content, isAutoUpdate);
 
     this.init();
   }

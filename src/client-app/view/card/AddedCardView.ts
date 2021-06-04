@@ -13,7 +13,8 @@ export class AddedCardView extends View<HTMLDivElement> {
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
     content: string,
-    parentListPos: number
+    parentListPos: number,
+    isAutoUpdate: boolean
   ) {
     super(templateHelper, "AddedCardView");
 
@@ -24,7 +25,8 @@ export class AddedCardView extends View<HTMLDivElement> {
 
     const currentCardPos = CardController.onSetContentInAddedCard(
       parentListPos,
-      content
+      content,
+      isAutoUpdate
     );
 
     this.dragDrop = new CardDragDrop(

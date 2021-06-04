@@ -50,7 +50,7 @@ export class AddingCardView extends View<HTMLDivElement> {
   }
 
   public click(): void {
-    this.addBtnEl.click();
+    this.addCard(true);
   }
 
   @autobind
@@ -69,7 +69,7 @@ export class AddingCardView extends View<HTMLDivElement> {
    * set the content of adding-card, which is the title of added-card
    * with the value of input.
    */
-  private addCard(): void {
+  private addCard(isAutoUpdate: boolean = false): void {
     // 공백 X
     if (!this.contentTextareaEl.value) {
       return;
@@ -91,7 +91,8 @@ export class AddingCardView extends View<HTMLDivElement> {
         true
       ),
       content,
-      this.parentListPos
+      this.parentListPos,
+      isAutoUpdate
     );
 
     // 생성된 added card 에 ID 추가

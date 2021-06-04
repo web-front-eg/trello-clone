@@ -2,6 +2,9 @@ import { TemplateHelper } from "../template/TemplateHelper.js";
 
 export abstract class View<T extends HTMLElement> {
   public static currentListPosition: number = -1;
+  public reinitCurrentListPosition(): void {
+    View.currentListPosition = -1;
+  }
   public currentEl: T;
   public nextView: View<T>;
   public templateHelper: TemplateHelper<T>;

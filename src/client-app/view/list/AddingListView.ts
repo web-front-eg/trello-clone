@@ -49,7 +49,7 @@ export class AddingListView extends View<HTMLDivElement> {
   }
 
   public click(): void {
-    this.saveBtnEl.click();
+    this.addChild(true);
   }
 
   @autobind
@@ -70,7 +70,7 @@ export class AddingListView extends View<HTMLDivElement> {
     ListController.onCloseAddingList();
   }
 
-  private addChild(): void {
+  private addChild(isAutoUpdate: boolean = false): void {
     if (!this.titleInputEl.value) {
       return;
     }
@@ -90,7 +90,8 @@ export class AddingListView extends View<HTMLDivElement> {
         false,
         View.currentListPosition
       ),
-      this.titleInputEl.value
+      this.titleInputEl.value,
+      isAutoUpdate
     );
 
     this.reset();

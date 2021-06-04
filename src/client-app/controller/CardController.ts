@@ -5,7 +5,7 @@ export namespace CardController {
   export function onClickAddCardAgain(keepClosing: number): void {
     // open adding card first
     ViewCache.addingCardView.reopen();
-    
+
     // reopen other add cards except current add card
     ViewCache.getAddCardViewAll()
       .filter((_, i: number) => i !== keepClosing)
@@ -22,9 +22,10 @@ export namespace CardController {
 
   export function onSetContentInAddedCard(
     listPos: number,
-    content: string
+    content: string,
+    isAutoUpdate: boolean
   ): number {
-    const currentCardPos = Model.addNewCard(listPos, content);
+    const currentCardPos = Model.addNewCard(listPos, content, isAutoUpdate);
     return currentCardPos;
   }
 }

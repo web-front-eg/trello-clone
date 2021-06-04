@@ -4,6 +4,7 @@ import { AddCardView } from "./card/AddCardView.js";
 import { AddingCardView } from "./card/AddingCardView.js";
 import { ViewCache } from "../controller/ViewCache.js";
 import { ListsView } from "./index.js";
+import { View } from "./View.js";
 
 export const rebuildLists = (
   listsLen: number,
@@ -11,7 +12,15 @@ export const rebuildLists = (
   cardsLen: number[],
   cardsContents: string[][]
 ) => {
-  ViewCache.listsView = new ListsView();    
+  console.log(`listsLen: ${listsLen}, cardsLen: ${cardsLen}`);
+  console.log(`listsTitles: ${listsTitles}, cardsTitles: ${cardsContents}`);
+
+  Array.from(document.getElementById("root")?.children!).forEach(child =>
+    child.remove()
+  );
+
+  ViewCache.listsView = new ListsView();
+  ViewCache.listsView.reinitCurrentListPosition();
   const addList = ViewCache.listsView.nextView as AddListView;
 
   for (let i = 0; i < listsLen; ++i) {
@@ -23,6 +32,10 @@ export const rebuildLists = (
     addingList.load(listsTitles[i]);
     // click save -> create added list
     addingList.click();
+
+    if (!cardsLen[i]) {
+      continue;
+    }
 
     const addCard = addingList.nextView.nextView as AddCardView;
     addCard.currentEl.click();

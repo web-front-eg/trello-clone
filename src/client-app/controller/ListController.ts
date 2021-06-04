@@ -15,7 +15,7 @@ export namespace ListController {
     ViewCache.addListView.reopen();
   }
 
-  export function onSetTitleInAddedList(title: string): void {
-    Model.addNewList(title);
+  export function onSetTitleInAddedList(title: string, isAutoUpdate: boolean): void {
+    Model.addNewList(title, isAutoUpdate);
   }
 }

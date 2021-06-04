@@ -14,15 +14,10 @@ export class App {
   constructor() {
     this.app = express();
 
-    this.app.use(morgan("dev"));
+    // this.app.use(morgan("dev"));
 
     // Allow cors
-    const corsOption = {
-      origin: "http://127.0.0.1:3000",
-      credentials: true,
-    };
-    this.app.use(cors(corsOption));
-    // this.app.use(cors());
+    this.app.use(cors());
 
     // body-parser
     this.app.use(bodyParser.urlencoded({ extended: true }));

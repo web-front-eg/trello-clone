@@ -28,7 +28,7 @@ class Model {
   public addNewList(title: string, isAutoUpdate: boolean): void {
     this.state.lists.push(<IList>{ title, cards: [] });
     if (!isAutoUpdate) {
-      this.save(false);
+      this.save();
     }
   }
 
@@ -41,15 +41,12 @@ class Model {
     const order = cardsArr.length;
     cardsArr.push({ content });
     if (!isAutoUpdate) {
-      this.save(false);
+      this.save();
     }
     return order;
   }
 
-  private async save(fromHTML: boolean = true): Promise<void> {
-    if (fromHTML) {
-      this.updateState();
-    }
+  private async save(): Promise<void> {
     await Service.POST_SaveLists(this.state);
   }
 
@@ -58,6 +55,7 @@ class Model {
     console.log("Incoming : ", loadedLists, " original : ", this.state.lists);
 
     // this.state.lists = lists;
+    this.state.lists = [];
     this.renderFromState(loadedLists);
   }
 
@@ -83,6 +81,7 @@ class Model {
 
   public updateState(): void {
     this.state = this.makeNewStateFromHTML();
+    this.save();
     // console.log(this.state);
   }
 

@@ -27,8 +27,13 @@ export class AddCardView extends View<HTMLDivElement> {
     this.close();
   }
 
+  public click(): void {
+    this.onClickAddCard();
+  }
+
   @autobind
-  private onClickAddCard(_: Event): void {
+  private onClickAddCard(): void {
+        
     // re-using only 1 adding-card
     if (!AddCardView.AddingCard) {
       AddCardView.AddingCard = new AddingCardView(

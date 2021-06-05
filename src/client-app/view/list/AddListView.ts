@@ -29,11 +29,11 @@ export class AddListView extends View<HTMLDivElement> {
   }
 
   public click(): void {
-    this.currentEl.click();
+    this.onClick();
   }
 
   @autobind
-  private onClick(_: Event): void {
+  private onClick(): void {
     // re-using adding-list
     if (!this.nextView) {
       this.nextView = new AddingListView(

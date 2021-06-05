@@ -38,7 +38,8 @@ export const rebuildLists = (
     }
 
     const addCard = addingList.nextView.nextView as AddCardView;
-    addCard.currentEl.click();
+    addCard.click();
+    
     const addingCard = ViewCache.addingCardView as AddingCardView;
 
     for (let j = 0; j < cardsLen[i]; ++j) {

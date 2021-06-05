@@ -2,7 +2,6 @@ import * as Model from "../model/ModelInterface.js";
 
 export class Service {
   public static BASE_URL = "http://localhost:8080/";
-  public static detectId: number = Math.floor(Math.random() * 10000000);
 
   public static async POST_SaveLists(lists: Model.IState): Promise<void> {
     const res = await fetch(Service.BASE_URL, {
@@ -18,21 +17,15 @@ export class Service {
     original: Model.IState
   ): Promise<boolean> {
     console.log("sending -> ", original);
-    
+
     const res = await fetch(`${Service.BASE_URL}detect`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lists: original, id: Service.detectId }),
+      body: JSON.stringify({ lists: original }),
     });
     const parsed = await res.json();
-    // console.log(
-    //   `Current Id: ${Service.detectId}, received Id: ${parsed.data.id}`
-    // );
-    const { anyChange, id } = parsed.data;
 
-    if (id !== Service.detectId) {
-      return false;
-    }
+    const { anyChange } = parsed.data;
 
     return anyChange as boolean;
   }

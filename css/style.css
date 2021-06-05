@@ -74,15 +74,6 @@ body {
   background-color: var(--color-trello-blue-500);
 }
 
-.save, .load {
-  display: inline-block;
-  margin: 0 auto;
-  padding: 10px 15px;
-  margin: 5px 5px;
-
-  
-}
-
 .separator {
   width: 1px;
   height: 20px;

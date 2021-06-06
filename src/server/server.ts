@@ -2,6 +2,7 @@ import {
   handleUncaughtExpt,
   handleUnhandledRejection,
 } from "./controller/ErrorControl";
+
 handleUncaughtExpt();
 
 import { App } from "./App";
@@ -12,11 +13,12 @@ class Server {
 
   public Start() {
     // start server
-    const server = this.app.getApp.listen(Server.PORT_NUM, () => {
+    const server = this.app.app.listen(Server.PORT_NUM, () => {
       console.log(
         `App is running on port ${Server.PORT_NUM}... -> http://localhost.com:${Server.PORT_NUM}`
       );
     });
+
     // error catch
     handleUnhandledRejection(server);
 

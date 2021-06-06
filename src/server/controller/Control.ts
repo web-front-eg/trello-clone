@@ -8,16 +8,18 @@ export function saveLists(
   request: express.Request,
   response: express.Response
 ) {
-  const recvState = request.body.lists as Model.IState;
-  if (!recvState) {
-    response.status(HTTP_CODES.BAD_REQUEST).json({
+  const received = request.body.newChanges as Model.IState;
+
+  if (!received) {
+    return response.status(HTTP_CODES.BAD_REQUEST).json({
       status: "failed",
+      data: "received lists are invalid!",
     });
   }
 
-  storage.state = recvState as Model.IState;
+  storage.state = received;
 
-  response.status(HTTP_CODES.OK).json({
+  return response.status(HTTP_CODES.OK).json({
     status: "success",
     data: "lists are safely saved!",
   });
@@ -27,17 +29,17 @@ export function detectAnyChange(
   request: express.Request,
   response: express.Response
 ) {
-  const { lists: incoming } = request.body;
+  const { incoming } = request.body;
 
   if (isDeepStrictEqual(storage.state, incoming)) {
-    response.status(HTTP_CODES.OK).json({
+    return response.status(HTTP_CODES.OK).json({
       status: "success",
       data: {
         anyChange: false,
       },
     });
   } else {
-    response.status(HTTP_CODES.OK).json({
+    return response.status(HTTP_CODES.OK).json({
       status: "success",
       data: {
         anyChange: true,
@@ -48,14 +50,15 @@ export function detectAnyChange(
 
 export function loadLists(_: express.Request, response: express.Response) {
   const { lists } = storage.state;
+  
   if (!lists) {
-    response.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json({
+    return response.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json({
       status: "failed",
       data: "no lists found!",
     });
   }
 
-  response.status(HTTP_CODES.OK).json({
+  return response.status(HTTP_CODES.OK).json({
     status: "success",
     data: {
       lists,

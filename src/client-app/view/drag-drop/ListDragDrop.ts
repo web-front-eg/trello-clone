@@ -1,12 +1,18 @@
 import { DragDrop } from "./DragDrop.js";
 
+/**
+ * bind helper of added-card to drag functionality
+ */
 export class ListDragDrop {
-  constructor(private readonly addedListEl: HTMLDivElement) {
+  constructor(private readonly dropTargetAddedListEl: HTMLDivElement) {
     this.bind();
   }
 
   private bind() {
-    this.addedListEl.addEventListener("dragover", DragDrop.onDragOver);
-    this.addedListEl.addEventListener("drop", DragDrop.onDrop);
+    this.dropTargetAddedListEl.addEventListener(
+      "dragover",
+      DragDrop.onDragOver
+    );
+    this.dropTargetAddedListEl.addEventListener("drop", DragDrop.onDrop);
   }
 }

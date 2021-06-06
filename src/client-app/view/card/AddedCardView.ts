@@ -4,11 +4,11 @@ import { CardController } from "../../controller/CardController.js";
 import { CardDragDrop } from "../drag-drop/CardDragDrop.js";
 
 export class AddedCardView extends View<HTMLDivElement> {
-  /**
-   *
-   */
-  private readonly titleEl: HTMLParagraphElement;
-  private readonly dragDrop: CardDragDrop;
+  private readonly titleEl = <HTMLParagraphElement>(
+    this.currentEl.querySelector(".list__added-card__title")!
+  );
+
+  private readonly dragDrop: CardDragDrop = new CardDragDrop(this.currentEl);
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
@@ -18,13 +18,13 @@ export class AddedCardView extends View<HTMLDivElement> {
   ) {
     super(templateHelper, "AddedCardView");
 
-    this.titleEl = this.currentEl.querySelector(
-      ".list__added-card__title"
-    )! as HTMLParagraphElement;
+    if (!this.titleEl) {
+      throw new Error("title element is invalid!");
+    }
+
     this.titleEl.textContent = content;
 
-    this.dragDrop = new CardDragDrop(this.currentEl);
-
+    // add new card to data set
     CardController.onSetContentInAddedCard(
       parentListPos,
       content,

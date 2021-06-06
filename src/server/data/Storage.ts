@@ -1,13 +1,16 @@
 import * as Model from "../model/Model";
 
+/**
+ * Data representation
+ */
 class Storage {
-  private _state: Model.IState = {
+  private _state = <Model.IState>{
     lists: [],
-  } as Model.IState;
+  };
 
   public set state(newState: Model.IState) {
     this._state = newState;
-    console.log(this._state);
+    // console.log(this._state);
   }
 
   public get state() {

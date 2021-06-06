@@ -1,24 +1,26 @@
 import { ViewCache } from "../controller/ViewCache.js";
 import { TemplateHelper } from "../template/TemplateHelper.js";
-import { Template } from "../template/TemplateNames.js";
+import { TemplateNames } from "../template/TemplateNames.js";
 import { AddListView } from "./list/AddListView.js";
 import { View } from "./View.js";
 
 export class ListsView extends View<HTMLDivElement> {
   constructor() {
-    // 1. init template injector
-    //    attach list under the #root
-    //    add-list 를 #root 아래에 붙임
+    // 1. attach list under the #root
     super(
-      new TemplateHelper<HTMLDivElement>("#root", Template.lists, "afterbegin"),
+      new TemplateHelper<HTMLDivElement>(
+        "#root",
+        TemplateNames.lists,
+        "afterbegin"
+      ),
       "ListsView"
     );
 
     // 2. attach the initial .add-list template under #root
     this.nextView = new AddListView(
       new TemplateHelper<HTMLDivElement>(
-        this.templateHelper.getCurElIdOrClassName,
-        Template.addList,
+        this.templateHelper.currentElSelector,
+        TemplateNames.addList,
         "afterbegin"
       )
     );
@@ -34,30 +36,31 @@ export class ListsView extends View<HTMLDivElement> {
     //
   }
 
-  public attachNewLists() {    
+  public createNewLists() {
+    // create a new lists
     this.templateHelper = new TemplateHelper<HTMLDivElement>(
-      this.templateHelper.getCurElIdOrClassName,
-      Template.lists,
+      this.templateHelper.currentElSelector,
+      TemplateNames.lists,
       "afterend",
       false,
       ++View.currentListPosition
     );
-  }
 
-  public attachToNewListsFrom(addListView: AddListView) {
+    // move add-list & adding-list
+
     // attach add-list to new parent element
-    this.templateHelper.getCreatedEl.insertAdjacentElement(
+    this.templateHelper.createdEl.insertAdjacentElement(
       "afterbegin",
-      addListView.currentEl
+      this.nextView.currentEl
     );
 
     // attach adding-list to add-list
-    addListView.currentEl.insertAdjacentElement(
+    this.nextView.currentEl.insertAdjacentElement(
       "afterend",
-      addListView.nextView.currentEl
+      this.nextView.nextView.currentEl
     );
 
     // click add-list since it's already created once
-    addListView.currentEl.click();
+    this.nextView.currentEl.click();
   }
 }

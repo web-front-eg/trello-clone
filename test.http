@@ -3,17 +3,34 @@ POST http://localhost:8080/ HTTP/1.1
 Content-Type: application/json
 
 {
-  "lists": {
-    "title": "test title",
-    "cards": [
+  "newChanges": {
+    "lists": [
       {
-        "content": "test content1"
-      },
+        "title": "test title",
+        "cards": [
+          {
+            "content": "test content1"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+### POST - detect any changes
+POST http://localhost:8080/detect HTTP/1.1
+Content-Type: application/json
+
+{
+  "newChanges": {
+    "lists": [
       {
-        "content": "test content2"
-      },
-      {
-        "content": "test content3"
+        "title": "test title",
+        "cards": [
+          {
+            "content": "test 2"
+          }
+        ]
       }
     ]
   }

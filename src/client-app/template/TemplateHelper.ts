@@ -1,125 +1,120 @@
-export class TemplateHelper<TCreateEl extends HTMLElement> {
-  private templateEl: HTMLTemplateElement;
+export class TemplateHelper<TyCreateEl extends HTMLElement> {
+  private readonly _templateEl: HTMLTemplateElement;
 
   /**
    * rool element of this created element
    */
-  private rootEl: HTMLDivElement;
+  private _rootEl: HTMLDivElement;
 
-  private createdEl: TCreateEl;
+  private readonly _createdEl: TyCreateEl;
   /**
    * if not exists, it's falsy null
    */
-  public get getCreatedEl(): TCreateEl {
-    return this.createdEl;
+  public get createdEl(): TyCreateEl {
+    return this._createdEl;
   }
 
-  private curElIdOrClassName: string;
+  private readonly _currentElSelector: string;
   /**
    * if not exists, it's falsy ""
    */
-  public get getCurElIdOrClassName(): string {
-    return this.curElIdOrClassName;
+  public get currentElSelector(): string {
+    return this._currentElSelector;
   }
 
   /**
    *
-   */
-  private isManualInserted: boolean = false;
-
-  /**
-   *
-   * @param rootIdorClassName key to find root Element
-   * @param templateIdOrClassName key to find template
-   * @param insertWhere insert position
-   * @param listPos list position at head (index)
+   * @param rootSelector to find root Element
+   * @param templateSelector to find template
+   * @param where insert position
    * @param isManualInserted deroute to insert manually the created element from template
+   * @param listPos to identify which list is to insert this template
    */
   constructor(
-    rootIdorClassName: string,
-    templateIdOrClassName: string,
-    insertWhere: InsertPosition,
-    isManualInserted?: boolean,
+    rootSelector: string,
+    templateSelector: string,
+    where: InsertPosition,
+    private _isManuallyInserted?: boolean,
     listPos?: number
   ) {
     // 1. set up the anchor tag and the template tag
-    this.templateEl = document.getElementById(
-      templateIdOrClassName
-    )! as HTMLTemplateElement;
+    this._templateEl = <HTMLTemplateElement>(
+      document.getElementById(templateSelector)!
+    );
 
-    if (!this.templateEl) {
-      throw new Error(
-        `template ID or Class ${templateIdOrClassName} is invalid!`
-      );
+    if (!this._templateEl) {
+      throw new Error(`template selector ${templateSelector} is invalid!`);
     }
 
-    this.isManualInserted = isManualInserted ?? false;
-
-    if (!this.isManualInserted) {
+    // find root element unless it's being manually inserted
+    if (!this._isManuallyInserted) {
       if (!listPos) {
-        this.rootEl = document.querySelector(
-          rootIdorClassName
-        )! as HTMLDivElement;
+        this._rootEl = <HTMLDivElement>document.querySelector(rootSelector)!;
 
-        if (!this.rootEl) {
-          throw new Error(
-            `anchor ID or Class ${rootIdorClassName} is invalid!`
-          );
+        if (!this._rootEl) {
+          throw new Error(`root selector ${rootSelector} is invalid!`);
         }
       } else {
-        const allRoots = document.querySelectorAll(rootIdorClassName);
-        this.rootEl = allRoots[listPos]! as HTMLDivElement;
+        // find multiple roots (there are already other lists created)
+        const allRoots = document.querySelectorAll(rootSelector);
+        this._rootEl = <HTMLDivElement>allRoots[listPos]!;
 
-        if (!this.rootEl) {
-          throw new Error(
-            `anchor ID or Class ${rootIdorClassName} is invalid!`
-          );
+        if (!this._rootEl) {
+          throw new Error(`root selector ${rootSelector} is invalid!`);
         }
       }
     }
 
     // 2. import a node from the template
-    const imported = document.importNode(this.templateEl.content, true);
+    const imported = document.importNode(this._templateEl.content, true);
 
     // 3. get the first element child of the imported node
-    this.createdEl = <TCreateEl>imported.firstElementChild;
+    this._createdEl = <TyCreateEl>imported.firstElementChild;
 
-    if (!this.createdEl) {
+    if (!this._createdEl) {
       throw new Error(`Element creation failed!`);
     }
 
-    // if (newTemplateClassName) {
-    //   this.createdEl.classList.add(newTemplateClassName);
-    // }
-
     // 4. save id or class name of the created element.
-    this.curElIdOrClassName = this.createdEl.id ? `#${this.createdEl.id}` : "";
-    this.curElIdOrClassName = this.createdEl.className
-      ? `.${this.createdEl.className}`
+    this._currentElSelector = this._createdEl.id
+      ? `#${this._createdEl.id}`
+      : "";
+    this._currentElSelector = this._createdEl.className
+      ? `.${this._createdEl.className}`
       : "";
 
     // 5. forward the position to insert the createdEl
-    if (!this.isManualInserted) {
-      this.insertAt(insertWhere);
+    if (!this._isManuallyInserted) {
+      this.insertAt(where);
     }
   }
 
+  /**
+   * @param where insert position of inserAdjacentElement
+   * @param atEl insert position element
+   */
   public insertAtManually(where: InsertPosition, atEl: HTMLDivElement) {
-    if (!this.isManualInserted) {
+    if (!this._isManuallyInserted) {
       throw new Error(
         "This template injector did not set 'isManualInserted' to 'true'"
       );
     }
 
-    this.rootEl = atEl;
+    this._rootEl = atEl;
     this.insertAt(where);
   }
 
+  /** 
+   * @param where insert position of inserAdjacentElement
+  */
   private insertAt(where: InsertPosition) {
-    this.rootEl.insertAdjacentElement(where, this.createdEl);
+    this._rootEl.insertAdjacentElement(where, this._createdEl);
   }
 
+  /**
+   * remove created element
+   */
   public removeMyself() {
-    this.createdEl.remove();
+    this._createdEl.remove();
   }
 }

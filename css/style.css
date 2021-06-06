@@ -458,6 +458,10 @@ nav .btn {
   transform: rotate(0deg);
 }
 
+.list__added-inside.active {
+  background-color: var(--color-text-dark1);
+}
+
 .list__added-card:hover .list__added-inside {
   background-color: var(--color-text-dark1);
 }

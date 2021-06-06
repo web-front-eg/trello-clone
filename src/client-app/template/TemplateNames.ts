@@ -1,4 +1,4 @@
-export namespace Template {
+export namespace TemplateNames {
   export const lists = "template__lists";
 
   export const addList = "template__add-list";

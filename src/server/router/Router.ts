@@ -5,6 +5,8 @@ export const router = express.Router();
 
 // save lists
 router.post("/", Control.saveLists);
+
+// detect any changes
 router.post("/detect", Control.detectAnyChange);
 
 // load lists

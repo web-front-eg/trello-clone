@@ -2,7 +2,7 @@ import { ViewCache } from "./ViewCache.js";
 import Model from "../model/Model.js";
 
 export namespace CardController {
-  export function onClickAddCardAgain(keepClosing: number): void {
+  export function onClickAddCardAgain(keepClosing: number) {
     // open adding card first
     ViewCache.addingCardView.reopen();
 
@@ -12,11 +12,11 @@ export namespace CardController {
       .forEach(addCard => addCard.reopen());
   }
 
-  export function onCloseAddingCard(idx: number): void {
+  export function onCloseAddingCard(idx: number) {
     ViewCache.getAddCardView(idx).reopen();
   }
 
-  export function onNewAddedCardAdded(idx: number): void {
+  export function onNewAddedCardAdded(idx: number) {
     ViewCache.getAddCardView(idx).moveAddCardUnder(ViewCache.addingCardView);
   }
 
@@ -24,8 +24,7 @@ export namespace CardController {
     listPos: number,
     content: string,
     isAutoUpdate: boolean
-  ): number {
-    const currentCardPos = Model.addNewCard(listPos, content, isAutoUpdate);
-    return currentCardPos;
+  ) {
+    Model.addNewCard(listPos, content, isAutoUpdate);
   }
 }

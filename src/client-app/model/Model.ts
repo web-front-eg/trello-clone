@@ -15,51 +15,36 @@ class Model {
     this.rootEl = document.querySelector("#root")! as HTMLElement;
 
     this.detectAnyChangeAndLoad(detectInterval);
-
-    // document
-    //   .querySelector(".save")!
-    //   .addEventListener("click", this.save.bind(this, true));
-
-    // document
-    //   .querySelector(".load")!
-    //   .addEventListener("click", this.load.bind(this));
   }
 
-  public addNewList(title: string, isAutoUpdate: boolean): void {
+  public addNewList(title: string, isAutoUpdate: boolean) {
     this.state.lists.push(<IList>{ title, cards: [] });
     if (!isAutoUpdate) {
       this.save();
     }
   }
 
-  public addNewCard(
-    listPos: number,
-    content: string,
-    isAutoUpdate: boolean
-  ): number {
+  public addNewCard(listPos: number, content: string, isAutoUpdate: boolean) {
     const cardsArr = this.state.lists[listPos].cards;
-    const order = cardsArr.length;
     cardsArr.push({ content });
     if (!isAutoUpdate) {
       this.save();
     }
-    return order;
   }
 
-  private async save(): Promise<void> {
+  private async save() {
     await Service.POST_SaveLists(this.state);
   }
 
-  private async load(): Promise<void> {
+  private async load() {
     const loadedLists = await Service.GET_LoadLists();
     console.log("Incoming : ", loadedLists, " original : ", this.state.lists);
 
-    // this.state.lists = lists;
     this.state.lists = [];
     this.renderFromState(loadedLists);
   }
 
-  private async detectAnyChangeAndLoad(detectInterval: number): Promise<void> {
+  private async detectAnyChangeAndLoad(detectInterval: number) {
     setInterval(async () => {
       try {
         const hasChanged: boolean = await Service.POST_DetectAnyChanges(
@@ -79,10 +64,9 @@ class Model {
     }, detectInterval * 1000);
   }
 
-  public updateState(): void {
+  public updateState() {
     this.state = this.makeNewStateFromHTML();
     this.save();
-    // console.log(this.state);
   }
 
   public makeNewStateFromHTML(): IState {
@@ -135,7 +119,7 @@ class Model {
     return newState;
   }
 
-  public renderFromState(loadedLists: IList[]): void {
+  public renderFromState(loadedLists: IList[]) {
     const listsLength = loadedLists.length;
     const listsTitles = loadedLists.map(list => list.title);
     const cardsLength = loadedLists.map(list => list.cards.length);

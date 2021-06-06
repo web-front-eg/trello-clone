@@ -3,7 +3,7 @@ import * as Model from "../model/ModelInterface.js";
 export class Service {
   public static BASE_URL = "http://localhost:8080/";
 
-  public static async POST_SaveLists(lists: Model.IState): Promise<void> {
+  public static async POST_SaveLists(lists: Model.IState) {
     const res = await fetch(Service.BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -13,9 +13,7 @@ export class Service {
     // console.log(parsed);
   }
 
-  public static async POST_DetectAnyChanges(
-    original: Model.IState
-  ): Promise<boolean> {
+  public static async POST_DetectAnyChanges(original: Model.IState) {
     console.log("sending -> ", original);
 
     const res = await fetch(`${Service.BASE_URL}detect`, {
@@ -30,7 +28,7 @@ export class Service {
     return anyChange as boolean;
   }
 
-  public static async GET_LoadLists(): Promise<Model.IList[]> {
+  public static async GET_LoadLists() {
     const res = await fetch(Service.BASE_URL);
     const parsed = await res.json();
     // console.log(parsed);

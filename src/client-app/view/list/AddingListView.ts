@@ -30,7 +30,7 @@ export class AddingListView extends View<HTMLDivElement> {
     this.init();
   }
 
-  protected init(): void {
+  protected init() {
     ViewCache.addingListView = this;
 
     // bind clicking the Save button or press enter
@@ -40,37 +40,37 @@ export class AddingListView extends View<HTMLDivElement> {
     this.closeBtnEl.addEventListener("click", this.close);
   }
 
-  protected reset(): void {
+  protected reset() {
     this.titleInputEl.value = "";
   }
 
-  public load(newTitle: string): void {
+  public load(newTitle: string) {
     this.titleInputEl.value = newTitle;
   }
 
-  public click(): void {
+  public click() {
     this.addChild(true);
   }
 
   @autobind
-  private onClickSaveBtn(_: Event): void {
+  private onClickSaveBtn(_: Event) {
     this.addChild();
   }
 
   @autobind
-  private onPressEnterKey(e: Event): void {
+  private onPressEnterKey(e: Event) {
     if ((e as KeyboardEvent)!.key !== "Enter") return;
 
     this.addChild();
   }
 
   @autobind
-  private onFocusOut(_: Event): void {
+  private onFocusOut(_: Event) {
     this.currentEl.style.display = "none";
     ListController.onCloseAddingList();
   }
 
-  private addChild(isAutoUpdate: boolean = false): void {
+  private addChild(isAutoUpdate: boolean = false) {
     if (!this.titleInputEl.value) {
       return;
     }
@@ -100,13 +100,13 @@ export class AddingListView extends View<HTMLDivElement> {
   /**
    * show adding-list and auto-focus at the input
    */
-  public reopen(): void {
+  public reopen() {
     this.currentEl.style.display = "block";
     this.titleInputEl.focus();
   }
 
   @autobind
-  private close(): void {
+  private close() {
     this.currentEl.style.display = "none";
   }
 }

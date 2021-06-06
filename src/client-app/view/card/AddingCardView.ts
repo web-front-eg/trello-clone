@@ -5,7 +5,7 @@ import { autobind } from "../../decorator/autobind.js";
 import { Template } from "../../template/TemplateNames.js";
 import { ViewCache } from "../../controller/ViewCache.js";
 import { CardController } from "../../controller/CardController.js";
-import { delay } from "../../util/timer.js";
+import { delay, delayFinally } from "../../util/timer.js";
 
 export class AddingCardView extends View<HTMLDivElement> {
   private readonly contentTextareaEl: HTMLTextAreaElement;
@@ -21,7 +21,7 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.contentTextareaEl = this.currentEl
       .firstElementChild! as HTMLTextAreaElement;
 
-    delay(() => this.contentTextareaEl.focus(), 0);
+    delayFinally(() => this.contentTextareaEl.focus());
 
     this.addBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
 
@@ -31,7 +31,7 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.init();
   }
 
-  protected init(): void {
+  protected init() {
     ViewCache.addingCardView = this;
 
     this.addBtnEl.addEventListener("click", this.onClickAddCard);
@@ -41,25 +41,25 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.reset();
   }
 
-  protected reset(): void {
+  protected reset() {
     this.contentTextareaEl.value = "";
   }
 
-  public load(newContent: string): void {
+  public load(newContent: string) {
     this.contentTextareaEl.value = newContent;
   }
 
-  public click(): void {
+  public click() {
     this.addCard(true);
   }
 
   @autobind
-  private onClickAddCard(_: Event): void {
+  private onClickAddCard(_: Event) {
     this.addCard();
   }
 
   @autobind
-  private onPressEnterKey(e: Event): void {
+  private onPressEnterKey(e: Event) {
     if ((e as KeyboardEvent).key !== "Enter") return;
 
     this.addCard();
@@ -69,7 +69,7 @@ export class AddingCardView extends View<HTMLDivElement> {
    * set the content of adding-card, which is the title of added-card
    * with the value of input.
    */
-  private addCard(isAutoUpdate: boolean = false): void {
+  private addCard(isAutoUpdate: boolean = false) {
     // 공백 X
     if (!this.contentTextareaEl.value) {
       return;
@@ -110,17 +110,18 @@ export class AddingCardView extends View<HTMLDivElement> {
     this.reset();
   }
 
-  public reopen(): void {
+  public async reopen() {
     // show and focus adding-card on clicking add-card again
     this.currentEl.style.display = "block";
-    delay(() => {
-      this.contentTextareaEl.focus();
-      this.reset();
-    }, 0);
+
+    await delay();
+
+    this.contentTextareaEl.focus();
+    this.reset();
   }
 
   @autobind
-  public closeAddingCardForcely(): void {
+  public closeAddingCardForcely() {
     this.currentEl.style.display = "none";
     this.contentTextareaEl.blur();
     CardController.onCloseAddingCard(this.parentListPos);

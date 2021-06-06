@@ -10,7 +10,7 @@ class Server {
   private readonly app: App = new App();
   public static PORT_NUM: number = 8080;
 
-  public Start(): void {
+  public Start() {
     // start server
     const server = this.app.getApp.listen(Server.PORT_NUM, () => {
       console.log(

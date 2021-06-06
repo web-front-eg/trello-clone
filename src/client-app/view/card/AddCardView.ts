@@ -16,23 +16,23 @@ export class AddCardView extends View<HTMLDivElement> {
     this.init();
   }
 
-  protected init(): void {
+  protected init() {
     ViewCache.setAddCardView = this;
 
     this.currentEl.addEventListener("click", this.onClickAddCard);
     // this.currentEl.addEventListener("focusout", this.onFocusOut);
   }
 
-  protected reset(): void {
+  protected reset() {
     this.close();
   }
 
-  public click(): void {
+  public click() {
     this.onClickAddCard();
   }
 
   @autobind
-  private onClickAddCard(): void {
+  private onClickAddCard() {
         
     // re-using only 1 adding-card
     if (!AddCardView.AddingCard) {
@@ -59,21 +59,21 @@ export class AddCardView extends View<HTMLDivElement> {
   }
 
   // @autobind
-  // private onFocusOut(_: Event): void {
+  // private onFocusOut(_: Event) {
   //   // hide add-card automatically on focusing out
   //   this.currentEl.style.display = "none";
   // }  
 
-  public reopen(): void {
+  public reopen() {
     // show add-card on closing adding-card
     this.currentEl.style.display = "block";
   }
 
-  public close(): void {
+  public close() {
     this.currentEl.style.display = "none";
   }
 
-  public moveAddCardUnder(addingCardView: AddingCardView): void {
+  public moveAddCardUnder(addingCardView: AddingCardView) {
     // attach add-card under adding-card
     addingCardView.currentEl.insertAdjacentElement("afterend", this.currentEl);
   }

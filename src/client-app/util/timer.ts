@@ -4,8 +4,8 @@
  * @param delay unit: second
  * @returns
  */
-export const delay = (fn: Function = () => {}, delay: number): Promise<void> =>
-  new Promise((resolve, reject) =>
+export const delayFinally = (fn: Function = () => {}, delay: number = 0) =>
+  new Promise<void>((resolve, reject) =>
     setTimeout(() => {
       try {
         fn();
@@ -13,7 +13,17 @@ export const delay = (fn: Function = () => {}, delay: number): Promise<void> =>
       } catch (e: unknown) {
         reject(e);
       }
-    }, delay * 1000)
+    }, delay != 0 ? delay * 1000 : 0)
+  );
+
+export const delay = (delay: number = 0) =>
+  new Promise<void>(resolve =>
+    setTimeout(
+      () => {
+        resolve();
+      },
+      delay != 0 ? delay * 1000 : 0
+    )
   );
 
 /**
@@ -22,8 +32,8 @@ export const delay = (fn: Function = () => {}, delay: number): Promise<void> =>
  * @param interval unit: second
  * @returns
  */
-export const interval = (fn: Function, interval: number): Promise<void> =>
-  new Promise((resolve, reject) =>
+export const interval = (fn: Function, interval: number) =>
+  new Promise<void>((resolve, reject) =>
     setInterval(() => {
       try {
         fn();

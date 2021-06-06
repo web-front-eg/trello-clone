@@ -16,7 +16,7 @@ export class AddListView extends View<HTMLDivElement> {
     this.init();
   }
 
-  protected init(): void {
+  protected init() {
     // cache instance
     ViewCache.addListView = this;
 
@@ -24,16 +24,16 @@ export class AddListView extends View<HTMLDivElement> {
     this.currentEl.addEventListener("focusout", this.onFocusOut);
   }
 
-  protected reset(): void {
+  protected reset() {
     this.currentEl.style.display = "none";
   }
 
-  public click(): void {
+  public click() {
     this.onClick();
   }
 
   @autobind
-  private onClick(): void {
+  private onClick() {
     // re-using adding-list
     if (!this.nextView) {
       this.nextView = new AddingListView(
@@ -50,12 +50,12 @@ export class AddListView extends View<HTMLDivElement> {
   }
 
   @autobind
-  private onFocusOut(_: Event): void {
+  private onFocusOut(_: Event) {
     // hide add-list automatically on focusing out
     this.currentEl.style.display = "none";
   }
 
-  public reopen(): void {
+  public reopen() {
     // show add-list on closing adding-card
     this.currentEl.style.display = "block";
   }

@@ -3,14 +3,11 @@ import { HTTP_CODES } from "../model/ServerModel";
 import * as Model from "../model/Model";
 import storage from "../data/Storage";
 import { isDeepStrictEqual } from "util";
-import { delay } from "../util/timer";
 
 export function saveLists(
   request: express.Request,
   response: express.Response
-): void {
-  // console.log(request);
-
+) {
   const recvState = request.body.lists as Model.IState;
   if (!recvState) {
     response.status(HTTP_CODES.BAD_REQUEST).json({
@@ -29,7 +26,7 @@ export function saveLists(
 export function detectAnyChange(
   request: express.Request,
   response: express.Response
-): void {
+) {
   const { lists: incoming } = request.body;
 
   if (isDeepStrictEqual(storage.state, incoming)) {
@@ -49,10 +46,7 @@ export function detectAnyChange(
   }
 }
 
-export function loadLists(
-  _: express.Request,
-  response: express.Response
-): void {
+export function loadLists(_: express.Request, response: express.Response) {
   const { lists } = storage.state;
   if (!lists) {
     response.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json({

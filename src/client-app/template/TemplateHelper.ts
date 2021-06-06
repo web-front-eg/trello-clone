@@ -104,7 +104,7 @@ export class TemplateHelper<TCreateEl extends HTMLElement> {
     }
   }
 
-  public insertAtManually(where: InsertPosition, atEl: HTMLDivElement): void {
+  public insertAtManually(where: InsertPosition, atEl: HTMLDivElement) {
     if (!this.isManualInserted) {
       throw new Error(
         "This template injector did not set 'isManualInserted' to 'true'"
@@ -115,11 +115,11 @@ export class TemplateHelper<TCreateEl extends HTMLElement> {
     this.insertAt(where);
   }
 
-  private insertAt(where: InsertPosition): void {
+  private insertAt(where: InsertPosition) {
     this.rootEl.insertAdjacentElement(where, this.createdEl);
   }
 
-  public removeMyself(): void {
+  public removeMyself() {
     this.createdEl.remove();
   }
 }

@@ -2,7 +2,7 @@ import { TemplateHelper } from "../template/TemplateHelper.js";
 
 export abstract class View<T extends HTMLElement> {
   public static currentListPosition: number = -1;
-  public reinitCurrentListPosition(): void {
+  public reinitCurrentListPosition() {
     View.currentListPosition = -1;
   }
   public currentEl: T;
@@ -22,7 +22,7 @@ export abstract class View<T extends HTMLElement> {
   protected abstract init(): void;
   protected abstract reset(): void;
 
-  protected removeMyself(): void {
+  protected removeMyself() {
     this.templateHelper.removeMyself();
   }
 }

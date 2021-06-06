@@ -21,17 +21,15 @@ export class AddedListView extends View<HTMLDivElement> {
     this.titleEl = this.currentEl.querySelector("strong")! as HTMLElement;
 
     this.titleEl.innerText = content;
-    
+
     this.init();
-    
+
     ListController.onSetTitleInAddedList(content, isAutoUpdate);
   }
 
-  protected reset(): void {
-    //
-  }
+  protected reset() {}
 
-  protected init(): void {
+  protected init() {
     this.currentEl.draggable = true;
     ViewCache.setAddedListView = this;
 

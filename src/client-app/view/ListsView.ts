@@ -26,15 +26,15 @@ export class ListsView extends View<HTMLDivElement> {
     this.init();
   }
 
-  protected init(): void {
+  protected init() {
     ViewCache.listsView = this;
   }
 
-  protected reset(): void {
+  protected reset() {
     //
   }
 
-  public attachNewLists(): void {    
+  public attachNewLists() {    
     this.templateHelper = new TemplateHelper<HTMLDivElement>(
       this.templateHelper.getCurElIdOrClassName,
       Template.lists,
@@ -44,7 +44,7 @@ export class ListsView extends View<HTMLDivElement> {
     );
   }
 
-  public attachToNewListsFrom(addListView: AddListView): void {
+  public attachToNewListsFrom(addListView: AddListView) {
     // attach add-list to new parent element
     this.templateHelper.getCreatedEl.insertAdjacentElement(
       "afterbegin",

@@ -23,24 +23,16 @@ export class AddedCardView extends View<HTMLDivElement> {
     )! as HTMLParagraphElement;
     this.titleEl.textContent = content;
 
-    const currentCardPos = CardController.onSetContentInAddedCard(
+    this.dragDrop = new CardDragDrop(this.currentEl);
+
+    CardController.onSetContentInAddedCard(
       parentListPos,
       content,
       isAutoUpdate
     );
-
-    this.dragDrop = new CardDragDrop(
-      this.currentEl,
-      parentListPos,
-      currentCardPos
-    );
-
-    this.init();
   }
 
-  protected init(): void {}
+  protected init() {}
 
-  protected reset(): void {
-    //
-  }
+  protected reset() {}
 }

@@ -15,12 +15,11 @@ export namespace DragDrop {
 
   const indicatorEl = movingCardIndicatorTemplateHelper.getCreatedEl;
 
-  // static ctor 가 없어서 field 는 ctor 에서 초기화
   const temporaryIndicatorPosEl: HTMLDivElement = document.getElementById(
     "moving-card-pos-indicator-disabled"
   )! as HTMLDivElement;
 
-  export const onDragStart = (e: DragEvent): void => {
+  export const onDragStart = (e: DragEvent) => {
     // -> turn on the move effect
     //   1. rotate the target tiny bit
 
@@ -45,7 +44,7 @@ export namespace DragDrop {
     // e.dataTransfer!.setDragImage(dragImageEl, 10, 10);
   };
 
-  export function onDragEnd(e: DragEvent): void {
+  export function onDragEnd(e: DragEvent) {
     temporaryIndicatorPosEl.insertAdjacentElement("afterend", indicatorEl);
     if (!indicatorEl.classList.contains("hidden")) {
       indicatorEl.classList.add("hidden");
@@ -53,7 +52,7 @@ export namespace DragDrop {
     (e.target as HTMLElement).classList.toggle("dragged");
   }
 
-  export function onDragOver(e: DragEvent): void {
+  export function onDragOver(e: DragEvent) {
     // prevent the default handling by both the dragEnter or dragOver since to allow a drop
     // dragEnter 와 dragOver 의 drop 허용을 위해 preventDefault() 호출
     e.preventDefault();
@@ -80,7 +79,7 @@ export namespace DragDrop {
     targetEl.insertAdjacentElement("afterend", indicatorEl);
   }
 
-  export function onDrop(e: DragEvent): void {
+  export function onDrop(e: DragEvent) {
     // hide indicator and attach to temporary position element transiently
     // indicator 를 숨기고 잠시 position element 에 붙혀둠
     temporaryIndicatorPosEl.insertAdjacentElement("afterend", indicatorEl);

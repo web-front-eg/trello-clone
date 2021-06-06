@@ -4,21 +4,30 @@ import {
   AddedListView,
   AddCardView,
   AddingCardView,
-  AddedCardView,
   ListsView,
-  View,
 } from "../view/index.js";
 
+
+/**
+ * static class for Cached View(s)
+ * all the cached views are singleton objects
+ */
 export class ViewCache {
+  public static reinit() {
+    ViewCache._addedListViews = [];
+    ViewCache._addCardViews = [];
+  }
+
   /**
-   *
+   * cached listsView
    */
   private static _listsView: ListsView;
 
   public static get listsView(): ListsView {
     if (!ViewCache._listsView) {
-      throw new Error("No cached lists view valid!");
+      throw new Error("No cached lists view is valid!");
     }
+
     return ViewCache._listsView;
   }
 
@@ -27,14 +36,15 @@ export class ViewCache {
   }
 
   /**
-   *
+   * cached addListView
    */
   private static _addListView: AddListView;
 
   public static get addListView(): AddListView {
     if (!ViewCache._addListView) {
-      throw new Error("No cached add list view valid!");
+      throw new Error("No cached add list view is valid!");
     }
+
     return ViewCache._addListView;
   }
 
@@ -43,14 +53,15 @@ export class ViewCache {
   }
 
   /**
-   *
+   * cached addingListView
    */
   private static _addingListView: AddingListView;
 
   public static get addingListView(): AddingListView {
     if (!ViewCache._addingListView) {
-      throw new Error("No cached adding list view valid!");
+      throw new Error("No cached adding list view is valid!");
     }
+
     return ViewCache._addingListView;
   }
 
@@ -59,13 +70,13 @@ export class ViewCache {
   }
 
   /**
-   *
+   * cached addedCardView array
    */
   private static _addedListViews: Array<AddedListView> = [];
 
   public static getAddedListView(idx: number): AddedListView {
     if (ViewCache._addedListViews.length < 0) {
-      throw new Error("No cached added card view valid!");
+      throw new Error("No cached added card view is valid!");
     }
 
     if (idx < 0 || idx > ViewCache._addCardViews.length) {
@@ -82,13 +93,13 @@ export class ViewCache {
   }
 
   /**
-   *
+   * cached addCardView array
    */
   private static _addCardViews: Array<AddCardView> = [];
 
   public static getAddCardView(idx: number): AddCardView {
     if (ViewCache._addCardViews.length < 0) {
-      throw new Error("No cached add card view valid!");
+      throw new Error("No cached add card view is valid!");
     }
 
     if (idx < 0 || idx > ViewCache._addCardViews.length) {
@@ -113,9 +124,8 @@ export class ViewCache {
   }
 
   /**
-   *
+   * cached addingCardView
    */
-
   private static _addingCardView: AddingCardView;
 
   public static get addingCardView(): AddingCardView {
@@ -129,30 +139,4 @@ export class ViewCache {
   public static set addingCardView(view: AddingCardView) {
     ViewCache._addingCardView = view;
   }
-
-  // private static _addingCardView: Array<AddingCardView> = [];
-
-  // public static getAddingCardView(idx: number): AddingCardView {
-  //   if (ViewCache._addingCardView.length < 0) {
-  //     throw new Error("No cached adding card view valid!");
-  //   }
-
-  //   if (idx < 0 || idx > ViewCache._addCardViews.length) {
-  //     throw new Error(
-  //       "idx can't be 0 below or over the length of addingCardViews amount"
-  //     );
-  //   }
-
-  //   const found = ViewCache._addingCardView.find(
-  //     addingCardView => addingCardView.parentListPos === idx
-  //   );
-  //   if (!found) {
-  //     throw new Error("No correspondant adding card!");
-  //   }
-  //   return found;
-  // }
-
-  // public static set setAddingCardView(view: AddingCardView) {
-  //   ViewCache._addingCardView.push(view);
-  // }
 }

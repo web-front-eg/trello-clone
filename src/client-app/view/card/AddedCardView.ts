@@ -4,41 +4,35 @@ import { CardController } from "../../controller/CardController.js";
 import { CardDragDrop } from "../drag-drop/CardDragDrop.js";
 
 export class AddedCardView extends View<HTMLDivElement> {
-  /**
-   *
-   */
-  private readonly titleEl: HTMLParagraphElement;
-  private readonly dragDrop: CardDragDrop;
+  private readonly titleEl = <HTMLParagraphElement>(
+    this.currentEl.querySelector(".list__added-card__title")!
+  );
+
+  private readonly dragDrop: CardDragDrop = new CardDragDrop(this.currentEl);
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
     content: string,
-    parentListPos: number
+    parentListPos: number,
+    isAutoUpdate: boolean
   ) {
     super(templateHelper, "AddedCardView");
 
-    this.titleEl = this.currentEl.querySelector(
-      ".list__added-card__title"
-    )! as HTMLParagraphElement;
+    if (!this.titleEl) {
+      throw new Error("title element is invalid!");
+    }
+
     this.titleEl.textContent = content;
 
-    const currentCardPos = CardController.onSetContentInAddedCard(
+    // add new card to data set
+    CardController.onSetContentInAddedCard(
       parentListPos,
-      content
+      content,
+      isAutoUpdate
     );
-
-    this.dragDrop = new CardDragDrop(
-      this.currentEl,
-      parentListPos,
-      currentCardPos
-    );
-
-    this.init();
   }
 
-  protected init(): void {}
+  protected init() {}
 
-  protected reset(): void {
-    //
-  }
+  protected reset() {}
 }

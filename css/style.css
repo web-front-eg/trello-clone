@@ -74,15 +74,6 @@ body {
   background-color: var(--color-trello-blue-500);
 }
 
-.save, .load {
-  display: inline-block;
-  margin: 0 auto;
-  padding: 10px 15px;
-  margin: 5px 5px;
-
-  
-}
-
 .separator {
   width: 1px;
   height: 20px;
@@ -465,6 +456,10 @@ nav .btn {
   background-color: #fff;
 
   transform: rotate(0deg);
+}
+
+.list__added-inside.active {
+  background-color: var(--color-text-dark1);
 }
 
 .list__added-card:hover .list__added-inside {

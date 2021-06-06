@@ -1,7 +1,6 @@
-import { Template } from "../../template/TemplateNames.js";
+import { TemplateNames } from "../../template/TemplateNames.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import Model from "../../model/Model.js";
-import { ICard, IList, IState } from "../../model/ModelInterface.js";
 
 export namespace DragDrop {
   type TyTransferredDataOnDrag = {
@@ -10,80 +9,68 @@ export namespace DragDrop {
 
   const movingCardIndicatorTemplateHelper = new TemplateHelper<HTMLDivElement>(
     "#moving-card-pos-indicator-disabled",
-    Template.movingCardPosIndicator,
+    TemplateNames.movingCardPosIndicator,
     "afterbegin"
   );
 
-  const indicatorEl = movingCardIndicatorTemplateHelper.getCreatedEl;
+  const indicatorEl = movingCardIndicatorTemplateHelper.createdEl;
 
-  // static ctor 가 없어서 field 는 ctor 에서 초기화
   const temporaryIndicatorPosEl: HTMLDivElement = document.getElementById(
     "moving-card-pos-indicator-disabled"
   )! as HTMLDivElement;
 
-  export const onDragStart = (e: DragEvent): void => {
-    // -> turn on the move effect
-    //   1. rotate the target tiny bit
-
+  export function onDragStart(e: DragEvent) {
     // e.dataTransfer & e.target never be invalid
-    // e.dataTransfer & e.target 은 무조건 유효
     const targetEl = e.target! as HTMLElement;
     targetEl.classList.toggle("dragged");
 
     const transferred = <TyTransferredDataOnDrag>{
       draggableId: targetEl.id,
     };
+
+    // TODO: ERROR! same data isn't transferred.
+
     e.dataTransfer!.setData("text/plain", JSON.stringify(transferred));
     e.dataTransfer!.effectAllowed = "move";
+  }
 
-    // const dragImageNode = targetEl.cloneNode(true);
-    // document.body.appendChild(dragImageNode);
-    // console.log(dragImageNode);
-
-    // const dragImageEl = dragImageNode as HTMLElement;
-    // dragImageEl.style.width = targetEl.style.width + "px";
-    // dragImageEl.style.height = targetEl.style.height + "px";
-    // e.dataTransfer!.setDragImage(dragImageEl, 10, 10);
-  };
-
-  export function onDragEnd(e: DragEvent): void {
+  export function onDragEnd(e: DragEvent) {
+    // attach indicator to the temporary pos
     temporaryIndicatorPosEl.insertAdjacentElement("afterend", indicatorEl);
+
+    // hide indicator element
     if (!indicatorEl.classList.contains("hidden")) {
       indicatorEl.classList.add("hidden");
     }
+
+    // enable drag effect
     (e.target as HTMLElement).classList.toggle("dragged");
   }
 
-  export function onDragOver(e: DragEvent): void {
-    // prevent the default handling by both the dragEnter or dragOver since to allow a drop
-    // dragEnter 와 dragOver 의 drop 허용을 위해 preventDefault() 호출
+  export function onDragOver(e: DragEvent) {
+    // prevent the default handling by both the dragEnter or dragOver since it's to allow a drop
     e.preventDefault();
 
     // check data has been transferred at first
-    // 먼저 data 전송 여부 체크
     if (!e.dataTransfer || e.dataTransfer.types[0] !== "text/plain") {
       throw new Error("draggable data hasn't been transferred!");
     }
 
     // check the moving card indicator which is containing .hidden and remove it to turn the indicator on
-    // .hidden 포함 체크 후 moving card indicator 표시
     if (indicatorEl.classList.contains("hidden")) {
       indicatorEl.classList.remove("hidden");
     }
 
     // e.target -> the target on which being drag-over
-    // e.target -> drag over 되는 타겟
     const targetEl = e.target! as HTMLElement;
 
     // insert the indicator into in the afterEnd of the target
     // to attach right down to the target as always
-    // 항상 target 의 아래에 위치시키기 위해서 indicator 를 target 의 afterEnd 위치로 삽입
     targetEl.insertAdjacentElement("afterend", indicatorEl);
   }
 
-  export function onDrop(e: DragEvent): void {
+  export function onDrop(e: DragEvent) {
     // hide indicator and attach to temporary position element transiently
-    // indicator 를 숨기고 잠시 position element 에 붙혀둠
     temporaryIndicatorPosEl.insertAdjacentElement("afterend", indicatorEl);
 
     if (!indicatorEl.classList.contains("hidden")) {
@@ -91,24 +78,25 @@ export namespace DragDrop {
     }
 
     // check data has been transferred at first
-    // 먼저 data 전송 여부 체크
     if (!e.dataTransfer || e.dataTransfer.types[0] !== "text/plain") {
       throw new Error("draggable data hasn't been transferred!");
     }
 
+    // get data
     const transferred = e.dataTransfer!.getData("text/plain");
-    const { draggableId } = JSON.parse(transferred) as TyTransferredDataOnDrag;
+    const { draggableId } = <TyTransferredDataOnDrag>JSON.parse(transferred);
 
+    // get draggable element
     const draggableEl = document.getElementById(draggableId);
-    const targetEl = e.target! as HTMLElement;
 
-    const currentListEl = targetEl.parentElement;
-    if (!currentListEl) {
+    const dropTargetEl = <HTMLElement>e.target!;
+
+    if (!dropTargetEl) {
       return;
     }
 
-    targetEl!.insertAdjacentElement("afterend", draggableEl!);
+    dropTargetEl!.insertAdjacentElement("afterend", draggableEl!);
 
-    Model.updateState();
+    Model.updateStateFromHTML();
   }
 }

@@ -1,16 +1,24 @@
 import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
 import { AddedCardView } from "./AddedCardView.js";
-import { autobind } from "../../decorator/autobind.js";
-import { Template } from "../../template/TemplateNames.js";
+import { thisbind } from "../../decorator/thisbind.js";
+import { TemplateNames } from "../../template/TemplateNames.js";
 import { ViewCache } from "../../controller/ViewCache.js";
 import { CardController } from "../../controller/CardController.js";
-import { delay } from "../../util/timer.js";
+import { delay, delayFinally } from "../../util/timer.js";
 
 export class AddingCardView extends View<HTMLDivElement> {
-  private readonly contentTextareaEl: HTMLTextAreaElement;
-  private readonly addBtnEl: HTMLButtonElement;
-  private readonly closeIconEl: HTMLElement;
+  private readonly contentTextareaEl = <HTMLTextAreaElement>(
+    this.currentEl.firstElementChild!
+  );
+
+  private readonly addBtnEl = <HTMLButtonElement>(
+    this.currentEl.querySelector(".btn")!
+  );
+
+  private readonly closeIconEl = <HTMLElement>(
+    this.currentEl.querySelector(".fa-times")!
+  );
 
   constructor(
     templateHelper: TemplateHelper<HTMLDivElement>,
@@ -18,110 +26,114 @@ export class AddingCardView extends View<HTMLDivElement> {
   ) {
     super(templateHelper, "AddingCardView");
 
-    this.contentTextareaEl = this.currentEl
-      .firstElementChild! as HTMLTextAreaElement;
+    if (!this.contentTextareaEl) {
+      throw new Error("content textarea element is invalid!");
+    }
 
-    delay(() => this.contentTextareaEl.focus(), 0);
+    // focus after call stack is cleared
+    delayFinally(() => this.contentTextareaEl.focus());
 
-    this.addBtnEl = this.currentEl.querySelector(".btn")! as HTMLButtonElement;
+    if (!this.addBtnEl) {
+      throw new Error("add button element is invalid!");
+    }
 
-    this.closeIconEl = this.currentEl.querySelector(
-      ".fa-times"
-    )! as HTMLElement;
+    if (!this.closeIconEl) {
+      throw new Error("close icon element is invalid!");
+    }
+
     this.init();
   }
 
-  protected init(): void {
+  protected init() {
     ViewCache.addingCardView = this;
 
-    this.addBtnEl.addEventListener("click", this.onClickAddCard);
+    this.addBtnEl.addEventListener("click", this.onClick);
     this.contentTextareaEl.addEventListener("keypress", this.onPressEnterKey);
     this.closeIconEl.addEventListener("click", this.closeAddingCardForcely);
-
-    this.reset();
   }
 
-  protected reset(): void {
-    this.contentTextareaEl.value = "";
-  }
-
-  public load(newContent: string): void {
-    this.contentTextareaEl.value = newContent;
-  }
-
-  public click(): void {
-    this.addBtnEl.click();
-  }
-
-  @autobind
-  private onClickAddCard(_: Event): void {
+  @thisbind
+  protected onClick(e: Event) {
     this.addCard();
   }
 
-  @autobind
-  private onPressEnterKey(e: Event): void {
+  @thisbind
+  private onPressEnterKey(e: Event) {
     if ((e as KeyboardEvent).key !== "Enter") return;
-
+    // delete unwanted line break after pressing enter
+    e.preventDefault();
     this.addCard();
   }
 
   /**
    * set the content of adding-card, which is the title of added-card
    * with the value of input.
+   * @param isAutoUpdate if true,
    */
-  private addCard(): void {
-    // 공백 X
+  private addCard(isAutoUpdate: boolean = false) {
+    // no empty string allowed
     if (!this.contentTextareaEl.value) {
       return;
     }
 
     let content: string = this.contentTextareaEl.value;
-    // 다음 카드부터, content 앞에 개행문자(\n) 이 있으면 split 해서 없앰
+    // as of the next card, '\n' character every in front of string is removed
     const splitted = this.contentTextareaEl.value.split("\n");
     if (splitted[1]) {
       content = splitted[1];
     }
 
-    // addedCard 생성
+    // create addedCard
     this.nextView = new AddedCardView(
       new TemplateHelper<HTMLDivElement>(
-        this.templateHelper.getCurElIdOrClassName,
-        Template.addedCard,
+        this.templateHelper.currentElSelector,
+        TemplateNames.addedCard,
         "beforebegin",
         true
       ),
       content,
-      this.parentListPos
+      this.parentListPos,
+      isAutoUpdate
     );
 
-    // 생성된 added card 에 ID 추가
-    this.nextView.templateHelper.getCreatedEl.id = `${this.contentTextareaEl.value}-${this.parentListPos}`;
+    // add ID to the created added-card
+    this.nextView.templateHelper.createdEl.id = `${this.contentTextareaEl.value}-${this.parentListPos}`;
 
-    // adding card 를 생성된 added card 아래로 이동
+    // move down adding-card under the create added-card
     this.nextView.templateHelper.insertAtManually(
       "beforebegin",
       this.currentEl
     );
 
-    // add card 도 생성된 added card 아래로 이동
+    // move down add-card as well under the created added-card
     CardController.onNewAddedCardAdded(this.parentListPos);
 
     this.reset();
   }
 
-  public reopen(): void {
-    // show and focus adding-card on clicking add-card again
-    this.currentEl.style.display = "block";
-    delay(() => {
-      this.contentTextareaEl.focus();
-      this.reset();
-    }, 0);
+  protected reset() {
+    this.contentTextareaEl.value = "";
   }
 
-  @autobind
-  public closeAddingCardForcely(): void {
-    this.currentEl.style.display = "none";
-    this.contentTextareaEl.blur();
+  public loadContent(newContent: string) {
+    this.contentTextareaEl.value = newContent;
+  }
+
+  public click() {
+    this.addCard(true);
+  }
+
+  public reopen() {
+    // show and focus adding-card on clicking add-card again
+    super.reopen();
+    delayFinally(() => this.contentTextareaEl.focus());
+    this.reset();
+  }
+
+  @thisbind
+  public closeAddingCardForcely() {
+    super.close();
+    delayFinally(() => this.contentTextareaEl.blur());
     CardController.onCloseAddingCard(this.parentListPos);
   }
 }

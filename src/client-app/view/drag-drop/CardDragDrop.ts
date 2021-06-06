@@ -1,31 +1,18 @@
-// import { autobind } from "../../decorator/autobind.js";
 import { DragDrop } from "./DragDrop.js";
 
+/**
+ * bind helper of added-card to drag functionality
+ */
 export class CardDragDrop {
-  // private isFirstMove: boolean = true;
-
-  constructor(
-    private readonly cardEl: HTMLDivElement,
-    private readonly parentPos: number,
-    private readonly cardPos: number
-  ) {
-    this.cardEl.draggable = true;
+  constructor(private readonly draggableCardEl: HTMLDivElement) {
+    this.draggableCardEl.draggable = true;
     this.bind();
   }
 
-  private bind(): void {
-    // this.cardEl.addEventListener("dragstart", e =>
-    //   DragDrop.onDragStart(e, this.parentPos, this.cardPos)
-    // );
-    this.cardEl.addEventListener("dragstart", DragDrop.onDragStart);
-    this.cardEl.addEventListener("dragend", DragDrop.onDragEnd);
-    this.cardEl.addEventListener("dragover", DragDrop.onDragOver);
-    this.cardEl.addEventListener("drop", DragDrop.onDrop);
+  private bind() {
+    this.draggableCardEl.addEventListener("dragstart", DragDrop.onDragStart);
+    this.draggableCardEl.addEventListener("dragend", DragDrop.onDragEnd);
+    this.draggableCardEl.addEventListener("dragover", DragDrop.onDragOver);
+    this.draggableCardEl.addEventListener("drop", DragDrop.onDrop);
   }
-
-  // @autobind
-  // private onDrop(e: DragEvent): void {
-  //   DragDrop.onDrop(e, this.isFirstMove);
-  //   this.isFirstMove = false;
-  // }
 }

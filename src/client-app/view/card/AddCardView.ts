@@ -1,14 +1,20 @@
-import { View } from "../View.js";
 import { TemplateHelper } from "../../template/TemplateHelper.js";
-import { AddingCardView } from "./AddingCardView.js";
-import { autobind } from "../../decorator/autobind.js";
-import { Template } from "../../template/TemplateNames.js";
+import { View } from "../View.js";
 import { ViewCache } from "../../controller/ViewCache.js";
+import { AddingCardView } from "./AddingCardView.js";
+import { thisbind } from "../../decorator/thisbind.js";
+import { TemplateNames } from "../../template/TemplateNames.js";
 import { CardController } from "../../controller/CardController.js";
 
 export class AddCardView extends View<HTMLDivElement> {
+  /**
+   * card must have a fixed list pos when it's created
+   */
   private readonly fixedAddCardPos: number = View.currentListPosition;
 
+  /**
+   * only one adding-card can be created
+   */
   private static AddingCard: AddingCardView;
 
   constructor(templateHelper: TemplateHelper<HTMLDivElement>) {
@@ -16,31 +22,27 @@ export class AddCardView extends View<HTMLDivElement> {
     this.init();
   }
 
-  protected init(): void {
+  protected init() {
     ViewCache.setAddCardView = this;
 
-    this.currentEl.addEventListener("click", this.onClickAddCard);
-    // this.currentEl.addEventListener("focusout", this.onFocusOut);
+    this.currentEl.addEventListener("click", this.onClick);
   }
 
-  protected reset(): void {
-    this.close();
-  }
-
-  @autobind
-  private onClickAddCard(_: Event): void {
+  @thisbind
+  protected onClick() {
     // re-using only 1 adding-card
     if (!AddCardView.AddingCard) {
       AddCardView.AddingCard = new AddingCardView(
         new TemplateHelper<HTMLDivElement>(
-          this.templateHelper.getCurElIdOrClassName,
-          Template.addingCard,
+          this.templateHelper.currentElSelector,
+          TemplateNames.addingCard,
           "afterend",
           true
         ),
         this.fixedAddCardPos
       );
     } else {
+      // update parent list pos of adding-card after clicking other add-card
       AddCardView.AddingCard.parentListPos = this.fixedAddCardPos;
       CardController.onClickAddCardAgain(this.fixedAddCardPos);
     }
@@ -50,26 +52,15 @@ export class AddCardView extends View<HTMLDivElement> {
       "afterend",
       this.currentEl
     );
+
     this.reset();
   }
 
-  // @autobind
-  // private onFocusOut(_: Event): void {
-  //   // hide add-card automatically on focusing out
-  //   this.currentEl.style.display = "none";
-  // }  
-
-  public reopen(): void {
-    // show add-card on closing adding-card
-    this.currentEl.style.display = "block";
-  }
-
-  public close(): void {
-    this.currentEl.style.display = "none";
-  }
-
-  public moveAddCardUnder(addingCardView: AddingCardView): void {
+  public moveAddCardUnderAddingCard() {
     // attach add-card under adding-card
-    addingCardView.currentEl.insertAdjacentElement("afterend", this.currentEl);
+    AddCardView.AddingCard.currentEl.insertAdjacentElement(
+      "afterend",
+      this.currentEl
+    );
   }
 }

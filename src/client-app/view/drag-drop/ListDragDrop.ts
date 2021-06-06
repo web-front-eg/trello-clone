@@ -1,20 +1,18 @@
-// import { autobind } from "../../decorator/autobind.js";
 import { DragDrop } from "./DragDrop.js";
 
+/**
+ * bind helper of added-card to drag functionality
+ */
 export class ListDragDrop {
-  // private isFirstMove: boolean = true;
-  constructor(private readonly addedListEl: HTMLDivElement) {
+  constructor(private readonly dropTargetAddedListEl: HTMLDivElement) {
     this.bind();
   }
 
-  private bind(): void {
-    this.addedListEl.addEventListener("dragover", DragDrop.onDragOver);
-    this.addedListEl.addEventListener("drop", DragDrop.onDrop);
+  private bind() {
+    this.dropTargetAddedListEl.addEventListener(
+      "dragover",
+      DragDrop.onDragOver
+    );
+    this.dropTargetAddedListEl.addEventListener("drop", DragDrop.onDrop);
   }
-
-  // @autobind
-  // private onDrop(e: DragEvent): void {
-  //   (e, this.isFirstMove);
-  //   this.isFirstMove = false;
-  // }
 }

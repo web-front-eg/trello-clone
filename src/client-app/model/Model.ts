@@ -1,135 +1,83 @@
 import { rebuildLists } from "../view/RebuildLists.js";
 import { Service } from "../service/Service.js";
-import { delay } from "../util/timer.js";
-import { ICard, IList, IState } from "./ModelInterface.js";
+import { StateHolder } from "./StateHolder.js";
+import { makeNewStateFromHTML } from "../view/makeStateFromHTML.js";
 
+/**
+ * state, db operation happens here
+ */
 class Model {
-  private state: IState;
-  private rootEl: HTMLElement;
+  private readonly stateHolder: StateHolder = new StateHolder();
 
-  constructor(saveInterval: number = 5, syncInterval: number = 10) {
-    this.state = {
-      lists: [],
-    };
-
-    this.rootEl = document.querySelector("#root")! as HTMLElement;
-
-    // this.saveAutomatically(saveInterval);
-    // this.loadAutomatically(syncInterval);
-
-    document
-      .querySelector(".save")!
-      .addEventListener("click", this.save.bind(this));
-
-    document
-      .querySelector(".load")!
-      .addEventListener("click", this.load.bind(this));
+  constructor(detectInterval: number = 10) {
+    this.syncFromServer(detectInterval);
   }
 
-  private async load(): Promise<void> {
-    this.state = await Service.GET_LoadLists();
-    this.renderFromState();
-  }
+  /**
+   * @param title list title
+   * @param isAutoUpdate if true, no saving operation to the server occurs
+   */
+  public addNewList(title: string, isAutoUpdate: boolean) {
+    this.stateHolder.pushList(title);
 
-  private async save(): Promise<void> {
-    this.updateState();
-    await Service.POST_SaveLists(this.state);
-  }
-
-  private async loadAutomatically(syncInterval: number): Promise<void> {
-    while (true) {
-      try {
-        await delay(this.load, syncInterval);
-      } catch (e: unknown) {
-        console.error(`sync automatically failed! error status code: ${e}`);
-      }
+    if (!isAutoUpdate) {
+      this.saveToServer();
     }
   }
 
-  private async saveAutomatically(saveInterval: number): Promise<void> {
-    while (true) {
-      try {
-        await delay(this.save, saveInterval);
-      } catch (e: unknown) {
-        console.error(`save automatically failed! error status code: ${e}`);
-      }
+  /**
+   * @param listPos at which list a card is supposed to be inserted
+   * @param content card content
+   * @param isAutoUpdate if true, no saving operation to the server occurs
+   */
+  public addNewCard(listPos: number, content: string, isAutoUpdate: boolean) {
+    this.stateHolder.pushCard(listPos, content);
+    if (!isAutoUpdate) {
+      this.saveToServer();
     }
   }
 
-  public addNewList(title: string): void {
-    this.state.lists.push(<IList>{ title, cards: [] });
+  /**
+   * POST lists to the server
+   */
+  private async saveToServer() {
+    await Service.POST_SaveLists(this.stateHolder.state);
   }
 
-  public addNewCard(listPos: number, content: string): number {
-    const cardsArr = this.state.lists[listPos].cards;
-    const order = cardsArr.length;
-    cardsArr.push({ content });
-    return order;
-  }
+  /**
+   * @param syncInterval sync interval
+   */
+  private async syncFromServer(syncInterval: number) {
+    setInterval(async () => {
+      try {
+        const hasChanged: boolean = await Service.POST_DetectAnyChanges(
+          this.stateHolder.state
+        );
 
-  public updateState(): void {
-    this.state = this.makeNewState();
-    console.log(this.state);
-  }
-
-  public makeNewState(): IState {
-    const newState = <IState>{
-      lists: [],
-    };
-
-    // 1. lists 추가
-    // lists 가져오기
-    const allLists = Array.from(this.rootEl.querySelectorAll(".lists")!);
-    newState.lists = new Array<IList>(allLists.length - 1);
-
-    // 각 lists 의 타이틀 가져오기
-    const allListsTitles = allLists.map(
-      lists => lists.firstElementChild?.firstElementChild?.innerHTML
-    );
-
-    // 2. list 추가
-    // 각 lists 에 title 를 추가한 새로운 list 를 추가
-    allListsTitles.forEach((title: string | undefined, i: number) => {
-      if (title) {
-        const newList = <IList>{ title, cards: [] };
-        newState.lists[i] = newList;
-      }
-    });
-
-    // 3. card 추가
-    // added-card 가져오기
-    const allAddedCards = allLists.map(
-      lists => lists.querySelectorAll(".list__added-card")!
-    );
-
-    // 필요 없는 부분 pop
-    allAddedCards.pop();
-
-    // 첫 번째 루프 - i 번째 lists 이용
-    allAddedCards.forEach((cards: NodeListOf<Element>, i: number) => {
-      // 두 번째 루프 - j 번째 cards 이용
-      cards.forEach((card: Element, j: number) => {
-        const content = card.firstElementChild?.firstElementChild?.innerHTML;
-        if (content) {
-          const newCard = <ICard>{ content };
-          newState.lists[i].cards[j] = newCard;
+        // load and sync if there's any changes
+        if (hasChanged) {
+          const loadedLists = await Service.GET_LoadLists();
+          // wipe out the last state before rebuilding a new state
+          this.stateHolder.reinitList();
+          rebuildLists(loadedLists);
         }
-      });
-    });
-    return newState;
+      } catch (e: unknown) {
+        console.error(
+          `detect any change has been failed! error status code: `,
+          e as Error
+        );
+      }
+    }, syncInterval * 1000);
   }
 
-  public renderFromState(): void {
-    const { lists } = this.state;
-    const listsLength = lists.length;
-    const listsTitles = lists.map(list => list.title);
-    const cardsLength = lists.map(list => list.cards.length);
-    const cardsContents = lists.map(list =>
-      list.cards.map(card => card.content)
-    );
-
-    rebuildLists(listsLength, listsTitles, cardsLength, cardsContents);
+  /**
+   * update state from html
+   */
+  public updateStateFromHTML() {
+    this.stateHolder.state = makeNewStateFromHTML();
+    // and save the new changes
+    this.saveToServer();
   }
 }
 
-export default new Model(5, 10);
+export default new Model(5);

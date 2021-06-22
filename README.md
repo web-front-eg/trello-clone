@@ -1,8 +1,4 @@
-# DESKCAT - 웹 프론트 엔드 과제 - 이윤상
-
-## 설명
-> **Trello clone**, **5초 텀**으로 다른 클라이언트(웹 사이트) 에서 조작한 list, card **sync**.
-
+# Trello Clone
 ---
 
 ## installation

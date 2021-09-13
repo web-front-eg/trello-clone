@@ -30,36 +30,6 @@ npm serve
 
 ---
 
-// <img src="./img/desc/add-list.jpg" alt="add list alt" width=250><br />
-// AddListView
-
----
-
-// <img src="./img/desc/adding-list.jpg" alt="adding list alt" width=250><br />
-// AddingListView
-
----
-
-// <img src="./img/desc/added-list.jpg" alt="added list alt" width=250><br />
-// AddedListView
-
----
-
-// <img src="./img/desc/add-card.jpg" alt="add card alt" width=250><br />
-// AddCardView
-
----
-
-// <img src="./img/desc/adding-card.jpg" alt="adding card alt" width=250><br />
-// AddingCardView
-
----
-
-// <img src="./img/desc/added-card.jpg" alt="added card alt" width=250><br />
-// AddedCardView
-
----
-
 > Controller 에서 각 View 별 interaction 을 처리.
 
 > ViewCache 에서 View 를(들을) 가지고 있음.

@@ -5,7 +5,7 @@ import {
 
 handleUncaughtExpt();
 
-import { App } from "./App";
+import { App } from "./app";
 
 class Server {
   private readonly app: App = new App();

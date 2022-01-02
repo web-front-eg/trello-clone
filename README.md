@@ -1,4 +1,7 @@
 # Trello Clone
+트렐로 기본 기능인 
+카드 쓰기 & 드래그 드롭 & 반쪽 짜리 real-time sync 
+
 ---
 
 ## installation
@@ -16,8 +19,12 @@ tsc
 npm start
 
 # 서버 실행
-npm serve
+npm run serve
 ```
+--- 
+# 시연 링크
+
+https://youtu.be/8pEBvR-6KiI
 
 ---
 

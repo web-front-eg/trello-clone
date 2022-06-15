@@ -4,7 +4,10 @@
 드래그 드롭
 
 UI 구조: MVC
-네트워크 연동: RestFul Polling -> 이후: websocket / event source 추가 구현 예정
+
+네트워크 연동 방식
+* 현재: RestFul Polling
+* 이후: + websocket / event source
 
 ---
 
